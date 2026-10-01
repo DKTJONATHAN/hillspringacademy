@@ -26,7 +26,11 @@ export default function App() {
         <div className="page" key={pathname}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />\n            <Route path="/directors" element={<Directors />} />\n            <Route path="/privacy" element={<Privacy />} />\n            <Route path="/blog" element={<Blog />} />\n            <Route path="/sitemap" element={<Sitemap />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/directors" element={<Directors />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/academics" element={<Academics />} />
             <Route path="/admissions" element={<Admissions />} />
             <Route path="/gallery" element={<Gallery />} />
