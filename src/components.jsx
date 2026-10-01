@@ -42,11 +42,11 @@ export function PageHead({ title, text }) {
 
 export const NAV = [
   ["/", "Home", "home"],
-  ["/about", "About", "about"],
+  ["/about", "About", "about"],\n  ["/directors", "Directors", "about"],
   ["/academics", "Academics", "book"],
   ["/admissions", "Admissions", "apply"],
   ["/gallery", "Gallery", "image"],
-  ["/contact", "Contact", "mail"],
+  ["/contact", "Contact", "mail"],\n  ["/blog", "Blog", "book"],
 ];
 
 export function Header({ theme, toggle, scrolled }) {
