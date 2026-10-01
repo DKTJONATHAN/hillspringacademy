@@ -38,8 +38,8 @@ export function Home() {
       <section className="hero">
         <div className="wrap hero-grid">
           <div>
-            <h1>Learning that builds <em>character</em> in Maua.</h1>
-            <p>{SCHOOL.intro}</p>
+            <h1>Big ideas begin <em>here.</em></h1>
+            <p>Curious minds, caring guidance and room to discover what you can do. Explore our learning approach, school life and admissions.</p>
             <div className="btns">
               <Link to="/admissions" className="btn">How to apply</Link>
               <Link to="/about" className="btn ghost">About the school</Link>
@@ -54,7 +54,7 @@ export function Home() {
 
       <section className="section">
         <div className="wrap">
-          <h2 className="reveal">Why {SCHOOL.short}</h2>
+          <span className="eyebrow">A place to grow</span><h2 className="reveal">Every child has a spark. Let’s help it shine.</h2>
           <div className="cols">
             {SCHOOL.values.map((v, n) => (
               <div className="card reveal" style={{ "--d": n * 90 + "ms" }} key={v.title}><h3>{v.title}</h3><p>{v.text}</p></div>
@@ -63,9 +63,12 @@ export function Home() {
         </div>
       </section>
 
+      <section className="section learning-band">
+        <div className="wrap learning-feature"><span className="eyebrow">Competency-Based Education</span><h2>Learning that goes beyond remembering</h2><p>Kenya’s CBE approach supports learners in building knowledge, practical skills, values and positive attitudes. Through inquiry, projects, collaboration and reflection, children connect classroom learning with everyday life.</p><div className="video-grid"><div className="video-slot"><span className="play">▶</span><b>Discover and explore</b><small>School-approved learning film slot</small></div><div className="video-slot"><span className="play">▶</span><b>Stories for young minds</b><small>School-approved children’s video slot</small></div></div></div>
+      </section>
       <section className="section alt">
         <div className="wrap">
-          <div className="row-head reveal"><h2>From the gallery</h2><Link to="/gallery" className="textlink">See all photos</Link></div>
+          <div className="row-head reveal"><h2>Moments of school life</h2><Link to="/gallery" className="textlink">See all photos</Link></div>
           <div className="gallery-grid">
             {GALLERY.slice(0, 6).map((g, n) => <div className="reveal" style={{ "--d": n * 70 + "ms" }} key={g.alt}><Photo {...g} /></div>)}
           </div>
@@ -124,7 +127,7 @@ export function Academics() {
       <PageHead title="Academics" text="Each level builds on the last, with teachers who know their learners by name." />
       <section className="section">
         <div className="wrap">
-          <h2>School levels</h2>
+          <h2>Learning at every stage</h2><p>Grade descriptions below are general CBE learning themes, not a claim about the school’s exact class placement or subject timetable.</p>
           <div className="tabs" role="tablist" aria-label="School levels">
             {SCHOOL.levels.map((x, n) => (
               <button key={x.title} role="tab" id={`t${n}`} aria-selected={n === tab} aria-controls="panel" className={n === tab ? "on" : ""} onClick={() => setTab(n)}>{x.title}</button>
@@ -267,6 +270,7 @@ export function Contact() {
             <p><b>Location</b>{SCHOOL.address && <>{SCHOOL.address}<br /></>}{SCHOOL.town}</p>
             {SCHOOL.hours && <p><b>Office hours</b>{SCHOOL.hours}</p>}
             <a className="btn ghost dark" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=Hill+Spring+Academy+Maua">Open in Google Maps</a>
+            <div className="map-frame"><iframe title="Map showing Hill Spring Academy in Maua" src="https://www.google.com/maps?q=Hill%20Spring%20Academy%2C%20Maua%2C%20Kenya&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
           </div>
           <form onSubmit={send}>
             <label>Your name<input name="name" required autoComplete="name" /></label>
