@@ -42,14 +42,17 @@ export function PageHead({ title, text }) {
 
 export const NAV = [
   ["/", "Home", "home"],
-  ["/about", "About", "about"],\n  ["/directors", "Directors", "about"],
+  ["/about", "About", "about"],
+  ["/directors", "Directors", "about"],
   ["/academics", "Academics", "book"],
   ["/admissions", "Admissions", "apply"],
   ["/gallery", "Gallery", "image"],
-  ["/contact", "Contact", "mail"],\n  ["/blog", "Blog", "book"],
+  ["/contact", "Contact", "mail"],
+  ["/blog", "Blog", "book"],
 ];
 
 export function Header({ theme, toggle, scrolled }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <header className={"site-header" + (scrolled ? " scrolled" : "")}>
       <div className="wrap bar">
@@ -57,6 +60,7 @@ export function Header({ theme, toggle, scrolled }) {
         <nav aria-label="Main" className="top-nav">
           {NAV.map(([to, label]) => <NavLink key={to} to={to} end={to === "/"}>{label}</NavLink>)}
         </nav>
+        <button className="menu-toggle" aria-expanded={menuOpen} aria-label={menuOpen ? "Close navigation" : "Open navigation"} onClick={() => setMenuOpen(v => !v)}>{menuOpen ? "×" : "☰"} <span>{menuOpen ? "Close" : "Menu"}</span></button>
         <div className="actions">
           <button className="icon-btn" onClick={toggle} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
             <Icon n={theme === "dark" ? "sun" : "moon"} />
@@ -64,6 +68,7 @@ export function Header({ theme, toggle, scrolled }) {
           <Link to="/admissions" className="btn small">Apply now</Link>
         </div>
       </div>
+      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
     </header>
   );
 }
