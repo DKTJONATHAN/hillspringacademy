@@ -281,3 +281,19 @@ export function Contact() {
     </>
   );
 }
+
+
+export function Directors() {
+  return <><PageHead title="Our leadership" text="Meet the people guiding the school community. Portraits and verified biographies will be added by the school."/><section className="section"><div className="wrap director-grid">{["Director","Director","School leadership"].map((role,i)=><article className="director-card" key={role+i}><div className="portrait-placeholder">Photo to be added</div><span className="eyebrow">{role}</span><h2>Name to be added</h2><p>A short message and professional biography will appear here after approval by the school.</p></article>)}</div></section></>;
+}
+export function Privacy() {
+ return <><PageHead title="Privacy & child protection" text="We respect the privacy, dignity and safety of every learner and family."/><section className="section"><div className="wrap prose"><h2>Information we collect</h2><p>When families contact the school, we may receive names, contact details and information they choose to share about a learner. The school should only collect information needed for education, admissions, communication and learner welfare.</p><h2>How information is used</h2><p>Information is used for school administration, learning support, safeguarding and responding to enquiries. Access should be limited to authorised staff and information should not be published without an appropriate lawful basis.</p><h2>Children’s images</h2><p>Photos, recordings and learner work should be shared only with appropriate parent or guardian consent and in line with the school’s safeguarding procedures. Do not submit sensitive learner information through this website.</p><h2>Your choices</h2><p>For privacy questions or requests, contact the school office using the contact details on this website. This page is a public-facing summary and should be reviewed against the school’s approved privacy policy.</p></div></section></>;
+}
+export function Blog() {
+ const posts=[["CBE at home: learning beyond the classroom","Simple ways families can encourage curiosity, reading and practical problem-solving."],["Reading together builds confident learners","A short daily reading routine can help children grow vocabulary, imagination and confidence."],["Why play matters in early learning","Play gives young learners opportunities to explore, communicate, create and practise social skills."],["Helping children build healthy study habits","Consistent routines, encouragement and rest can make learning more manageable."]];
+ return <><PageHead title="Ideas for growing minds" text="Notes for parents and educators on learning, wellbeing and childhood."/><section className="section"><div className="wrap blog-grid">{posts.map(([title,desc],i)=><article className="blog-card" key={title}><div className="blog-art" aria-hidden="true">{["✎","▤","✿","☆"][i]}</div><span className="eyebrow">Learning & family</span><h2>{title}</h2><p>{desc}</p><span className="coming">Article preview · Full post coming soon</span></article>)}</div></section></>;
+}
+export function Sitemap() {
+ const links=[["Home","/"],["About the school","/about"],["Our directors","/directors"],["Academics & CBE","/academics"],["Admissions","/admissions"],["Gallery","/gallery"],["Learning blog","/blog"],["Privacy & child protection","/privacy"],["Contact","/contact"]];
+ return <><PageHead title="Sitemap" text="Find your way around Hill Spring Academy."/><section className="section"><div className="wrap sitemap-list">{links.map(([label,to])=><Link key={to} to={to}>{label}<span>↗</span></Link>)}</div></section></>;
+}
