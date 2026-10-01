@@ -16,7 +16,7 @@ export const SCHOOL = {
   intro:
     "A school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
   social: { facebook: "", instagram: "", x: "", youtube: "" },
-  videoIds: ["", ""], // Add school-approved YouTube video IDs; embeds remain hidden until supplied.
+  videoIds: ["vD-ZwMjRDPU", "R0K7VKkksyc"],
   values: [
     { title: "Learning", text: "Curious, well-taught learners who understand more than they memorise." },
     { title: "Character", text: "Respect, honesty and responsibility practised every day." },
