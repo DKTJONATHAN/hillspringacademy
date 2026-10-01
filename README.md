@@ -1,6 +1,6 @@
 # Hill Spring Academy website
 
-React + Vite + React Router. Built by Jonathan Mwaniki (zandani.co.ke)
+React + Vite + React Router. Built by Jonathan Mwaniki (zandani.co.ke).
 
 ## Run locally
     npm install
