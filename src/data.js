@@ -5,7 +5,8 @@
 export const SCHOOL = {
   name: "Hill Spring Academy",
   short: "Hill Spring",
-  town: "Maua, Meru County, Kenya",
+  town: "Maua, Igembe South, Meru County, Kenya",
+  centreCode: "15309228",
   admissionsEmail: "admissions@hillspringacademy.sc.ke",
   infoEmail: "info@hillspringacademy.sc.ke",
   phone: "", // "+254 7XX XXX XXX"
@@ -15,15 +16,17 @@ export const SCHOOL = {
   intro:
     "A school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
   social: { facebook: "", instagram: "", x: "", youtube: "" },
+  videoIds: ["", ""], // Add school-approved YouTube video IDs; embeds remain hidden until supplied.
   values: [
     { title: "Learning", text: "Curious, well-taught learners who understand more than they memorise." },
     { title: "Character", text: "Respect, honesty and responsibility practised every day." },
     { title: "Community", text: "Parents, teachers and learners working together." },
   ],
   levels: [
-    { title: "Pre-Primary", text: "A warm, play-based start that builds early language, number and social skills." },
-    { title: "Primary", text: "Solid foundations in literacy, numeracy, science and creative learning." },
-    { title: "Junior School", text: "Deeper subject learning, projects and growing independence." },
+    { title: "Pre-Primary", text: "Play, stories, songs, movement and guided discovery support early language, number sense, confidence and social development." },
+    { title: "Lower Primary · Grades 1–3", text: "Learners strengthen foundational literacy and numeracy, explore the environment, express ideas creatively and practise learning together." },
+    { title: "Middle Primary · Grades 4–6", text: "Learners build fluency, investigate questions, use digital and practical tools, and connect classroom concepts to everyday life." },
+    { title: "Upper Primary · Grades 7–9", text: "Junior-school learning deepens subject understanding, independent study, collaboration, creative problem-solving and exploration of interests." },
   ],
   subjects: ["English", "Kiswahili", "Mathematics", "Science and Technology", "Social Studies", "Creative Arts", "Religious Education", "Physical Education"],
   activities: ["Sports and games", "Music and drama", "Clubs and societies", "ICT and digital skills", "Community service"],
