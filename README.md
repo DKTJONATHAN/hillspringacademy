@@ -19,3 +19,6 @@ React + Vite + React Router. Built by Jonathan Mwaniki (zandani.co.ke).
 4. Deploy, then add the custom domain under Custom domains.
 
 Pages serves `index.html` for unknown paths when there is no `404.html`, so routes like `/gallery` work on refresh. Do not add a `404.html`.
+
+## App-like features
+Page transitions, scroll progress bar, light/dark toggle, hero carousel, tabbed levels, step-by-step admissions, FAQ accordion, gallery lightbox with keyboard arrows, and a mobile bottom tab bar.
