@@ -64,7 +64,10 @@ export function Home() {
       </section>
 
       <section className="section learning-band">
-        <div className="wrap learning-feature"><span className="eyebrow">Competency-Based Education</span><h2>Learning that goes beyond remembering</h2><p>Kenya’s CBE approach supports learners in building knowledge, practical skills, values and positive attitudes. Through inquiry, projects, collaboration and reflection, children connect classroom learning with everyday life.</p><div className="video-grid"><div className="video-slot"><span className="play">▶</span><b>Discover and explore</b><small>School-approved learning film slot</small></div><div className="video-slot"><span className="play">▶</span><b>Stories for young minds</b><small>School-approved children’s video slot</small></div></div></div>
+        <div className="wrap learning-feature"><span className="eyebrow">Competency-Based Education</span><h2>Learning that goes beyond remembering</h2><p>Kenya’s CBE approach supports learners in building knowledge, practical skills, values and positive attitudes. Through inquiry, projects, collaboration and reflection, children connect classroom learning with everyday life.</p><div className="video-grid">
+            <article className="video-card"><div className="video-frame"><iframe src={`https://www.youtube-nocookie.com/embed/${SCHOOL.videoIds[0]}?rel=0` } title="The water cycle for young learners" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /></div><div className="video-copy"><b>The water cycle</b><small>Explore how water moves through our world.</small></div></article>
+            <article className="video-card"><div className="video-frame"><iframe src={`https://www.youtube-nocookie.com/embed/${SCHOOL.videoIds[1]}?rel=0` } title="Where does water come from? Learning for children" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /></div><div className="video-copy"><b>Where does water come from?</b><small>A simple science story for curious learners.</small></div></article>
+          </div></div>
       </section>
       <section className="section alt">
         <div className="wrap">
