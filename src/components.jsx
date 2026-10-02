@@ -84,6 +84,9 @@ export const NAV = [
   ["/gallery", "Gallery", "image"],
   ["/reading-materials", "Reading Materials", "book"],
   ["/contact", "Contact", "mail"],
+  ["/school-life", "School Life", "image"],
+  ["/fees", "Fees", "apply"],
+  ["/faq", "FAQ", "about"],
   ["/blog", "Blog", "book"],
 ];
 
