@@ -84,6 +84,7 @@ export function Home() {
         </div>
       </section>
 
+<section className="section alt"><div className="wrap split"><div><span className="eyebrow">Find us</span><h2>Visit Hill Springs Academy</h2><p>Hill Springs Academy is in Maua, Igembe South, Meru County, Kenya. Use the map below for location guidance and contact the school before travelling if you need directions or visit arrangements.</p><a className="textlink" href="https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a></div><div className="map-card"><iframe title="Hill Springs Academy on Google Maps" src="https://www.google.com/maps?q=Hill+Springs+Academy,+Maua,+Kenya&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" style={{width:"100%",height:"360px",border:0}} allowFullScreen /></div></div></section>
       <section className="section alt"><div className="wrap split"><div><span className="eyebrow">Getting to school</span><h2>School transport services</h2><p>Hill Springs Academy offers school transport services for learners. Parents and guardians can contact the admissions office to confirm current route coverage, availability, transport arrangements and applicable charges before enrolling.</p><Link to="/contact" className="textlink">Enquire about school transport</Link></div><Photo src="/Gallery/school-bus.webp" alt="Hill Springs Academy school bus" /></div></section><section className="section learning-band">
         <div className="wrap learning-feature"><span className="eyebrow">Competency-Based Education</span><h2>Learning that goes beyond remembering</h2><p>Kenya’s CBE approach supports learners in building knowledge, practical skills, values and positive attitudes. Through inquiry, projects, collaboration and reflection, children connect classroom learning with everyday life.</p><div className="video-grid">
             <article className="video-card"><div className="video-frame"><iframe src={`https://www.youtube-nocookie.com/embed/${SCHOOL.videoIds[0]}?rel=0` } title="The water cycle for young learners" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /></div><div className="video-copy"><b>The water cycle</b><small>Explore how water moves through our world.</small></div></article>
@@ -162,7 +163,7 @@ export function Academics() {
       <PageHead title="Academics" text="Each level builds on the last, with teachers who know their learners by name." />
       <section className="section">
         <div className="wrap">
-          <h2>Learning at every stage</h2><p>Grade descriptions below are general CBE learning themes, not a claim about the school’s exact class placement or subject timetable.</p>
+          <h2>Learning at every stage</h2><p>Hill Springs Academy has Kindergarten, Pre-Primary and Junior School. The descriptions below are general learning themes and do not claim a particular class timetable or placement.</p>
           <div className="tabs" role="tablist" aria-label="School levels">
             {SCHOOL.levels.map((x, n) => (
               <button key={x.title} role="tab" id={`t${n}`} aria-selected={n === tab} aria-controls="panel" className={n === tab ? "on" : ""} onClick={() => setTab(n)}>{x.title}</button>
