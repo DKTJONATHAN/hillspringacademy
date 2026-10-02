@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation, Link } from "react-router-dom";
 import { Header, BottomNav, Footer, PageHead } from "./components.jsx";
-import { Home, About, Academics, Admissions, Gallery, ReadingMaterials, Contact, Admin, Directors, Privacy, Blog, Sitemap, SchoolLife, Fees, FAQ } from "./pages.jsx";
+import { Home, About, Academics, Admissions, Gallery, ReadingMaterials, Contact, Directors, Privacy, Blog, Sitemap, SchoolLife, Fees, FAQ } from "./pages.jsx";
+import { AdminEmailCentre } from "./AdminEmailCentre.jsx";
 import { useTheme, useScroll } from "./hooks.js";
 
 const NotFound = () => (
@@ -38,7 +39,7 @@ export default function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/reading-materials" element={<ReadingMaterials />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<AdminEmailCentre />} />
             <Route path="/school-life" element={<SchoolLife />} />
             <Route path="/fees" element={<Fees />} />
             <Route path="/faq" element={<FAQ />} />
