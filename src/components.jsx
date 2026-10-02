@@ -78,16 +78,11 @@ export function PageHead({ title, text, description, path }) {
 export const NAV = [
   ["/", "Home", "home"],
   ["/about", "About", "about"],
-  ["/directors", "Directors", "about"],
   ["/academics", "Academics", "book"],
   ["/admissions", "Admissions", "apply"],
-  ["/gallery", "Gallery", "image"],
-  ["/reading-materials", "Reading Materials", "book"],
-  ["/contact", "Contact", "mail"],
   ["/school-life", "School Life", "image"],
-  ["/fees", "Fees", "apply"],
-  ["/faq", "FAQ", "about"],
-  ["/blog", "Blog", "book"],
+  ["/reading-materials", "Resources", "book"],
+  ["/contact", "Contact", "mail"],
 ];
 
 export function Header({ theme, toggle, scrolled }) {
@@ -107,7 +102,7 @@ export function Header({ theme, toggle, scrolled }) {
           <Link to="/admissions" className="btn small">Apply now</Link>
         </div>
       </div>
-      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
+      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/fees","School Fees"], ["/faq","FAQ"], ["/gallery","Gallery"], ["/directors","Leadership"], ["/blog","Blog"], ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
     </header>
   );
 }
