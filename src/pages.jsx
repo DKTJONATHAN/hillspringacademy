@@ -220,7 +220,7 @@ export function Admissions() {
         message: f.get("message"),
         website: f.get("website"),
       });
-      e.currentTarget.reset();
+      e.currentTarget?.reset?.();
       setSent(true);
     } catch (err) {
       setError(err.message || "We could not send your enquiry. Please try again.");
@@ -497,7 +497,7 @@ export function Contact() {
     const f = new FormData(e.currentTarget);
     try {
       await subscribeToSchoolUpdates({ name: f.get("name"), email: f.get("email"), website: f.get("website") });
-      e.currentTarget.reset();
+      e.currentTarget?.reset?.();
       setSubscribed(true);
     } catch (err) {
       setError(err.message || "We could not subscribe you. Please try again.");
