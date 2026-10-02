@@ -74,11 +74,11 @@ export const SCHOOL = {
 
 /* Gallery: set src to "/gallery/your-photo.jpg" after adding the file to public/gallery/ */
 export const GALLERY = [
-  { src: "/school-gate.webp", alt: "Hill Springs Academy school gate", cat: "Campus" },
+  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", cat: "Campus" },
   { src: "", alt: "Classroom learning", cat: "Classes" },
   { src: "", alt: "Football on the field", cat: "Sports" },
   { src: "", alt: "Morning assembly", cat: "Events" },
-  { src: "/playground.webp", alt: "Hill Springs Academy playground", cat: "Campus" },
+  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus", cat: "Transport" },
   { src: "", alt: "Science lesson", cat: "Classes" },
   { src: "", alt: "Athletics day", cat: "Sports" },
   { src: "", alt: "Prize giving", cat: "Events" },
@@ -91,6 +91,6 @@ export const GALLERY = [
 /* Hero slides on the home page. Add "src: '/gallery/photo.jpg'" to show a real photo. */
 export const HERO = [
   { src: "", alt: "Photo: learners in class", title: "Welcome to Hill Springs Academy", text: "Building an excellent foundation for a brighter future." },
-  { src: "/school-gate.webp", alt: "Hill Springs Academy school gate", title: "Welcome to Hill Springs Academy", text: "A school community in Maua, Meru County." },
+  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", title: "Welcome to Hill Springs Academy", text: "A school community in Maua, Meru County." },
   { src: "", alt: "Photo: sports and activities", title: "Life beyond the classroom", text: "Sports, music, clubs and more." },
 ];
