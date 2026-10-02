@@ -11,7 +11,7 @@
   --shadow: 0 16px 42px rgba(23,43,77,.08);
   font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
-.dark {
+:root[data-theme="dark"] {
   color-scheme: dark;
   --ink: #edf2fb;
   --ink-2: #d5e1f2;
@@ -253,3 +253,15 @@ textarea { min-height: 140px; resize: vertical; }
 .video-frame{position:relative;aspect-ratio:16/9;background:#111}
 .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .video-copy{padding:16px 18px 18px;display:grid;gap:6px}.video-copy b{font-size:1.05rem}.video-copy small{color:#666;line-height:1.5}
+
+/* Complete dark-mode coverage for elements with intentionally fixed light colors */
+:root[data-theme="dark"] .learning-band { background: var(--surface); }
+:root[data-theme="dark"] .video-card { background: var(--surface); border-color: var(--line); color: var(--ink); }
+:root[data-theme="dark"] .video-copy small { color: var(--muted); }
+:root[data-theme="dark"] .video-slot { background: var(--surface); border-color: var(--line); color: var(--ink); }
+:root[data-theme="dark"] .portrait-placeholder,
+:root[data-theme="dark"] .blog-art,
+:root[data-theme="dark"] .photo { background: #243248; color: #d5e1f2; }
+:root[data-theme="dark"] .tags li { background: #26364c; color: #e4ecf7; }
+:root[data-theme="dark"] .btn.ghost { border-color: var(--line); }
+html, body { transition: background-color .2s ease, color .2s ease; }
