@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SCHOOL, GALLERY, HERO } from "./data.js";
 import { Photo, PageHead, Icon } from "./components.jsx";
+import { submitSchoolEnquiry, subscribeToSchoolUpdates, adminSignIn, adminCall } from "./supabase.js";
 
 function Carousel() {
   const [i, setI] = useState(0);
@@ -198,7 +199,33 @@ export function Academics() {
 export function Admissions() {
   const [step, setStep] = useState(0);
   const [open, setOpen] = useState(0);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
   const S = SCHOOL.steps;
+  const sendEnquiry = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSent(false);
+    const f = new FormData(e.currentTarget);
+    try {
+      await submitSchoolEnquiry({
+        type: "admissions",
+        name: f.get("name"),
+        email: f.get("email"),
+        phone: f.get("phone"),
+        subject: "Student enrolment enquiry",
+        studentName: f.get("studentName"),
+        currentLevel: f.get("currentLevel"),
+        requestedLevel: f.get("requestedLevel"),
+        message: f.get("message"),
+        website: f.get("website"),
+      });
+      e.currentTarget.reset();
+      setSent(true);
+    } catch (err) {
+      setError(err.message || "We could not send your enquiry. Please try again.");
+    }
+  };
   return (
     <>
       <PageHead title="Admissions" text="Applying is simple. Our admissions office will guide you through each step." />
@@ -219,12 +246,32 @@ export function Admissions() {
               <p>{S[step].text}</p>
               <div className="btns">
                 {step > 0 && <button className="btn ghost dark" onClick={() => setStep(step - 1)}>Back</button>}
-                {step < S.length - 1
-                  ? <button className="btn" onClick={() => setStep(step + 1)}>Next step</button>
-                  : <a className="btn" href={`mailto:${SCHOOL.admissionsEmail}`}>Email admissions</a>}
+                {step < S.length - 1 ? <button className="btn" onClick={() => setStep(step + 1)}>Next step</button> : <a className="btn" href="#enquiry">Start enrolment enquiry</a>}
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="section alt" id="enquiry">
+        <div className="wrap">
+          <span className="eyebrow">Enrol a learner</span>
+          <h2>Send an admissions enquiry</h2>
+          <p className="lead">Your enquiry is stored securely for the admissions team. An administrator can reply to you by email.</p>
+          <form className="enquiry-form" onSubmit={sendEnquiry}>
+            <div className="form-grid">
+              <label>Parent/guardian name<input name="name" required autoComplete="name" /></label>
+              <label>Email<input name="email" type="email" required autoComplete="email" /></label>
+              <label>Phone<input name="phone" autoComplete="tel" /></label>
+              <label>Learner name<input name="studentName" required /></label>
+              <label>Current level<input name="currentLevel" placeholder="e.g. Pre-Primary" /></label>
+              <label>Level requested<input name="requestedLevel" placeholder="e.g. Junior School" /></label>
+            </div>
+            <label>Message<textarea name="message" required placeholder="Tell us what you would like to know about admission." /></label>
+            <input name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" className="hp-field" />
+            {error && <p className="form-error" role="alert">{error}</p>}
+            {sent && <p className="form-success" role="status">Thank you. Your admissions enquiry has been sent to Hill Springs Academy.</p>}
+            <button className="btn" type="submit">Send admissions enquiry</button>
+          </form>
         </div>
       </section>
       <section className="section">
@@ -240,19 +287,8 @@ export function Admissions() {
       </section>
       <section className="section alt">
         <div className="wrap split">
-          <div className="reveal">
-            <h2>Documents needed</h2>
-            <ul className="checks">{SCHOOL.documents.map((d) => <li key={d}>{d}</li>)}</ul>
-          </div>
-          <div className="reveal">
-            <h2>Questions</h2>
-            {SCHOOL.faqs.map((f, i) => (
-              <div className="faq" key={f.q}>
-                <button aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>{f.q}<span aria-hidden="true">{open === i ? "−" : "+"}</span></button>
-                <div className={"ans" + (open === i ? " open" : "")}><p>{f.a}</p></div>
-              </div>
-            ))}
-          </div>
+          <div className="reveal"><h2>Documents needed</h2><ul className="checks">{SCHOOL.documents.map((d) => <li key={d}>{d}</li>)}</ul></div>
+          <div className="reveal"><h2>Questions</h2>{SCHOOL.faqs.map((f, i) => <div className="faq" key={f.q}><button aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>{f.q}<span aria-hidden="true">{open === i ? "−" : "+"}</span></button><div className={"ans" + (open === i ? " open" : "")}><p>{f.a}</p></div></div>)}</div>
         </div>
       </section>
     </>
@@ -430,15 +466,42 @@ export function FAQ() {
 }
 
 export function Contact() {
-  const [toast, setToast] = useState(false);
-  const send = (e) => {
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  const send = async (e) => {
     e.preventDefault();
-    const f = new FormData(e.target);
-    const to = f.get("topic") === "Admissions" ? SCHOOL.admissionsEmail : SCHOOL.infoEmail;
-    const body = `${f.get("message")}\n\nFrom: ${f.get("name")} (${f.get("email")})`;
-    window.location.href = `mailto:${to}?subject=${encodeURIComponent(f.get("topic") + " enquiry")}&body=${encodeURIComponent(body)}`;
-    setToast(true);
-    setTimeout(() => setToast(false), 4000);
+    setError("");
+    setSent(false);
+    const f = new FormData(e.currentTarget);
+    try {
+      await submitSchoolEnquiry({
+        type: f.get("topic") === "Admissions" ? "admissions" : "general",
+        name: f.get("name"),
+        email: f.get("email"),
+        phone: f.get("phone"),
+        subject: f.get("subject"),
+        message: f.get("message"),
+        website: f.get("website"),
+      });
+      e.currentTarget.reset();
+      setSent(true);
+    } catch (err) {
+      setError(err.message || "We could not send your message. Please try again.");
+    }
+  };
+  const subscribe = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSubscribed(false);
+    const f = new FormData(e.currentTarget);
+    try {
+      await subscribeToSchoolUpdates({ name: f.get("name"), email: f.get("email"), website: f.get("website") });
+      e.currentTarget.reset();
+      setSubscribed(true);
+    } catch (err) {
+      setError(err.message || "We could not subscribe you. Please try again.");
+    }
   };
   return (
     <>
@@ -454,20 +517,141 @@ export function Contact() {
             <a className="btn ghost dark" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=Hill+Spring+Academy+Maua">Open in Google Maps</a>
             <div className="map-frame"><iframe title="Map showing Hill Springs Academy in Maua" src="https://www.google.com/maps?q=Hill%20Spring%20Academy%2C%20Maua%2C%20Kenya&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
           </div>
-          <form onSubmit={send}>
+          <form onSubmit={send} className="enquiry-form">
             <label>Your name<input name="name" required autoComplete="name" /></label>
             <label>Your email<input name="email" type="email" required autoComplete="email" /></label>
-            <label>Topic<select name="topic"><option>Admissions</option><option>General</option></select></label>
+            <label>Phone<input name="phone" autoComplete="tel" /></label>
+            <label>Topic<select name="topic"><option>General</option><option>Admissions</option></select></label>
+            <label>Subject<input name="subject" required /></label>
             <label>Message<textarea name="message" required /></label>
+            <input name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" className="hp-field" />
+            {error && <p className="form-error" role="alert">{error}</p>}
+            {sent && <p className="form-success" role="status">Your message has been sent to Hill Springs Academy.</p>}
             <button className="btn" type="submit">Send message</button>
           </form>
         </div>
       </section>
-      {toast && <div className="toast" role="status">Your email app should open with the message ready to send.</div>}
+      <section className="section alt">
+        <div className="wrap split">
+          <div><span className="eyebrow">Stay informed</span><h2>Subscribe to school updates</h2><p>Receive selected school notices, admissions updates, learning information and news by email.</p></div>
+          <form onSubmit={subscribe} className="card enquiry-form">
+            <label>Your name<input name="name" autoComplete="name" /></label>
+            <label>Your email<input name="email" type="email" required autoComplete="email" /></label>
+            <input name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" className="hp-field" />
+            {subscribed && <p className="form-success" role="status">You are subscribed to Hill Springs Academy updates.</p>}
+            <button className="btn" type="submit">Subscribe</button>
+          </form>
+        </div>
+      </section>
+      {error && !sent && !subscribed && <div className="toast" role="status">{error}</div>}
     </>
   );
 }
 
+export function Admin() {
+  const [token, setToken] = useState(() => localStorage.getItem("hsa_admin_token") || "");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [conversations, setConversations] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [reply, setReply] = useState("");
+  const [status, setStatus] = useState("");
+  const [tab, setTab] = useState("messages");
+  const [subscribers, setSubscribers] = useState([]);
+
+  const load = async (t = token) => {
+    const data = await adminCall(t, { action: "list_conversations" });
+    setConversations(data.conversations || []);
+  };
+  useEffect(() => {
+    if (token) load().catch(() => { localStorage.removeItem("hsa_admin_token"); setToken(""); });
+  }, []);
+  const login = async (e) => {
+    e.preventDefault(); setLoginError("");
+    try {
+      const data = await adminSignIn(email, password);
+      localStorage.setItem("hsa_admin_token", data.access_token);
+      setToken(data.access_token);
+      setPassword("");
+      await load(data.access_token);
+    } catch (err) { setLoginError(err.message || "Unable to sign in."); }
+  };
+  const openConversation = async (id) => {
+    const data = await adminCall(token, { action: "get_conversation", id });
+    setSelected(data.conversation); setMessages(data.messages || []); setReply(""); setStatus("");
+  };
+  const sendReply = async () => {
+    if (!selected || reply.trim().length < 2) return;
+    setStatus("Sending through Resend…");
+    try {
+      await adminCall(token, { action: "reply", id: selected.id, reply });
+      setReply(""); setStatus("Reply sent successfully.");
+      await openConversation(selected.id); await load();
+    } catch (err) { setStatus(err.message || "Reply failed."); }
+  };
+  const closeConversation = async () => {
+    if (!selected) return;
+    await adminCall(token, { action: "close", id: selected.id });
+    await openConversation(selected.id); await load();
+  };
+  const loadSubscribers = async () => {
+    try { const data = await adminCall(token, { action: "subscribers" }); setSubscribers(data.subscribers || []); } catch (err) { setStatus(err.message || "Unable to load subscribers."); }
+  };
+  const logout = () => { localStorage.removeItem("hsa_admin_token"); setToken(""); setSelected(null); };
+
+  if (!token) return (
+    <>
+      <PageHead title="Admin Email Centre" text="Secure Hill Springs Academy communications." />
+      <section className="section"><div className="wrap admin-login">
+        <form className="card enquiry-form" onSubmit={login}>
+          <span className="eyebrow">Staff only</span><h2>Sign in</h2>
+          <p>Use the Supabase administrator account created for the school.</p>
+          <label>Email<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoComplete="username" /></label>
+          <label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password" /></label>
+          {loginError && <p className="form-error" role="alert">{loginError}</p>}
+          <button className="btn" type="submit">Sign in</button>
+        </form>
+      </div></section>
+    </>
+  );
+
+  return (
+    <>
+      <PageHead title="Admin Email Centre" text="Manage parent enquiries and newsletter subscribers." />
+      <section className="section">
+        <div className="wrap">
+          <div className="admin-toolbar">
+            <div><button className={tab==="messages"?"btn small":"btn small ghost dark"} onClick={()=>setTab("messages")}>Messages</button><button className={tab==="subscribers"?"btn small":"btn small ghost dark"} onClick={()=>{setTab("subscribers");loadSubscribers();}}>Subscribers</button></div>
+            <button className="btn small ghost dark" onClick={logout}>Sign out</button>
+          </div>
+          {tab==="messages" ? (
+            <div className="admin-grid">
+              <div className="card admin-list">
+                <h3>Enquiries</h3>
+                {conversations.length===0 && <p>No enquiries yet.</p>}
+                {conversations.map(c=><button key={c.id} className={"admin-item"+(selected?.id===c.id?" selected":"")} onClick={()=>openConversation(c.id)}><strong>{c.subject}</strong><span>{c.requester_name} · {c.status}</span><small>{new Date(c.last_message_at).toLocaleString()}</small></button>)}
+              </div>
+              <div className="card admin-thread">
+                {!selected ? <div><h3>Select an enquiry</h3><p>Choose a message to view the conversation and reply by email.</p></div> : <>
+                  <div className="thread-head"><div><span className="eyebrow">{selected.type}</span><h3>{selected.subject}</h3><p>{selected.requester_name} · {selected.requester_email}{selected.requester_phone ? ` · ${selected.requester_phone}` : ""}</p></div><button className="btn small ghost dark" onClick={closeConversation}>Close</button></div>
+                  <div className="thread">
+                    {messages.map(m=><div className={"thread-message "+m.sender_type} key={m.id}><small>{m.sender_type==="visitor"?m.sender_name:"Hill Springs Academy"} · {new Date(m.created_at).toLocaleString()}</small><p>{m.body_text}</p>{m.delivery_status && <span>{m.delivery_status}</span>}</div>)}
+                  </div>
+                  {selected.status!=="closed" && <div className="reply-box"><textarea value={reply} onChange={e=>setReply(e.target.value)} placeholder="Write your reply to the parent or student…" /><button className="btn" onClick={sendReply}>Send reply by email</button></div>}
+                  {status && <p className="form-success" role="status">{status}</p>}
+                </>}
+              </div>
+            </div>
+          ) : (
+            <div className="card"><h3>Newsletter subscribers</h3><p>{subscribers.length} subscriber(s) loaded.</p><div className="subscriber-list">{subscribers.map(s=><div className="subscriber-row" key={s.id}><strong>{s.name || "No name"}</strong><span>{s.email}</span><small>{s.active?"Active":"Unsubscribed"}</small></div>)}</div></div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
 
 export function Directors() {
   return <><PageHead title="Our leadership" text="Meet the people guiding the school community. Portraits and verified biographies will be added by the school."/><section className="section"><div className="wrap director-grid">{["Director","Director","School leadership"].map((role,i)=><article className="director-card" key={role+i}><div className="portrait-placeholder">Photo to be added</div><span className="eyebrow">{role}</span><h2>Name to be added</h2><p>A short message and professional biography will appear here after approval by the school.</p></article>)}</div></section></>;
