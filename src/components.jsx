@@ -54,6 +54,10 @@ export function PageHead({ title, text, description, path }) {
     setMeta("og:type", "website");
     setMeta("og:url", canonical);
     setMeta("og:site_name", SCHOOL.name);
+    setMeta("og:image", `${SCHOOL.siteUrl}/logo.png`);
+    setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:title", `${title} | ${SCHOOL.name}`);
+    setMeta("twitter:description", metaDescription);
     let ld = document.getElementById("school-jsonld");
     if (!ld) { ld = document.createElement("script"); ld.id = "school-jsonld"; ld.type = "application/ld+json"; document.head.appendChild(ld); }
     ld.textContent = JSON.stringify({
@@ -64,6 +68,7 @@ export function PageHead({ title, text, description, path }) {
       description: SCHOOL.intro,
       slogan: SCHOOL.motto,
       email: SCHOOL.infoEmail,
+      logo: `${SCHOOL.siteUrl}/logo.png`,
       address: { "@type": "PostalAddress", addressLocality: "Maua", addressRegion: "Meru County", addressCountry: "KE" },
       areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"]
     });
