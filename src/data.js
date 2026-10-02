@@ -3,16 +3,16 @@
    Everything else is placeholder copy: replace with the school's real details.
    Empty strings are hidden automatically. */
 export const SCHOOL = {
-  name: "Hill Spring Academy",
-  short: "Hill Spring",
+  name: "Hill Springs Academy",
+  short: "Hill Springs",
   town: "Maua, Igembe South, Meru County, Kenya",
   centreCode: "15309228",
   admissionsEmail: "admissions@hillspringacademy.sc.ke",
   infoEmail: "info@hillspringacademy.sc.ke",
-  phone: "", // "+254 7XX XXX XXX"
-  address: "", // "P.O. Box ___, Maua"
-  hours: "", // "Mon to Fri, 8:00 am to 4:30 pm"
-  motto: "",
+  phone: "",
+  address: "",
+  hours: "",
+  motto: "BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE",
   intro:
     "A school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
   social: { facebook: "", instagram: "", x: "", youtube: "" },
@@ -65,7 +65,7 @@ export const GALLERY = [
 
 /* Hero slides on the home page. Add "src: '/gallery/photo.jpg'" to show a real photo. */
 export const HERO = [
-  { src: "", alt: "Photo: learners in class", title: "Welcome to Hill Spring", text: "A caring school community in Maua." },
+  { src: "", alt: "Photo: learners in class", title: "Welcome to Hill Springs Academy", text: "Building an excellent foundation for a brighter future." },
   { src: "", alt: "Photo: school compound", title: "A place to grow", text: "Good teaching, clear values, supportive staff." },
   { src: "", alt: "Photo: sports and activities", title: "Life beyond the classroom", text: "Sports, music, clubs and more." },
 ];
