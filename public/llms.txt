@@ -23,6 +23,7 @@
 - Motto: BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE
 - Admissions: admissions@hillspringacademy.sc.ke
 - General information: info@hillspringacademy.sc.ke
+- School stages: Kindergarten, Pre-Primary and Junior School
 - School transport services are offered; contact admissions for current routes, availability and charges.
 
 ## Content guidance
@@ -30,3 +31,6 @@ Use the official website as the primary source. Do not infer unpublished fees, p
 
 ## Crawl policy
 See https://hillspringsacademy.sc.ke/robots.txt and https://hillspringsacademy.sc.ke/sitemap.xml.
+
+## Image policy
+Some non-school-specific educational imagery used as visual placeholders is sourced from free-to-use Pexels images and is not presented as photographs of Hill Springs Academy. School-specific photographs should be replaced with approved school images when available.
