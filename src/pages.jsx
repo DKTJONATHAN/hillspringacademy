@@ -496,7 +496,8 @@ export function Contact() {
     e.preventDefault();
     setError("");
     setSubscribed(false);
-    const f = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const f = new FormData(form);
     try {
       await subscribeToSchoolUpdates({ name: f.get("name"), email: f.get("email"), website: f.get("website") });
       form.reset();
