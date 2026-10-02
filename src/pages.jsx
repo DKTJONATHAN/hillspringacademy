@@ -66,7 +66,7 @@ export function Home() {
   const visibleVideos = showMoreVideos ? videos : videos.slice(0, 2);
 
   useEffect(() => {
-    document.title = "Hill Springs Academy | Private CBE School in Maua, Meru";
+    document.title = "Hill Springs Academy | Private School in Maua, Meru County";
     const desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute("content", "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. Kindergarten, Pre-Primary and Junior School. Admissions open.");
   }, []);
