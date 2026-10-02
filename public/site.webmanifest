@@ -1,10 +1,12 @@
 {
   "name": "Hill Springs Academy",
   "short_name": "Hill Springs",
+  "description": "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#c8102e",
+  "lang": "en-KE",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
