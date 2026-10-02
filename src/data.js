@@ -3,7 +3,7 @@
    Everything else is placeholder copy: replace with the school's real details.
    Empty strings are hidden automatically. */
 export const SCHOOL = {
-  siteUrl: "https://hillspringacademy.sc.ke",
+  siteUrl: "https://hillspringsacademy.sc.ke",
   name: "Hill Springs Academy",
   short: "Hill Springs",
   town: "Maua, Igembe South, Meru County, Kenya",
