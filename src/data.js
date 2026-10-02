@@ -17,6 +17,17 @@ export const SCHOOL = {
     "A school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
   social: { facebook: "", instagram: "", x: "", youtube: "" },
   videoIds: ["vD-ZwMjRDPU", "R0K7VKkksyc"],
+  readingMaterials: [
+    { title: "Grade 1 English Reading Material", grade: "Grade 1", description: "Reading practice and language activities.", file: "/reading-materials/grade-1-english.pdf" },
+    { title: "Grade 2 Mathematics Practice", grade: "Grade 2", description: "Mathematics revision and practice exercises.", file: "/reading-materials/grade-2-mathematics.pdf" },
+    { title: "Grade 3 Science Notes", grade: "Grade 3", description: "Science learning notes for revision.", file: "/reading-materials/grade-3-science.pdf" },
+    { title: "Grade 4 English Reading Material", grade: "Grade 4", description: "Reading comprehension and language practice.", file: "/reading-materials/grade-4-english.pdf" },
+    { title: "Grade 5 Mathematics Revision", grade: "Grade 5", description: "Revision notes and practice questions.", file: "/reading-materials/grade-5-mathematics.pdf" },
+    { title: "Grade 6 Science Notes", grade: "Grade 6", description: "Science notes and revision material.", file: "/reading-materials/grade-6-science.pdf" },
+    { title: "Grade 7 General Reading Material", grade: "Grade 7", description: "Learning and revision material for learners.", file: "/reading-materials/grade-7-reading.pdf" },
+    { title: "Grade 8 General Reading Material", grade: "Grade 8", description: "Learning and revision material for learners.", file: "/reading-materials/grade-8-reading.pdf" },
+    { title: "Grade 9 General Reading Material", grade: "Grade 9", description: "Learning and revision material for learners.", file: "/reading-materials/grade-9-reading.pdf" },
+  ],
   values: [
     { title: "Learning", text: "Curious, well-taught learners who understand more than they memorise." },
     { title: "Character", text: "Respect, honesty and responsibility practised every day." },
