@@ -65,15 +65,23 @@ export function Home() {
   const videos = SCHOOL.videos || [];
   const visibleVideos = showMoreVideos ? videos : videos.slice(0, 2);
 
+  useEffect(() => {
+    document.title = "Hill Springs Academy | Private CBE School in Maua, Meru";
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. Kindergarten, Pre-Primary and Junior School. Admissions open.");
+  }, []);
+
   return (
     <>
       <section className="hero">
         <div className="wrap hero-grid">
           <div>
-            <h1 className="motto">
-              BUILDING AN <em>EXCELLENT</em> FOUNDATION FOR A <em>BRIGHTER</em> FUTURE
+            <p className="eyebrow">Private CBE school · Maua, Meru County</p>
+            <h1>
+              <span className="h1-name">Hill Springs Academy</span>
+              <span className="motto-line">BUILDING AN <em>EXCELLENT</em> FOUNDATION FOR A <em>BRIGHTER</em> FUTURE</span>
             </h1>
-            <p>Strong teaching, clear values and a caring community. Discover how we help every learner grow in knowledge and character.</p>
+            <p>Hill Springs Academy is a private school in Maua, Igembe South, Meru County. We teach Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education (CBE), with strong teaching, clear values and a caring community.</p>
             <div className="btns">
               <Link to="/admissions" className="btn">How to apply</Link>
               <Link to="/about" className="btn ghost">About the school</Link>
@@ -110,17 +118,19 @@ export function Home() {
         <div className="wrap split">
           <div>
             <span className="eyebrow">Hill Springs Academy · Maua</span>
-            <h2>A school community in Igembe South, Meru County</h2>
-            <p>Hill Springs Academy serves families in Maua and the wider Meru County. We offer Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education, with a clear focus on learning, character and partnership with parents.</p>
+            <h2>A private school in Maua, Igembe South, Meru County</h2>
+            <p>Hill Springs Academy serves families looking for private schools in Maua and across Meru County. We offer Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education (CBE), with a clear focus on learning, character and partnership with parents.</p>
             <p>For current places, fees and reporting dates, please contact the admissions office — these details can change from term to term.</p>
-            <Link to="/contact" className="textlink">Contact the school</Link>
+            <Link to="/contact" className="textlink">Contact Hill Springs Academy</Link>
           </div>
           <div className="card">
             <h3>At a glance</h3>
             <ul className="checks">
-              <li>Location: Maua, Igembe South, Meru County</li>
-              <li>Curriculum: Kenya’s Competency-Based Education</li>
+              <li>School: Hill Springs Academy</li>
+              <li>Location: Maua, Igembe South, Meru County, Kenya</li>
+              <li>Curriculum: Kenya’s Competency-Based Education (CBE)</li>
               <li>Levels: Kindergarten, Pre-Primary, Junior School</li>
+              <li>Type: Private school in Maua</li>
               <li>Transport: available (confirm routes with admissions)</li>
             </ul>
           </div>
@@ -131,13 +141,13 @@ export function Home() {
         <div className="wrap split">
           <div>
             <span className="eyebrow">Find us</span>
-            <h2>Visit Hill Springs Academy</h2>
-            <p>We are based in Maua, Igembe South, Meru County. Use the map for location guidance and contact us before travelling if you need directions or to arrange a visit.</p>
-            <a className="textlink" href="https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a>
+            <h2>Visit Hill Springs Academy in Maua</h2>
+            <p>We are based in Maua, Igembe South, Meru County. Use the map for location guidance and contact us before travelling if you need directions or to arrange a visit to this private CBE school.</p>
+            <a className="textlink" href="https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya" target="_blank" rel="noopener noreferrer">Open Hill Springs Academy on Google Maps ↗</a>
           </div>
           <div className="map-card">
             <iframe
-              title="Hill Springs Academy on Google Maps"
+              title="Hill Springs Academy on Google Maps, Maua, Meru County"
               src="https://www.google.com/maps?q=Hill+Springs+Academy,+Maua,+Kenya&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -156,15 +166,15 @@ export function Home() {
             <p>School transport is available for learners. Contact the admissions office to confirm current routes, availability and charges.</p>
             <Link to="/contact" className="textlink">Enquire about school transport</Link>
           </div>
-          <Photo src="/Gallery/school-bus.webp" alt="Hill Springs Academy school bus" />
+          <Photo src="/Gallery/school-bus.webp" alt="Hill Springs Academy school bus in Maua, Meru County" />
         </div>
       </section>
 
       <section className="section learning-band">
         <div className="wrap learning-feature">
-          <span className="eyebrow">Competency-Based Education</span>
+          <span className="eyebrow">Competency-Based Education (CBE)</span>
           <h2>Learning that goes beyond remembering</h2>
-          <p>Kenya’s CBE approach helps learners build knowledge, practical skills, values and positive attitudes. Through inquiry, projects and reflection, children connect classroom learning with everyday life.</p>
+          <p>Kenya’s CBE approach helps learners at Hill Springs Academy build knowledge, practical skills, values and positive attitudes. Through inquiry, projects and reflection, children connect classroom learning with everyday life in Maua and Meru County.</p>
           <div className="video-grid">
             {visibleVideos.map((v) => (
               <VideoCard key={v.id} id={v.id} title={v.title} text={v.text} />
@@ -198,8 +208,8 @@ export function Home() {
 
       <section className="cta">
         <div className="wrap reveal">
-          <h2>Admissions are open</h2>
-          <p>Write to the admissions office and we will guide you through every step.</p>
+          <h2>Admissions are open at Hill Springs Academy</h2>
+          <p>Write to the admissions office in Maua and we will guide you through every step.</p>
           <Link className="btn white" to="/admissions#enquiry">Start an admissions enquiry</Link>
         </div>
       </section>
