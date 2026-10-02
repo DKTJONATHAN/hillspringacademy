@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, useLocation, Link } from "react-router-dom";
 import { Header, BottomNav, Footer, PageHead } from "./components.jsx";
 import { Home, About, Academics, Admissions, Gallery, Contact, Directors, Privacy, Blog, Sitemap } from "./pages.jsx";
-import { useTheme, useScroll, useReveal } from "./hooks.js";
+import { useTheme, useScroll } from "./hooks.js";
 
 const NotFound = () => (
   <>
@@ -15,8 +15,9 @@ export default function App() {
   const { pathname } = useLocation();
   const [theme, toggle] = useTheme();
   const { y, p } = useScroll();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
-  useReveal(pathname);
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [pathname]);
   return (
     <>
       <a className="skip" href="#main">Skip to content</a>
