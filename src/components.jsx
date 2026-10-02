@@ -64,7 +64,7 @@ export function PageHead({ title, text, description, path, image }) {
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", `${title} | ${SCHOOL.name}`);
     setMeta("twitter:description", metaDescription);
-    setMeta("twitter:image", image || `${SCHOOL.siteUrl}/social-preview.jpg`);
+    setMeta("twitter:image", image || `${SCHOOL.siteUrl}/logo.png`);
     setMeta("twitter:image:alt", `${title} | ${SCHOOL.name}`);
     let ld = document.getElementById("school-jsonld");
     if (!ld) { ld = document.createElement("script"); ld.id = "school-jsonld"; ld.type = "application/ld+json"; document.head.appendChild(ld); }
