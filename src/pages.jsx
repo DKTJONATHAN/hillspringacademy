@@ -206,7 +206,8 @@ export function Admissions() {
     e.preventDefault();
     setError("");
     setSent(false);
-    const f = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const f = new FormData(form);
     try {
       await submitSchoolEnquiry({
         type: "admissions",
@@ -220,7 +221,7 @@ export function Admissions() {
         message: f.get("message"),
         website: f.get("website"),
       });
-      e.currentTarget?.reset?.();
+      form.reset();
       setSent(true);
     } catch (err) {
       setError(err.message || "We could not send your enquiry. Please try again.");
@@ -484,7 +485,7 @@ export function Contact() {
         message: f.get("message"),
         website: f.get("website"),
       });
-      e.currentTarget.reset();
+      form.reset();
       setSent(true);
     } catch (err) {
       setError(err.message || "We could not send your message. Please try again.");
