@@ -55,11 +55,12 @@ export function PageHead({ title, text, description, path, image }) {
     setMeta("og:type", "website");
     setMeta("og:url", canonical);
     setMeta("og:site_name", SCHOOL.name);
-    setMeta("og:image", image || `${SCHOOL.siteUrl}/social-preview.jpg`);
+    setMeta("og:image", image || `${SCHOOL.siteUrl}/logo.png`);
     setMeta("og:image:alt", `${title} | ${SCHOOL.name}`);
     setMeta("og:locale", "en_KE");
     setMeta("og:image:width", "1200");
     setMeta("og:image:height", "630");
+    setMeta("og:image:type", "image/png");
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", `${title} | ${SCHOOL.name}`);
     setMeta("twitter:description", metaDescription);
