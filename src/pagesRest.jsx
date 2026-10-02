@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { SCHOOL, GALLERY, HERO } from "./data.js";
-import { Photo, PageHead, Icon } from "./components.jsx";
-import { submitSchoolEnquiry, subscribeToSchoolUpdates } from "./supabase.js";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { SCHOOL, GALLERY } from "./data.js";
+import { Photo, PageHead } from "./components.jsx";
+import { submitSchoolEnquiry } from "./supabase.js";
 
 export function About() {
   return (
