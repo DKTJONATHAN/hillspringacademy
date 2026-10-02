@@ -63,6 +63,27 @@ export function Home() {
         </div>
       </section>
 
+      <section className="section">
+        <div className="wrap split">
+          <div>
+            <span className="eyebrow">Hill Springs Academy · Maua</span>
+            <h2>A school community in Igembe South, Meru County</h2>
+            <p>Hill Springs Academy is presented online as a school serving learners and families in Maua, Igembe South, Meru County, Kenya. This page brings together information parents commonly need when researching a school: learning approach, admissions, school life, learner resources and ways to contact the school.</p>
+            <p>For current grade availability, fees, reporting dates and school-specific requirements, families should use the admissions office because these details can change.</p>
+            <Link to="/contact" className="textlink">Contact the school</Link>
+          </div>
+          <div className="card">
+            <h3>At a glance</h3>
+            <ul className="checks">
+              <li>Location: Maua, Igembe South, Meru County</li>
+              <li>Curriculum context: Kenya's Competency-Based Education</li>
+              <li>Admissions: contact the admissions office for current requirements</li>
+              <li>Learning resources: downloadable materials section available on the site</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section className="section learning-band">
         <div className="wrap learning-feature"><span className="eyebrow">Competency-Based Education</span><h2>Learning that goes beyond remembering</h2><p>Kenya’s CBE approach supports learners in building knowledge, practical skills, values and positive attitudes. Through inquiry, projects, collaboration and reflection, children connect classroom learning with everyday life.</p><div className="video-grid">
             <article className="video-card"><div className="video-frame"><iframe src={`https://www.youtube-nocookie.com/embed/${SCHOOL.videoIds[0]}?rel=0` } title="The water cycle for young learners" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /></div><div className="video-copy"><b>The water cycle</b><small>Explore how water moves through our world.</small></div></article>
