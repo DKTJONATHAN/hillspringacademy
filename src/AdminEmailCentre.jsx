@@ -1,12 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { PageHead } from "./components.jsx";
-import { adminCall, adminSignIn } from "./supabase.js";
+import { adminCall, adminSignIn, requestAdminPasswordReset, verifyAdminPasswordReset } from "./supabase.js";
 
 export function AdminEmailCentre() {
   const [token, setToken] = useState(() => localStorage.getItem("hsa_admin_token") || "");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [resetMode, setResetMode] = useState(false);
+  const [resetStep, setResetStep] = useState("request");
+  const [resetCode, setResetCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [resetStatus, setResetStatus] = useState("");
   const [tab, setTab] = useState("messages");
   const [conversations, setConversations] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -30,6 +35,18 @@ export function AdminEmailCentre() {
   useEffect(() => {
     if (token) loadConversations().catch(() => { localStorage.removeItem("hsa_admin_token"); setToken(""); });
   }, []);
+
+  const requestReset = async (e) => {
+    e.preventDefault(); setResetStatus("");
+    try { await requestAdminPasswordReset(email); setResetStep("verify"); setResetStatus("If that email belongs to an administrator, a 6-digit verification code has been sent."); }
+    catch (err) { setResetStatus(err.message || "Unable to request a password reset."); }
+  };
+
+  const verifyReset = async (e) => {
+    e.preventDefault(); setResetStatus("");
+    try { await verifyAdminPasswordReset(email, resetCode, newPassword); setResetStatus("Password updated successfully. You can now sign in."); setResetMode(false); setResetStep("request"); setResetCode(""); setNewPassword(""); }
+    catch (err) { setResetStatus(err.message || "Unable to reset password."); }
+  };
 
   const login = async (e) => {
     e.preventDefault(); setLoginError("");
@@ -95,13 +112,16 @@ export function AdminEmailCentre() {
     <>
       <PageHead title="Admin Email Centre" text="Secure Hill Springs Academy communications." />
       <section className="section"><div className="wrap admin-login">
-        <form className="card enquiry-form" onSubmit={login}>
+        <form className="card enquiry-form" onSubmit={resetMode ? (resetStep === "request" ? requestReset : verifyReset) : login}>
           <span className="eyebrow">Staff only</span><h2>Sign in</h2>
-          <p>Use the Supabase administrator account created for Hill Springs Academy.</p>
+          <p>{resetMode ? "Reset your Hill Springs Academy administrator password using a verification code sent by email." : "Use the Supabase administrator account created for Hill Springs Academy."}</p>
           <label>Email<input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="username" /></label>
-          <label>Password<input type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="current-password" /></label>
+          {!resetMode && <label>Password<input type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="current-password" /></label>}
+          {resetMode && resetStep === "verify" && <><label>Verification code<input inputMode="numeric" maxLength="6" value={resetCode} onChange={e => setResetCode(e.target.value.replace(/\D/g, "").slice(0,6))} required placeholder="6-digit code" /></label><label>New password<input type="password" minLength="8" value={newPassword} onChange={e => setNewPassword(e.target.value)} required autoComplete="new-password" /></label></>}
           {loginError && <p className="form-error" role="alert">{loginError}</p>}
-          <button className="btn" type="submit">Sign in</button>
+          {resetStatus && <p className={resetStatus.includes("successfully") || resetStatus.includes("sent") ? "form-success" : "form-error"} role="status">{resetStatus}</p>}
+          <button className="btn" type="submit">{resetMode ? (resetStep === "request" ? "Send verification code" : "Reset password") : "Sign in"}</button>
+          <button type="button" className="btn small ghost dark" onClick={() => { setResetMode(!resetMode); setResetStep("request"); setResetStatus(""); setResetCode(""); setNewPassword(""); }}>{resetMode ? "Back to sign in" : "Forgot password?"}</button>
         </form>
       </div></section>
     </>
