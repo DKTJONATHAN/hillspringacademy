@@ -18,7 +18,7 @@ export const Icon = ({ n, size = 22 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{P[n]}</svg>
 );
 
-export function Logo({ size = 44 }) {
+export function Logo({ size = 56 }) {
   const [failed, setFailed] = useState(false);
   if (failed) return <span className="logo-ph" style={{ width: size, height: size }} aria-hidden="true">LOGO</span>;
   return <img src="/logo.png" alt="" width={size} height={size} onError={() => setFailed(true)} style={{ objectFit: "contain" }} />;
@@ -106,7 +106,7 @@ export function Header({ theme, toggle, scrolled }) {
   return (
     <header className={"site-header" + (scrolled ? " scrolled" : "")}>
       <div className="wrap bar">
-        <Link to="/" className="brand"><Logo size={scrolled ? 36 : 44} /><span>{SCHOOL.name}</span></Link>
+        <Link to="/" className="brand"><Logo size={scrolled ? 46 : 56} /><span>{SCHOOL.name}</span></Link>
         <nav aria-label="Main" className="top-nav">
           {NAV.map(([to, label]) => <NavLink key={to} to={to} end={to === "/"}>{label}</NavLink>)}
         </nav>
@@ -139,7 +139,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="wrap foot-grid">
         <div>
-          <div className="brand light"><Logo size={40} /><span>{SCHOOL.name}</span></div>
+          <div className="brand light"><Logo size={48} /><span>{SCHOOL.name}</span></div>
           <p>{SCHOOL.town}</p>
           {social.length > 0 && <p className="social">{social.map(([k, v]) => <a key={k} href={v} target="_blank" rel="noopener noreferrer">{k[0].toUpperCase() + k.slice(1)}</a>)}</p>}
         </div>
