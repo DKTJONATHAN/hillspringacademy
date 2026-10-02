@@ -35,7 +35,8 @@ export function Photo({ src, alt, ratio = "4/3" }) {
 export function PageHead({ title, text, description, path }) {
   const metaDescription = description || text || "Hill Springs Academy in Maua, Meru County, Kenya — learning, admissions, school life and learner resources.";
   const canonicalPath = path || window.location.pathname;
-  const canonical = `${SCHOOL.siteUrl}${canonicalPath === "/" ? "/" : canonicalPath.replace(/\\/$/, "")}`;
+  const cleanPath = canonicalPath === "/" ? "/" : (canonicalPath.endsWith("/") ? canonicalPath.slice(0, -1) : canonicalPath);
+  const canonical = `${SCHOOL.siteUrl}${cleanPath}`;
   useEffect(() => {
     document.title = `${title} | ${SCHOOL.name}`;
     let meta = document.querySelector('meta[name="description"]');
