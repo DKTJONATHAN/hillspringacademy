@@ -47,6 +47,7 @@ export const NAV = [
   ["/academics", "Academics", "book"],
   ["/admissions", "Admissions", "apply"],
   ["/gallery", "Gallery", "image"],
+  ["/reading-materials", "Reading Materials", "book"],
   ["/contact", "Contact", "mail"],
   ["/blog", "Blog", "book"],
 ];
