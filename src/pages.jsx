@@ -474,7 +474,8 @@ export function Contact() {
     e.preventDefault();
     setError("");
     setSent(false);
-    const f = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const f = new FormData(form);
     try {
       await submitSchoolEnquiry({
         type: f.get("topic") === "Admissions" ? "admissions" : "general",
@@ -498,7 +499,7 @@ export function Contact() {
     const f = new FormData(e.currentTarget);
     try {
       await subscribeToSchoolUpdates({ name: f.get("name"), email: f.get("email"), website: f.get("website") });
-      e.currentTarget?.reset?.();
+      form.reset();
       setSubscribed(true);
     } catch (err) {
       setError(err.message || "We could not subscribe you. Please try again.");
