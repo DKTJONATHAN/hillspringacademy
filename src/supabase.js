@@ -40,3 +40,9 @@ export async function adminSignIn(email, password) {
 
 export const adminCall = (token, body) =>
   callFunction("school-email-center", body, token);
+
+export const requestAdminPasswordReset = (email) =>
+  callFunction("school-admin-auth", { action: "request_reset", email });
+
+export const verifyAdminPasswordReset = (email, code, new_password) =>
+  callFunction("school-admin-auth", { action: "verify_reset", email, code, new_password });
