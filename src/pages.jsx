@@ -207,3 +207,17 @@ export function Home() {
     </>
   );
 }
+
+export function About() { return <div className="section"><div className="wrap"><h1>About</h1><p>Content restoring…</p></div></div>; }
+export function Academics() { return <div className="section"><div className="wrap"><h1>Academics</h1><p>Content restoring…</p></div></div>; }
+export function Admissions() { return <div className="section"><div className="wrap"><h1>Admissions</h1><p>Content restoring…</p></div></div>; }
+export function Gallery() { return <div className="section"><div className="wrap"><h1>Gallery</h1><p>Content restoring…</p></div></div>; }
+export function ReadingMaterials() { return <div className="section"><div className="wrap"><h1>Reading Materials</h1><p>Content restoring…</p></div></div>; }
+export function Contact() { return <div className="section"><div className="wrap"><h1>Contact</h1><p>Content restoring…</p></div></div>; }
+export function Directors() { return <div className="section"><div className="wrap"><h1>Directors</h1><p>Content restoring…</p></div></div>; }
+export function Privacy() { return <div className="section"><div className="wrap"><h1>Privacy</h1><p>Content restoring…</p></div></div>; }
+export function Blog() { return <div className="section"><div className="wrap"><h1>Blog</h1><p>Content restoring…</p></div></div>; }
+export function Sitemap() { return <div className="section"><div className="wrap"><h1>Sitemap</h1><p>Content restoring…</p></div></div>; }
+export function SchoolLife() { return <div className="section"><div className="wrap"><h1>School Life</h1><p>Content restoring…</p></div></div>; }
+export function Fees() { return <div className="section"><div className="wrap"><h1>Fees</h1><p>Content restoring…</p></div></div>; }
+export function FAQ() { return <div className="section"><div className="wrap"><h1>FAQ</h1><p>Content restoring…</p></div></div>; }
