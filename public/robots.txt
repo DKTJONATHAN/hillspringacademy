@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hillspringacademy.sc.ke/sitemap.xml
+Sitemap: https://hillspringsacademy.sc.ke/sitemap.xml
