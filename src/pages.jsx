@@ -114,6 +114,17 @@ export function About() {
       </section>
       <section className="section">
         <div className="wrap">
+          <span className="eyebrow">School identity</span>
+          <h2>What families can expect</h2>
+          <div className="cols">
+            <article className="card"><h3>Strong foundations</h3><p>Foundational literacy, numeracy, communication and positive learning habits support progress across the primary years.</p></article>
+            <article className="card"><h3>Character and values</h3><p>Learning is connected with respect, honesty, responsibility, cooperation and care for the school community.</p></article>
+            <article className="card"><h3>Partnership with families</h3><p>Parents and guardians are encouraged to communicate with the school about admissions, progress and learner support.</p></article>
+          </div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="wrap">
           <h2>News and notices</h2>
           {SCHOOL.news.map((n) => <div className="notice" key={n.title}><b>{n.title}</b>{n.date && <span> ({n.date})</span>}<p>{n.text}</p></div>)}
         </div>
@@ -140,6 +151,15 @@ export function Academics() {
             <h3>{l.title}</h3>
             <p>{l.text}</p>
             <ul className="tags">{SCHOOL.subjects.map((s) => <li key={s}>{s}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="wrap">
+          <span className="eyebrow">How learning works</span>
+          <h2>A broader approach to CBE</h2>
+          <div className="cols">
+            {SCHOOL.learningApproach.map((x) => <article className="card" key={x.title}><h3>{x.title}</h3><p>{x.text}</p></article>)}
           </div>
         </div>
       </section>
@@ -185,6 +205,17 @@ export function Admissions() {
           </div>
         </div>
       </section>
+      <section className="section">
+        <div className="wrap">
+          <span className="eyebrow">Before you apply</span>
+          <h2>Prepare for admission</h2>
+          <div className="cols">
+            <article className="card"><h3>Confirm the grade</h3><p>Tell the admissions office the learner's current level and the grade being requested so the school can explain the applicable placement process.</p></article>
+            <article className="card"><h3>Request current information</h3><p>Ask for the latest admission form, fee structure, reporting instructions and any school-specific requirements.</p></article>
+            <article className="card"><h3>Plan a school visit</h3><p>A visit gives families an opportunity to ask questions about learning, school routines and the learner's transition.</p></article>
+          </div>
+        </div>
+      </section>
       <section className="section alt">
         <div className="wrap split">
           <div className="reveal">
@@ -225,6 +256,9 @@ export function Gallery() {
       <PageHead title="Gallery" text="A look at life at Hill Springs Academy." />
       <section className="section">
         <div className="wrap">
+          <span className="eyebrow">Photo stories</span>
+          <h2>Life at Hill Springs Academy</h2>
+          <p>Use this gallery to showcase authentic school activities, classroom moments, learner projects, sports and community events. Only approved school photographs should be uploaded, with appropriate consent for identifiable learners.</p>
           <div className="chips" role="group" aria-label="Filter photos">
             {cats.map((c) => <button key={c} className={c === cat ? "on" : ""} aria-pressed={c === cat} onClick={() => setCat(c)}>{c}</button>)}
           </div>
@@ -261,6 +295,7 @@ export function ReadingMaterials() {
           <div className="row-head">
             <div><span className="eyebrow">Learner resources</span><h2>Read and learn online</h2><p>Choose a material below to open the PDF in your browser. You can also download it for offline reading.</p></div>
           </div>
+          <div className="card" style={{marginBottom:"24px"}}><p><strong>Copyright notice:</strong> Only materials the school owns, has permission to redistribute, or that are released under a licence allowing redistribution should be uploaded here. Each item should identify its copyright owner and licence.</p></div>
           <div className="materials-grid">
             {materials.map((m) => (
               <article className="material-card" key={m.file}>
@@ -276,6 +311,96 @@ export function ReadingMaterials() {
             ))}
           </div>
           {materials.length === 0 && <div className="card"><p>No reading materials have been added yet.</p></div>}
+        </div>
+      </section>
+    </>
+  );
+}
+
+export function SchoolLife() {
+  return (
+    <>
+      <PageHead title="School Life" text="Explore learning, activities, character development and the wider school experience at Hill Springs Academy." />
+      <section className="section">
+        <div className="wrap">
+          <span className="eyebrow">Beyond the classroom</span>
+          <h2>A balanced school experience</h2>
+          <p className="lead">A strong primary-school experience is more than lessons alone. Learners also need opportunities to communicate, create, collaborate, stay active and develop confidence and responsibility.</p>
+          <div className="cols">
+            {SCHOOL.activities.map((a) => <article className="card" key={a}><h3>{a}</h3><p>Activities at Hill Springs Academy can give learners opportunities to practise teamwork, communication, creativity, discipline and positive participation. The school can update this section with current clubs, teams, schedules and achievements.</p></article>)}
+          </div>
+        </div>
+      </section>
+      <section className="section alt">
+        <div className="wrap">
+          <span className="eyebrow">For families</span>
+          <h2>Supporting learners together</h2>
+          <div className="cols">
+            {SCHOOL.parentInfo.map((x) => <article className="card" key={x.title}><h3>{x.title}</h3><p>{x.text}</p></article>)}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+export function Fees() {
+  return (
+    <>
+      <PageHead title="School Fees & Financial Information" text="Find out how to request the current Hill Springs Academy fee structure and understand the costs associated with joining the school." />
+      <section className="section">
+        <div className="wrap split">
+          <div>
+            <span className="eyebrow">Current information</span>
+            <h2>Request the latest fee structure</h2>
+            <p>Fee amounts, payment schedules and other charges can change from one school year or term to another. For that reason, this website does not publish an unverified figure.</p>
+            <p>Parents and guardians should contact the admissions office for the current official fee structure, payment instructions, reporting requirements and any applicable charges.</p>
+            <a className="btn" href={`mailto:${SCHOOL.admissionsEmail}?subject=Current%20fee%20structure%20request`}>Request fee structure</a>
+          </div>
+          <div className="card">
+            <h3>When asking about fees</h3>
+            <ul className="checks">
+              <li>Ask for the current term and school-year fee schedule.</li>
+              <li>Confirm what tuition or school charges are included.</li>
+              <li>Ask about payment dates and accepted payment methods.</li>
+              <li>Confirm requirements for a new or transferring learner.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section className="section alt">
+        <div className="wrap">
+          <h2>Transparent information for parents</h2>
+          <p>Parents should receive the same official fee information from the admissions office and the school website. If the school publishes a new approved fee document, it can be added to the website's downloadable resources without changing the rest of the site.</p>
+        </div>
+      </section>
+    </>
+  );
+}
+
+export function FAQ() {
+  const [open, setOpen] = useState(0);
+  const items = [
+    ...SCHOOL.faqs,
+    { q: "Where is Hill Springs Academy located?", a: "Hill Springs Academy is located in Maua, Igembe South, Meru County, Kenya." },
+    { q: "Which curriculum does the website describe?", a: "The site describes learning in the context of Kenya's Competency-Based Education approach. Parents should confirm the school's current grade structure and subject timetable with the school." },
+    { q: "How can I get the current school fees?", a: "Contact the admissions office at admissions@hillspringacademy.sc.ke for the latest official fee structure." },
+    { q: "Can I visit the school before admission?", a: "Yes. Contact the admissions office in advance to arrange a visit and confirm the appropriate time." },
+    { q: "Where can learners find reading materials?", a: "The Reading Materials section provides PDFs that the school is authorised to publish. Additional materials can be added as they are verified and approved for online distribution." }
+  ];
+  return (
+    <>
+      <PageHead title="Frequently Asked Questions" text="Answers to common questions from parents and guardians about Hill Springs Academy." />
+      <section className="section">
+        <div className="wrap prose">
+          <h2>Parents' questions</h2>
+          <p>Use the answers below as a starting point. For learner-specific, fee, placement or admissions decisions, contact the school directly.</p>
+          {items.map((f, i) => (
+            <div className="faq" key={f.q}>
+              <button aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>{f.q}<span aria-hidden="true">{open === i ? "−" : "+"}</span></button>
+              <div className={"ans" + (open === i ? " open" : "")}><p>{f.a}</p></div>
+            </div>
+          ))}
         </div>
       </section>
     </>
