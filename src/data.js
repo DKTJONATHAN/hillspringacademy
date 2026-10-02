@@ -11,11 +11,11 @@ export const SCHOOL = {
   admissionsEmail: "admissions@hillspringacademy.sc.ke",
   infoEmail: "info@hillspringacademy.sc.ke",
   phone: "",
-  address: "",
+  address: "Maua, Igembe South, Meru County, Kenya",
   hours: "",
   motto: "BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE",
   intro:
-    "Hill Springs Academy is a school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
+    "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. We offer Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education.",
   social: { facebook: "", instagram: "", x: "", youtube: "" },
   videos: [
     { id: "VzVgnbuUIPQ", title: "Alphabet sounds (CBC)", text: "Phonics and letter sounds for Playgroup, PP1 and PP2 — aligned with the Kenyan CBC system." },
@@ -72,7 +72,20 @@ export const SCHOOL = {
     { title: "Join", text: "Receive your admission decision and reporting details." },
   ],
   documents: ["Completed admission form", "Copy of birth certificate", "Recent passport photos", "Previous school report (if transferring)"],
-  siteKeywords: ["Hill Springs Academy", "Hill Springs Academy Maua", "primary school in Maua", "schools in Maua", "school in Igembe South", "schools in Meru County", "CBC school in Meru", "primary school Meru County", "Kenyan CBC school"],
+  siteKeywords: [
+    "Hill Springs Academy",
+    "Hill Springs Academy Maua",
+    "Hill Springs",
+    "schools in Maua",
+    "private schools in Maua",
+    "Maua Meru County",
+    "CBE school Maua",
+    "private school Igembe South",
+    "primary school in Maua",
+    "Hill Sprungs Academy",
+    "Hillsprings Academy Maua",
+    "Kenyan CBC school"
+  ],
   faqs: [
     { q: "How do I get an admission form?", a: "Email admissions@hillspringacademy.sc.ke and we will send it to you." },
     { q: "Can I visit the school before applying?", a: "Yes. Contact the admissions office to arrange a visit." },
@@ -87,15 +100,15 @@ export const SCHOOL = {
 /* Gallery: prefer real school photos. Add files under public/Gallery/ then list them here.
    Avoid clear face-forward portraits of children. */
 export const GALLERY = [
-  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", cat: "Campus" },
-  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus", cat: "Transport" },
-  { src: "/Gallery/school-gate.webp", alt: "Entrance to Hill Springs Academy", cat: "Campus" },
-  { src: "/Gallery/school-bus.webp", alt: "School transport at Hill Springs Academy", cat: "Transport" },
+  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua, Meru County", cat: "Campus" },
+  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua", cat: "Transport" },
+  { src: "/Gallery/school-gate.webp", alt: "Entrance to Hill Springs Academy, Maua", cat: "Campus" },
+  { src: "/Gallery/school-bus.webp", alt: "School transport at Hill Springs Academy, Meru County", cat: "Transport" },
 ];
 
 /* Hero slides — local photos first for authenticity and performance */
 export const HERO = [
-  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", title: "Welcome to Hill Springs Academy", text: "A school community in Maua, Meru County." },
-  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus", title: "Getting to school", text: "Transport services for learners — confirm routes with admissions." },
-  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy campus entrance", title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
+  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua, Meru County", title: "Hill Springs Academy, Maua", text: "A private CBE school in Meru County." },
+  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua", title: "Getting to school", text: "Transport for learners — confirm routes with admissions." },
+  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy campus entrance in Maua", title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
 ];
