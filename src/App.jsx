@@ -23,7 +23,7 @@ export default function App() {
       <div className="progress" style={{ transform: `scaleX(${p})` }} aria-hidden="true" />
       <Header theme={theme} toggle={toggle} scrolled={y > 12} />
       <main id="main">
-        <div className="page" key={pathname}>
+        <div className="page">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
