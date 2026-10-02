@@ -32,7 +32,7 @@ export function Photo({ src, alt, ratio = "4/3" }) {
   );
 }
 
-export function PageHead({ title, text, description, path }) {
+export function PageHead({ title, text, description, path, image }) {
   const metaDescription = description || text || "Hill Springs Academy in Maua, Meru County, Kenya — learning, admissions, school life and learner resources.";
   const canonicalPath = path || window.location.pathname;
   const cleanPath = canonicalPath === "/" ? "/" : (canonicalPath.endsWith("/") ? canonicalPath.slice(0, -1) : canonicalPath);
@@ -55,10 +55,16 @@ export function PageHead({ title, text, description, path }) {
     setMeta("og:type", "website");
     setMeta("og:url", canonical);
     setMeta("og:site_name", SCHOOL.name);
-    setMeta("og:image", `${SCHOOL.siteUrl}/logo.png`);
+    setMeta("og:image", image || `${SCHOOL.siteUrl}/social-preview.jpg`);
+    setMeta("og:image:alt", `${title} | ${SCHOOL.name}`);
+    setMeta("og:locale", "en_KE");
+    setMeta("og:image:width", "1200");
+    setMeta("og:image:height", "630");
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", `${title} | ${SCHOOL.name}`);
     setMeta("twitter:description", metaDescription);
+    setMeta("twitter:image", image || `${SCHOOL.siteUrl}/social-preview.jpg`);
+    setMeta("twitter:image:alt", `${title} | ${SCHOOL.name}`);
     let ld = document.getElementById("school-jsonld");
     if (!ld) { ld = document.createElement("script"); ld.id = "school-jsonld"; ld.type = "application/ld+json"; document.head.appendChild(ld); }
     ld.textContent = JSON.stringify({
