@@ -34,11 +34,15 @@ export const SCHOOL = {
     { title: "Character", text: "Respect, honesty and responsibility practised every day." },
     { title: "Community", text: "Parents, teachers and learners working together." },
   ],
+  stages: [
+    { title: "Kindergarten", text: "A nurturing early-learning stage where play, stories, movement, creativity and guided discovery support confidence and foundational development." },
+    { title: "Pre-Primary", text: "Early learning builds language, communication, number sense, social skills, creativity and positive learning habits through age-appropriate activities." },
+    { title: "Junior School", text: "Junior School learning develops stronger subject understanding, practical skills, collaboration, independent study and preparation for the next stage of education." },
+  ],
   levels: [
-    { title: "Pre-Primary", text: "Play, stories, songs, movement and guided discovery support early language, number sense, confidence and social development." },
-    { title: "Lower Primary · Grades 1–3", text: "Learners strengthen foundational literacy and numeracy, explore the environment, express ideas creatively and practise learning together." },
-    { title: "Middle Primary · Grades 4–6", text: "Learners build fluency, investigate questions, use digital and practical tools, and connect classroom concepts to everyday life." },
-    { title: "Upper Primary · Grades 7–9", text: "Junior-school learning deepens subject understanding, independent study, collaboration, creative problem-solving and exploration of interests." },
+    { title: "Kindergarten", text: "A nurturing early-learning stage where play, stories, movement, creativity and guided discovery support confidence and foundational development." },
+    { title: "Pre-Primary", text: "Early learning builds language, communication, number sense, social skills, creativity and positive learning habits through age-appropriate activities." },
+    { title: "Junior School", text: "Junior School learning develops stronger subject understanding, practical skills, collaboration, independent study and preparation for the next stage of education." },
   ],
   subjects: ["English", "Kiswahili", "Mathematics", "Science and Technology", "Social Studies", "Creative Arts", "Religious Education", "Physical Education"],
   activities: ["Sports and games", "Music and drama", "Clubs and societies", "ICT and digital skills", "Community service"],
@@ -75,22 +79,22 @@ export const SCHOOL = {
 /* Gallery: set src to "/gallery/your-photo.jpg" after adding the file to public/gallery/ */
 export const GALLERY = [
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", cat: "Campus" },
-  { src: "", alt: "Classroom learning", cat: "Classes" },
-  { src: "", alt: "Football on the field", cat: "Sports" },
-  { src: "", alt: "Morning assembly", cat: "Events" },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "African pupils learning in a classroom, photographed from behind", cat: "Classes" },
+  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Pupils working in a classroom, photographed from behind", cat: "Junior School" },
+  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Students learning with a teacher, viewed from behind", cat: "Classes" },
   { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus", cat: "Transport" },
-  { src: "", alt: "Science lesson", cat: "Classes" },
-  { src: "", alt: "Athletics day", cat: "Sports" },
-  { src: "", alt: "Prize giving", cat: "Events" },
-  { src: "", alt: "Library", cat: "Campus" },
-  { src: "", alt: "Computer lab", cat: "Classes" },
-  { src: "", alt: "Netball match", cat: "Sports" },
-  { src: "", alt: "Cultural day", cat: "Events" },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Pupils concentrating on schoolwork in a classroom", cat: "Classes" },
+  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Learners studying together in a classroom", cat: "Junior School" },
+  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Young learners engaged in classroom activities", cat: "Kindergarten" },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Learners reading and writing in a classroom", cat: "Pre-Primary" },
+  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Junior School learners working at desks", cat: "Junior School" },
+  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Young learners participating in classroom learning", cat: "Kindergarten" },
+  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Classroom learning activity with pupils viewed from behind", cat: "Pre-Primary" },
 ];
 
 /* Hero slides on the home page. Add "src: '/gallery/photo.jpg'" to show a real photo. */
 export const HERO = [
-  { src: "", alt: "Photo: learners in class", title: "Welcome to Hill Springs Academy", text: "Building an excellent foundation for a brighter future." },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "African pupils learning in a classroom, photographed from behind", title: "Learning at Hill Springs Academy", text: "A learning environment for Kindergarten, Pre-Primary and Junior School." },
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", title: "Welcome to Hill Springs Academy", text: "A school community in Maua, Meru County." },
-  { src: "", alt: "Photo: sports and activities", title: "Life beyond the classroom", text: "Sports, music, clubs and more." },
+  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Young African learners in a classroom activity", title: "Early learning", text: "Kindergarten and Pre-Primary learning built around age-appropriate discovery." },
 ];
