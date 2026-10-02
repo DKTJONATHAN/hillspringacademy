@@ -310,7 +310,7 @@ export function ReadingMaterials() {
   const materials = SCHOOL.readingMaterials || [];
   return (
     <>
-      <PageHead title="Reading Materials" text="Access learning materials and revision resources for our learners." />
+      <PageHead title="Kenyan CBC Reading Materials" text="Access authorised learning and revision resources for Hill Springs Academy learners, organised by grade and subject." />
       <section className="section">
         <div className="wrap">
           <div className="row-head">
