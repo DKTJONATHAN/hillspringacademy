@@ -105,7 +105,7 @@ export function Home() {
         <div className="wrap reveal">
           <h2>Admissions are open</h2>
           <p>Write to the admissions office and we will guide you through every step.</p>
-          <a className="btn white" href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
+          <Link className="btn white" to="/admissions#enquiry">Start an admissions enquiry</Link>
         </div>
       </section>
     </>
@@ -413,7 +413,7 @@ export function Fees() {
             <h2>Request the latest fee structure</h2>
             <p>Fee amounts, payment schedules and other charges can change from one school year or term to another. For that reason, this website does not publish an unverified figure.</p>
             <p>Parents and guardians should contact the admissions office for the current official fee structure, payment instructions, reporting requirements and any applicable charges.</p>
-            <a className="btn" href={`mailto:${SCHOOL.admissionsEmail}?subject=Current%20fee%20structure%20request`}>Request fee structure</a>
+            <Link className="btn" to="/contact#contact-form">Request fee structure</Link>
           </div>
           <div className="card">
             <h3>When asking about fees</h3>
@@ -509,15 +509,15 @@ export function Contact() {
       <section className="section">
         <div className="wrap split">
           <div className="info">
-            <p><b>Admissions</b><a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a></p>
-            <p><b>General enquiries</b><a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a></p>
+            <p><b>Admissions</b><Link className="textlink" to="/admissions#enquiry">Send an admissions enquiry</Link><span>{SCHOOL.admissionsEmail}</span></p>
+            <p><b>General enquiries</b><span>{SCHOOL.infoEmail}</span></p>
             {SCHOOL.phone && <p><b>Phone</b>{SCHOOL.phone}</p>}
             <p><b>Location</b>{SCHOOL.address && <>{SCHOOL.address}<br /></>}{SCHOOL.town}</p>
             {SCHOOL.hours && <p><b>Office hours</b>{SCHOOL.hours}</p>}
             <a className="btn ghost dark" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=Hill+Spring+Academy+Maua">Open in Google Maps</a>
             <div className="map-frame"><iframe title="Map showing Hill Springs Academy in Maua" src="https://www.google.com/maps?q=Hill%20Spring%20Academy%2C%20Maua%2C%20Kenya&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
           </div>
-          <form onSubmit={send} className="enquiry-form">
+          <form id="contact-form" onSubmit={send} className="enquiry-form">
             <label>Your name<input name="name" required autoComplete="name" /></label>
             <label>Your email<input name="email" type="email" required autoComplete="email" /></label>
             <label>Phone<input name="phone" autoComplete="tel" /></label>
