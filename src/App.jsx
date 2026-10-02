@@ -31,6 +31,7 @@ export default function App() {
             <Route path="/directors" element={<Directors />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<Blog />} />
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/academics" element={<Academics />} />
             <Route path="/admissions" element={<Admissions />} />
