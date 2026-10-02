@@ -479,6 +479,20 @@ export function Blog() {
  return <><PageHead title="Ideas for growing minds" text="Notes for parents and educators on learning, wellbeing and childhood."/><section className="section"><div className="wrap blog-grid">{posts.map(([title,desc],i)=><article className="blog-card" key={title}><div className="blog-art" aria-hidden="true">{["✎","▤","✿","☆"][i]}</div><span className="eyebrow">Learning & family</span><h2>{title}</h2><p>{desc}</p><span className="coming">Article preview · Full post coming soon</span></article>)}</div></section></>;
 }
 export function Sitemap() {
- const links=[["Home","/"],["About the school","/about"],["Our directors","/directors"],["Academics & CBE","/academics"],["Admissions","/admissions"],["Gallery","/gallery"],["Learning blog","/blog"],["Privacy & child protection","/privacy"],["Contact","/contact"]];
- return <><PageHead title="Sitemap" text="Find your way around Hill Springs Academy."/><section className="section"><div className="wrap sitemap-list">{links.map(([label,to])=><Link key={to} to={to}>{label}<span>↗</span></Link>)}</div></section></>;
+  const links=[
+    ["Home","/"],
+    ["About the school","/about"],
+    ["Academics & CBE","/academics"],
+    ["Admissions","/admissions"],
+    ["School fees & financial information","/fees"],
+    ["School life","/school-life"],
+    ["Reading materials","/reading-materials"],
+    ["Gallery","/gallery"],
+    ["Frequently asked questions","/faq"],
+    ["Leadership","/directors"],
+    ["Learning blog","/blog"],
+    ["Contact","/contact"],
+    ["Privacy & child protection","/privacy"]
+  ];
+  return <><PageHead title="Sitemap" text="Find the main public sections of Hill Springs Academy."/><section className="section"><div className="wrap sitemap-list">{links.map(([label,to])=><Link key={to} to={to}>{label}<span>↗</span></Link>)}</div></section></>;
 }
