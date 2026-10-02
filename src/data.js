@@ -15,9 +15,16 @@ export const SCHOOL = {
   hours: "",
   motto: "BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE",
   intro:
-    "A school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
+    "Hill Springs Academy is a school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
   social: { facebook: "", instagram: "", x: "", youtube: "" },
-  videoIds: ["vD-ZwMjRDPU", "R0K7VKkksyc"],
+  videos: [
+    { id: "ncORPosDrjI", title: "The Water Cycle", text: "Dr. Binocs explains evaporation, condensation and precipitation in a fun way." },
+    { id: "TD3XSIE4ymo", title: "Water Cycle for Kids", text: "Clear stages of the water cycle with practical examples for young learners." },
+    { id: "C2ZLewPxZtc", title: "Water Cycle Experiment (Ubongo Kids)", text: "African educational cartoon that shows the water cycle through a simple experiment." },
+    { id: "B77sebHmfdk", title: "Why Does It Rain?", text: "A short, friendly explanation of how rain is formed." },
+    { id: "vD-ZwMjRDPU", title: "The Water Cycle (classroom)", text: "Explore how water moves through our world." },
+    { id: "R0K7VKkksyc", title: "Where does water come from?", text: "A simple science story for curious learners." },
+  ],
   readingMaterials: [
     { title: "Grade 1 English Reading Material", grade: "Grade 1", description: "Reading practice and language activities.", file: "/reading-materials/grade-1-english.pdf" },
     { title: "Grade 2 Mathematics Practice", grade: "Grade 2", description: "Mathematics revision and practice exercises.", file: "/reading-materials/grade-2-mathematics.pdf" },
@@ -47,28 +54,28 @@ export const SCHOOL = {
   subjects: ["English", "Kiswahili", "Mathematics", "Science and Technology", "Social Studies", "Creative Arts", "Religious Education", "Physical Education"],
   activities: ["Sports and games", "Music and drama", "Clubs and societies", "ICT and digital skills", "Community service"],
   learningApproach: [
-    { title: "Competency development", text: "Learning is presented around knowledge, skills, values and positive attitudes, with opportunities for learners to apply what they know." },
+    { title: "Competency development", text: "Learning focuses on knowledge, skills, values and positive attitudes, with clear opportunities for learners to apply what they know." },
     { title: "Literacy and numeracy", text: "Strong foundations in reading, writing, communication and mathematics support learning across the curriculum." },
-    { title: "Practical learning", text: "Inquiry, projects, discussion, creativity and real-life examples can help learners connect classroom concepts to everyday situations." },
+    { title: "Practical learning", text: "Inquiry, projects, discussion and real-life examples help children connect classroom ideas to everyday life." },
     { title: "Character and values", text: "Respect, responsibility, honesty, cooperation and care for others are part of a balanced education." },
   ],
   parentInfo: [
-    { title: "Admissions guidance", text: "Parents can contact the admissions office for the current admission form, available places, reporting requirements and the latest fee information." },
+    { title: "Admissions guidance", text: "Contact the admissions office for the current admission form, available places, reporting requirements and the latest fee information." },
     { title: "Learning support", text: "Families can discuss a learner's transition, learning needs and progress with the school so that appropriate support can be planned." },
-    { title: "Communication", text: "The school website provides public information while direct school communication should be used for learner-specific or confidential matters." },
+    { title: "Communication", text: "This website provides public information. For learner-specific or confidential matters, please contact the school directly." },
   ],
   steps: [
-    { title: "Enquire", text: "Email the admissions office to ask for the admission form and current fee details." },
+    { title: "Enquire", text: "Email the admissions office to request the admission form and current fee details." },
     { title: "Apply", text: "Submit the completed form with the required learner documents." },
     { title: "Visit", text: "Tour the school and meet the admissions team." },
-    { title: "Join", text: "Receive your admission decision and report-in details." },
+    { title: "Join", text: "Receive your admission decision and reporting details." },
   ],
   documents: ["Completed admission form", "Copy of birth certificate", "Recent passport photos", "Previous school report (if transferring)"],
   siteKeywords: ["Hill Springs Academy", "Hill Springs Academy Maua", "primary school in Maua", "schools in Maua", "school in Igembe South", "schools in Meru County", "CBC school in Meru", "primary school Meru County", "Kenyan CBC school"],
   faqs: [
     { q: "How do I get an admission form?", a: "Email admissions@hillspringacademy.sc.ke and we will send it to you." },
     { q: "Can I visit the school before applying?", a: "Yes. Contact the admissions office to arrange a visit." },
-    { q: "Does Hill Springs Academy offer school transport?", a: "Yes, school transport services are offered. Contact admissions to confirm current route coverage, availability, arrangements and charges." },
+    { q: "Does Hill Springs Academy offer school transport?", a: "Yes. Contact admissions to confirm current route coverage, availability, arrangements and charges." },
     { q: "Where can I find fee information?", a: "Ask the admissions office for the current fee structure." },
   ],
   news: [
@@ -79,22 +86,22 @@ export const SCHOOL = {
 /* Gallery: set src to "/gallery/your-photo.jpg" after adding the file to public/gallery/ */
 export const GALLERY = [
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", cat: "Campus" },
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "African pupils learning in a classroom, photographed from behind", cat: "Classes" },
-  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Pupils working in a classroom, photographed from behind", cat: "Junior School" },
-  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Students learning with a teacher, viewed from behind", cat: "Classes" },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "African pupils learning in a classroom, photographed from behind", cat: "Classes" },
+  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Pupils working in a classroom, photographed from behind", cat: "Junior School" },
+  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Students learning with a teacher, viewed from behind", cat: "Classes" },
   { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus", cat: "Transport" },
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Pupils concentrating on schoolwork in a classroom", cat: "Classes" },
-  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Learners studying together in a classroom", cat: "Junior School" },
-  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Young learners engaged in classroom activities", cat: "Kindergarten" },
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Learners reading and writing in a classroom", cat: "Pre-Primary" },
-  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Junior School learners working at desks", cat: "Junior School" },
-  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Young learners participating in classroom learning", cat: "Kindergarten" },
-  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Classroom learning activity with pupils viewed from behind", cat: "Pre-Primary" },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Pupils concentrating on schoolwork in a classroom", cat: "Classes" },
+  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Learners studying together in a classroom", cat: "Junior School" },
+  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Young learners engaged in classroom activities", cat: "Kindergarten" },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Learners reading and writing in a classroom", cat: "Pre-Primary" },
+  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Junior School learners working at desks", cat: "Junior School" },
+  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Young learners participating in classroom learning", cat: "Kindergarten" },
+  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Classroom learning activity with pupils viewed from behind", cat: "Pre-Primary" },
 ];
 
-/* Hero slides on the home page. Add "src: '/gallery/photo.jpg'" to show a real photo. */
+/* Hero slides on the home page. Prefer local images for performance. */
 export const HERO = [
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "African pupils learning in a classroom, photographed from behind", title: "Learning at Hill Springs Academy", text: "A learning environment for Kindergarten, Pre-Primary and Junior School." },
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", title: "Welcome to Hill Springs Academy", text: "A school community in Maua, Meru County." },
-  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=1600", alt: "Young African learners in a classroom activity", title: "Early learning", text: "Kindergarten and Pre-Primary learning built around age-appropriate discovery." },
+  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=900", alt: "African pupils learning in a classroom, photographed from behind", title: "Learning that lasts", text: "Kindergarten, Pre-Primary and Junior School." },
+  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=900", alt: "Young African learners in a classroom activity", title: "Early learning", text: "Age-appropriate discovery that builds confidence." },
 ];
