@@ -18,14 +18,13 @@ export const SCHOOL = {
     "Hill Springs Academy is a school in Maua, Meru County, committed to strong academics, good character and a caring community for every learner.",
   social: { facebook: "", instagram: "", x: "", youtube: "" },
   videos: [
-    { id: "ncORPosDrjI", title: "The Water Cycle", text: "Dr. Binocs explains evaporation, condensation and precipitation in a fun way." },
-    { id: "TD3XSIE4ymo", title: "Water Cycle for Kids", text: "Clear stages of the water cycle with practical examples for young learners." },
-    { id: "C2ZLewPxZtc", title: "Water Cycle Experiment (Ubongo Kids)", text: "African educational cartoon that shows the water cycle through a simple experiment." },
-    { id: "B77sebHmfdk", title: "Why Does It Rain?", text: "A short, friendly explanation of how rain is formed." },
-    { id: "vD-ZwMjRDPU", title: "The Water Cycle (classroom)", text: "Explore how water moves through our world." },
-    { id: "R0K7VKkksyc", title: "Where does water come from?", text: "A simple science story for curious learners." },
+    { id: "VzVgnbuUIPQ", title: "Alphabet sounds (CBC)", text: "Phonics and letter sounds for Playgroup, PP1 and PP2 — aligned with the Kenyan CBC system." },
+    { id: "YxcIXoig-J8", title: "Writing numbers 1 to 10", text: "Mathematical activities for early learners: how to write numbers 1–10 (CBC)." },
+    { id: "OUWqFYSSxKQ", title: "Wild and domestic animals", text: "Learn types of animals — a CBC science topic for Playgroup through lower grades." },
+    { id: "C2ZLewPxZtc", title: "Water cycle experiment (Ubongo Kids)", text: "African educational cartoon that shows the water cycle through a simple home experiment." },
+    { id: "cQ9dO9leHL0", title: "Vowel sounds", text: "Vowel sounds for Playgroup, PP1 and PP2 under the CBC system." },
+    { id: "uwK-cVMt_08", title: "Counting 1 to 30", text: "Mathematical activities: counting numbers 1 to 30 for CBC early years." },
   ],
-  // compatibility for existing Home until VideoCard + Watch more is fully deployed
   get videoIds() { return this.videos.map(v => v.id); },
   readingMaterials: [
     { title: "Grade 1 English Reading Material", grade: "Grade 1", description: "Reading practice and language activities.", file: "/reading-materials/grade-1-english.pdf" },
@@ -85,25 +84,18 @@ export const SCHOOL = {
   ],
 };
 
-/* Gallery: set src to "/gallery/your-photo.jpg" after adding the file to public/gallery/ */
+/* Gallery: prefer real school photos. Add files under public/Gallery/ then list them here.
+   Avoid clear face-forward portraits of children. */
 export const GALLERY = [
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", cat: "Campus" },
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "African pupils learning in a classroom, photographed from behind", cat: "Classes" },
-  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Pupils working in a classroom, photographed from behind", cat: "Junior School" },
-  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Students learning with a teacher, viewed from behind", cat: "Classes" },
   { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus", cat: "Transport" },
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Pupils concentrating on schoolwork in a classroom", cat: "Classes" },
-  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Learners studying together in a classroom", cat: "Junior School" },
-  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Young learners engaged in classroom activities", cat: "Kindergarten" },
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Learners reading and writing in a classroom", cat: "Pre-Primary" },
-  { src: "https://images.pexels.com/photos/5905438/pexels-photo-5905438.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Junior School learners working at desks", cat: "Junior School" },
-  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Young learners participating in classroom learning", cat: "Kindergarten" },
-  { src: "https://images.pexels.com/photos/5905919/pexels-photo-5905919.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Classroom learning activity with pupils viewed from behind", cat: "Pre-Primary" },
+  { src: "/Gallery/school-gate.webp", alt: "Entrance to Hill Springs Academy", cat: "Campus" },
+  { src: "/Gallery/school-bus.webp", alt: "School transport at Hill Springs Academy", cat: "Transport" },
 ];
 
-/* Hero slides on the home page. Prefer local images for performance. */
+/* Hero slides — local photos first for authenticity and performance */
 export const HERO = [
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate", title: "Welcome to Hill Springs Academy", text: "A school community in Maua, Meru County." },
-  { src: "https://images.pexels.com/photos/5905450/pexels-photo-5905450.jpeg?auto=compress&cs=tinysrgb&w=900", alt: "African pupils learning in a classroom, photographed from behind", title: "Learning that lasts", text: "Kindergarten, Pre-Primary and Junior School." },
-  { src: "https://images.pexels.com/photos/5905928/pexels-photo-5905928.jpeg?auto=compress&cs=tinysrgb&w=900", alt: "Young African learners in a classroom activity", title: "Early learning", text: "Age-appropriate discovery that builds confidence." },
+  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus", title: "Getting to school", text: "Transport services for learners — confirm routes with admissions." },
+  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy campus entrance", title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
 ];
