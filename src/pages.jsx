@@ -250,6 +250,38 @@ export function Gallery() {
   );
 }
 
+
+export function ReadingMaterials() {
+  const materials = SCHOOL.readingMaterials || [];
+  return (
+    <>
+      <PageHead title="Reading Materials" text="Access learning materials and revision resources for our learners." />
+      <section className="section">
+        <div className="wrap">
+          <div className="row-head">
+            <div><span className="eyebrow">Learner resources</span><h2>Read and learn online</h2><p>Choose a material below to open the PDF in your browser. You can also download it for offline reading.</p></div>
+          </div>
+          <div className="materials-grid">
+            {materials.map((m) => (
+              <article className="material-card" key={m.file}>
+                <div className="material-icon" aria-hidden="true">PDF</div>
+                <span className="eyebrow">{m.grade}</span>
+                <h3>{m.title}</h3>
+                <p>{m.description}</p>
+                <div className="btns">
+                  <a className="btn small" href={m.file} target="_blank" rel="noopener noreferrer">Read online</a>
+                  <a className="btn small ghost" href={m.file} download>Download PDF</a>
+                </div>
+              </article>
+            ))}
+          </div>
+          {materials.length === 0 && <div className="card"><p>No reading materials have been added yet.</p></div>}
+        </div>
+      </section>
+    </>
+  );
+}
+
 export function Contact() {
   const [toast, setToast] = useState(false);
   const send = (e) => {
