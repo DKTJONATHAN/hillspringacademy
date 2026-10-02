@@ -149,8 +149,7 @@ export function Footer() {
         </div>
       </div>
       <div className="wrap legal">
-        © {new Date().getFullYear()} {SCHOOL.name}. Website by Jonathan Mwaniki of{" "}
-        <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">zandani.co.ke</a>.
+        © {new Date().getFullYear()} {SCHOOL.name}. Website by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>.
       </div>
     </footer>
   );
