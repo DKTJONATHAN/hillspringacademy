@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SCHOOL, GALLERY } from "./data.js";
+import { BLOG_POSTS } from "./blogData.js";
 import { Photo, PageHead } from "./components.jsx";
 import { submitSchoolEnquiry } from "./supabase.js";
 
@@ -370,15 +371,66 @@ export function Privacy() {
 }
 
 export function Blog() {
+  const { slug } = useParams();
+  const post = BLOG_POSTS.find((item) => item.slug === slug);
+  if (slug) {
+    if (!post) {
+      return (
+        <>
+          <PageHead title="Article not found" text="This article could not be found." path="/blog" />
+          <section className="section"><div className="wrap"><Link className="btn" to="/blog">Back to blog</Link></div></section>
+        </>
+      );
+    }
+    const canonicalPath = `/blog/${post.slug}`;
+    return (
+      <>
+        <PageHead title={post.title} text={post.intro} description={`${post.intro.slice(0, 145)}…`} path={canonicalPath} image={`${SCHOOL.siteUrl}/social-preview.jpg`} />
+        <article className="section">
+          <div className="wrap prose blog-article">
+            <Link className="textlink" to="/blog">← All articles</Link>
+            <span className="eyebrow">{post.date} · Learning & family</span>
+            <h1>{post.title}</h1>
+            <p className="lead">{post.intro}</p>
+            {post.sections.map(([heading, body]) => (
+              <section key={heading}><h2>{heading}</h2><p>{body}</p></section>
+            ))}
+            <div className="card">
+              <p><strong>For families:</strong> {post.closing}</p>
+              <p className="article-byline">Written by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>. This is general family-learning information, not a substitute for advice from your child’s teacher or current official curriculum materials.</p>
+              <h3>Sources and further reading</h3>
+              <ul>
+                <li><a href="https://kicd.ac.ke/curriculum-reform/basic-education-curriculum-framework/" target="_blank" rel="noopener noreferrer">Kenya Institute of Curriculum Development: Basic Education Curriculum Framework</a></li>
+                <li><a href="https://kicd.ac.ke/cbc-materials/" target="_blank" rel="noopener noreferrer">KICD: CBC curriculum and learning materials</a></li>
+              </ul>
+            </div>
+            <p><Link className="textlink" to="/blog">Explore more learning articles</Link></p>
+          </div>
+        </article>
+      </>
+    );
+  }
   return (
     <>
-      <PageHead title="Blog" text="News and notes from Hill Springs Academy." />
+      <PageHead title="Ideas for Growing Minds" text="Practical learning, reading, play and family study guidance for parents and learners at Hill Springs Academy." path="/blog" image={`${SCHOOL.siteUrl}/social-preview.jpg`} />
       <section className="section">
         <div className="wrap">
-          <p>School articles and notices will appear here. For the latest updates, contact the school or subscribe on the home page.</p>
-          {SCHOOL.news.map((n) => (
-            <div className="notice" key={n.title}><b>{n.title}</b><p>{n.text}</p></div>
-          ))}
+          <span className="eyebrow">Hill Springs Academy · Learning blog</span>
+          <h2>Ideas for growing minds</h2>
+          <p className="lead">Practical articles for families who want to support learning beyond the classroom.</p>
+          <div className="blog-grid">
+            {BLOG_POSTS.map((item) => (
+              <article className="blog-card" key={item.slug}>
+                <Link className="blog-card-link" to={`/blog/${item.slug}`} aria-label={`Read ${item.title}`}>
+                  <div className="blog-art" aria-hidden="true">✎</div>
+                  <span className="eyebrow">{item.date}</span>
+                  <h2>{item.title}</h2>
+                  <p>{item.intro}</p>
+                  <span className="textlink">Read full article →</span>
+                </Link>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
     </>
