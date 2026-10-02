@@ -3,6 +3,7 @@
    Everything else is placeholder copy: replace with the school's real details.
    Empty strings are hidden automatically. */
 export const SCHOOL = {
+  siteUrl: "https://hillspringacademy.sc.ke",
   name: "Hill Springs Academy",
   short: "Hill Springs",
   town: "Maua, Igembe South, Meru County, Kenya",
@@ -41,6 +42,17 @@ export const SCHOOL = {
   ],
   subjects: ["English", "Kiswahili", "Mathematics", "Science and Technology", "Social Studies", "Creative Arts", "Religious Education", "Physical Education"],
   activities: ["Sports and games", "Music and drama", "Clubs and societies", "ICT and digital skills", "Community service"],
+  learningApproach: [
+    { title: "Competency development", text: "Learning is presented around knowledge, skills, values and positive attitudes, with opportunities for learners to apply what they know." },
+    { title: "Literacy and numeracy", text: "Strong foundations in reading, writing, communication and mathematics support learning across the curriculum." },
+    { title: "Practical learning", text: "Inquiry, projects, discussion, creativity and real-life examples can help learners connect classroom concepts to everyday situations." },
+    { title: "Character and values", text: "Respect, responsibility, honesty, cooperation and care for others are part of a balanced education." },
+  ],
+  parentInfo: [
+    { title: "Admissions guidance", text: "Parents can contact the admissions office for the current admission form, available places, reporting requirements and the latest fee information." },
+    { title: "Learning support", text: "Families can discuss a learner's transition, learning needs and progress with the school so that appropriate support can be planned." },
+    { title: "Communication", text: "The school website provides public information while direct school communication should be used for learner-specific or confidential matters." },
+  ],
   steps: [
     { title: "Enquire", text: "Email the admissions office to ask for the admission form and current fee details." },
     { title: "Apply", text: "Submit the completed form with the required learner documents." },
@@ -48,6 +60,7 @@ export const SCHOOL = {
     { title: "Join", text: "Receive your admission decision and report-in details." },
   ],
   documents: ["Completed admission form", "Copy of birth certificate", "Recent passport photos", "Previous school report (if transferring)"],
+  siteKeywords: ["Hill Springs Academy", "Hill Springs Academy Maua", "primary school in Maua", "schools in Maua", "school in Igembe South", "schools in Meru County", "CBC school in Meru", "primary school Meru County", "Kenyan CBC school"],
   faqs: [
     { q: "How do I get an admission form?", a: "Email admissions@hillspringacademy.sc.ke and we will send it to you." },
     { q: "Can I visit the school before applying?", a: "Yes. Contact the admissions office to arrange a visit." },
