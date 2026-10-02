@@ -475,8 +475,102 @@ export function Privacy() {
  return <><PageHead title="Privacy & child protection" text="We respect the privacy, dignity and safety of every learner and family."/><section className="section"><div className="wrap prose"><h2>Information we collect</h2><p>When families contact the school, we may receive names, contact details and information they choose to share about a learner. The school should only collect information needed for education, admissions, communication and learner welfare.</p><h2>How information is used</h2><p>Information is used for school administration, learning support, safeguarding and responding to enquiries. Access should be limited to authorised staff and information should not be published without an appropriate lawful basis.</p><h2>Children’s images</h2><p>Photos, recordings and learner work should be shared only with appropriate parent or guardian consent and in line with the school’s safeguarding procedures. Do not submit sensitive learner information through this website.</p><h2>Your choices</h2><p>For privacy questions or requests, contact the school office using the contact details on this website. This page is a public-facing summary and should be reviewed against the school’s approved privacy policy.</p></div></section></>;
 }
 export function Blog() {
- const posts=[["CBE at home: learning beyond the classroom","Simple ways families can encourage curiosity, reading and practical problem-solving."],["Reading together builds confident learners","A short daily reading routine can help children grow vocabulary, imagination and confidence."],["Why play matters in early learning","Play gives young learners opportunities to explore, communicate, create and practise social skills."],["Helping children build healthy study habits","Consistent routines, encouragement and rest can make learning more manageable."]];
- return <><PageHead title="Ideas for growing minds" text="Notes for parents and educators on learning, wellbeing and childhood."/><section className="section"><div className="wrap blog-grid">{posts.map(([title,desc],i)=><article className="blog-card" key={title}><div className="blog-art" aria-hidden="true">{["✎","▤","✿","☆"][i]}</div><span className="eyebrow">Learning & family</span><h2>{title}</h2><p>{desc}</p><span className="coming">Article preview · Full post coming soon</span></article>)}</div></section></>;
+  const posts = [
+    {
+      title: "CBE at Home: Learning Beyond the Classroom",
+      date: "October 2, 2026",
+      intro: "Learning does not stop when the school day ends. For Kenyan families, ordinary moments at home can become useful opportunities to practise communication, problem-solving, creativity and responsibility.",
+      sections: [
+        ["Start with questions", "Instead of giving an immediate answer, invite a child to explain what they notice. A question such as “Why do you think this happened?” encourages observation, reasoning and communication."],
+        ["Turn everyday tasks into learning", "Shopping can involve comparing prices and quantities. Cooking can introduce measurement and sequencing. Gardening can lead to conversations about plants, weather and care for living things. The goal is not to turn every family activity into a formal lesson, but to help children notice the learning already around them."],
+        ["Make reading part of the routine", "A short, consistent reading period can help children practise vocabulary, comprehension and expression. Younger learners can read with an adult, while older learners can take turns reading aloud and explaining what they understood."],
+        ["Let children explain what they learned", "One of the simplest ways to reinforce learning is to ask a child to teach the idea back to you. If they can explain a concept in their own words and give an example, they are beginning to connect knowledge with understanding."]
+      ],
+      closing: "KICD describes competency-based learning as an approach that connects knowledge with what learners can do, and its curriculum materials emphasise practical activities and learning beyond school. Families can support that process through simple, regular experiences at home."
+    },
+    {
+      title: "Reading Together Builds Confident Learners",
+      date: "October 2, 2026",
+      intro: "A reading habit does not have to begin with long study sessions. Ten or fifteen focused minutes with a book, story or age-appropriate text can become a powerful family routine.",
+      sections: [
+        ["Choose material that matches the learner", "Children are more likely to engage when a text is understandable but still gives them something new to discover. Let learners choose between suitable books where possible. Choice can make reading feel purposeful rather than compulsory."],
+        ["Talk about the story", "After a page or section, ask what happened, why a character acted in a particular way, or what might happen next. These conversations develop comprehension and help children organise their thoughts."],
+        ["Build vocabulary naturally", "When a child meets an unfamiliar word, explain it in the context of the sentence and invite the child to use it in another sentence. A small number of well-understood words is more useful than memorising a long list without context."],
+        ["Celebrate progress", "Praise effort, persistence and improvement. A learner who struggles with a passage should know that rereading is part of learning. Confidence grows when children see that mistakes can be corrected without embarrassment."]
+      ],
+      closing: "Reading can also become a shared family activity: a parent, guardian or older sibling can read aloud, listen to a younger learner, or discuss a story. The routine matters more than making every session perfect."
+    },
+    {
+      title: "Why Play Matters in Early Learning",
+      date: "October 2, 2026",
+      intro: "Play is not simply a break from learning. For young children, play can create opportunities to communicate, experiment, make choices, solve problems and practise social skills.",
+      sections: [
+        ["Play develops communication", "Pretend shops, homes, schools and journeys give children reasons to use language. They negotiate roles, describe objects, ask questions and tell stories while playing."],
+        ["Play encourages problem-solving", "Building with blocks, arranging objects, completing simple puzzles or inventing games requires children to make decisions. When something does not work, they can try another approach."],
+        ["Play supports cooperation", "Games with siblings and friends can teach children to take turns, follow agreed rules, listen to others and manage small disagreements. Adults can guide these moments without taking over the activity."],
+        ["Keep play purposeful but flexible", "Not every activity needs a worksheet or a predetermined answer. Give children safe materials and enough time to explore. A simple activity can become richer when an adult asks thoughtful questions rather than directing every step."]
+      ],
+      closing: "KICD's curriculum framework places emphasis on learner engagement, practical experiences and the development of competencies. Play can provide one age-appropriate setting in which young learners practise those abilities."
+    },
+    {
+      title: "Helping Children Build Healthy Study Habits",
+      date: "October 2, 2026",
+      intro: "Good study habits are usually built through consistency rather than pressure. Children benefit when learning has a predictable place in the day and when adults help them develop routines they can gradually manage themselves.",
+      sections: [
+        ["Create a realistic routine", "Choose a regular time for reading, homework or revision that fits the family's daily schedule. A short focused session is often more manageable than expecting a tired child to study for hours."],
+        ["Reduce distractions", "Where possible, give the learner a reasonably quiet place to work and keep unnecessary notifications, television and unrelated phone use away during the study period."],
+        ["Use short breaks", "Young learners need movement and rest. A brief break between tasks can help a child return to work with better attention. Breaks should be planned rather than becoming an unstructured end to the study session."],
+        ["Check understanding, not just completion", "Instead of asking only whether homework is finished, ask the child to explain one thing they learned. This gives parents a better sense of understanding and gives the learner practice expressing ideas."],
+        ["Protect sleep and wellbeing", "Learning is part of a child's life, not the whole of it. Adequate rest, play, physical activity, family time and positive relationships all matter when building sustainable routines."]
+      ],
+      closing: "The aim of a study routine is to help children become increasingly independent. Encourage them to organise materials, identify what they need help with and reflect on what they have understood."
+    }
+  ];
+
+  return (
+    <>
+      <PageHead title="Ideas for Growing Minds" text="Practical learning, reading, play and family study guidance for parents and learners at Hill Springs Academy." />
+      <section className="section">
+        <div className="wrap">
+          <span className="eyebrow">Hill Springs Academy · Learning blog</span>
+          <h2>Ideas for growing minds</h2>
+          <p className="lead">Practical articles for families who want to support learning beyond the classroom. These articles are general educational guidance and should not be treated as a substitute for school-specific instructions.</p>
+          <div className="blog-grid">
+            {posts.map((post) => (
+              <article className="blog-card" key={post.title}>
+                <div className="blog-art" aria-hidden="true">✎</div>
+                <span className="eyebrow">{post.date}</span>
+                <h2>{post.title}</h2>
+                <p>{post.intro}</p>
+                <a className="textlink" href={`#${post.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>Read article</a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="section alt">
+        <div className="wrap prose">
+          {posts.map((post) => {
+            const id = post.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+            return (
+              <article className="blog-post" id={id} key={post.title}>
+                <span className="eyebrow">{post.date} · Learning & family</span>
+                <h2>{post.title}</h2>
+                <p className="lead">{post.intro}</p>
+                {post.sections.map(([heading, text]) => (
+                  <section key={heading}>
+                    <h3>{heading}</h3>
+                    <p>{text}</p>
+                  </section>
+                ))}
+                <div className="card"><p><strong>For families:</strong> {post.closing}</p></div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    </>
+  );
 }
 export function Sitemap() {
   const links=[
