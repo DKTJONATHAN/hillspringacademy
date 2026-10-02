@@ -64,6 +64,7 @@ export const SCHOOL = {
   faqs: [
     { q: "How do I get an admission form?", a: "Email admissions@hillspringacademy.sc.ke and we will send it to you." },
     { q: "Can I visit the school before applying?", a: "Yes. Contact the admissions office to arrange a visit." },
+    { q: "Does Hill Springs Academy offer school transport?", a: "Yes, school transport services are offered. Contact admissions to confirm current route coverage, availability, arrangements and charges." },
     { q: "Where can I find fee information?", a: "Ask the admissions office for the current fee structure." },
   ],
   news: [
@@ -73,11 +74,11 @@ export const SCHOOL = {
 
 /* Gallery: set src to "/gallery/your-photo.jpg" after adding the file to public/gallery/ */
 export const GALLERY = [
-  { src: "", alt: "Main school gate", cat: "Campus" },
+  { src: "/school-gate.webp", alt: "Hill Springs Academy school gate", cat: "Campus" },
   { src: "", alt: "Classroom learning", cat: "Classes" },
   { src: "", alt: "Football on the field", cat: "Sports" },
   { src: "", alt: "Morning assembly", cat: "Events" },
-  { src: "", alt: "School compound", cat: "Campus" },
+  { src: "/playground.webp", alt: "Hill Springs Academy playground", cat: "Campus" },
   { src: "", alt: "Science lesson", cat: "Classes" },
   { src: "", alt: "Athletics day", cat: "Sports" },
   { src: "", alt: "Prize giving", cat: "Events" },
@@ -90,6 +91,6 @@ export const GALLERY = [
 /* Hero slides on the home page. Add "src: '/gallery/photo.jpg'" to show a real photo. */
 export const HERO = [
   { src: "", alt: "Photo: learners in class", title: "Welcome to Hill Springs Academy", text: "Building an excellent foundation for a brighter future." },
-  { src: "", alt: "Photo: school compound", title: "A place to grow", text: "Good teaching, clear values, supportive staff." },
+  { src: "/school-gate.webp", alt: "Hill Springs Academy school gate", title: "Welcome to Hill Springs Academy", text: "A school community in Maua, Meru County." },
   { src: "", alt: "Photo: sports and activities", title: "Life beyond the classroom", text: "Sports, music, clubs and more." },
 ];
