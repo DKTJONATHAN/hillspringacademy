@@ -38,7 +38,7 @@ export function Home() {
       <section className="hero">
         <div className="wrap hero-grid">
           <div>
-            <h1>Big ideas begin <em>here.</em></h1>
+            <h1>BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE</h1>
             <p>Curious minds, caring guidance and room to discover what you can do. Explore our learning approach, school life and admissions.</p>
             <div className="btns">
               <Link to="/admissions" className="btn">How to apply</Link>
@@ -222,7 +222,7 @@ export function Gallery() {
   const cur = v !== null ? items[v] : null;
   return (
     <>
-      <PageHead title="Gallery" text="A look at life at Hill Spring Academy." />
+      <PageHead title="Gallery" text="A look at life at Hill Springs Academy." />
       <section className="section">
         <div className="wrap">
           <div className="chips" role="group" aria-label="Filter photos">
@@ -273,7 +273,7 @@ export function Contact() {
             <p><b>Location</b>{SCHOOL.address && <>{SCHOOL.address}<br /></>}{SCHOOL.town}</p>
             {SCHOOL.hours && <p><b>Office hours</b>{SCHOOL.hours}</p>}
             <a className="btn ghost dark" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=Hill+Spring+Academy+Maua">Open in Google Maps</a>
-            <div className="map-frame"><iframe title="Map showing Hill Spring Academy in Maua" src="https://www.google.com/maps?q=Hill%20Spring%20Academy%2C%20Maua%2C%20Kenya&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
+            <div className="map-frame"><iframe title="Map showing Hill Springs Academy in Maua" src="https://www.google.com/maps?q=Hill%20Spring%20Academy%2C%20Maua%2C%20Kenya&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
           </div>
           <form onSubmit={send}>
             <label>Your name<input name="name" required autoComplete="name" /></label>
@@ -302,5 +302,5 @@ export function Blog() {
 }
 export function Sitemap() {
  const links=[["Home","/"],["About the school","/about"],["Our directors","/directors"],["Academics & CBE","/academics"],["Admissions","/admissions"],["Gallery","/gallery"],["Learning blog","/blog"],["Privacy & child protection","/privacy"],["Contact","/contact"]];
- return <><PageHead title="Sitemap" text="Find your way around Hill Spring Academy."/><section className="section"><div className="wrap sitemap-list">{links.map(([label,to])=><Link key={to} to={to}>{label}<span>↗</span></Link>)}</div></section></>;
+ return <><PageHead title="Sitemap" text="Find your way around Hill Springs Academy."/><section className="section"><div className="wrap sitemap-list">{links.map(([label,to])=><Link key={to} to={to}>{label}<span>↗</span></Link>)}</div></section></>;
 }
