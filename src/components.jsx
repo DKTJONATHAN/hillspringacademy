@@ -20,8 +20,8 @@ export const Icon = ({ n, size = 22 }) => (
 
 export function Logo({ size = 56 }) {
   const [failed, setFailed] = useState(false);
-  if (failed) return <span className="logo-ph" style={{ width: size, height: size }} aria-hidden="true">LOGO</span>;
-  return <img src="/logo.png" alt="" width={size} height={size} onError={() => setFailed(true)} style={{ objectFit: "contain" }} />;
+  if (failed) return <span className="logo-ph" style={{ width: size, height: size }} aria-hidden="true">HSA</span>;
+  return <img src="/logo.png" alt="Hill Springs Academy, Maua" width={size} height={size} onError={() => setFailed(true)} style={{ objectFit: "contain" }} />;
 }
 
 export function Photo({ src, alt, ratio = "4/3" }) {
@@ -33,12 +33,13 @@ export function Photo({ src, alt, ratio = "4/3" }) {
 }
 
 export function PageHead({ title, text, description, path, image }) {
-  const metaDescription = description || text || "Hill Springs Academy in Maua, Meru County, Kenya — learning, admissions, school life and learner resources.";
+  const metaDescription = description || text || "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. Kindergarten, Pre-Primary and Junior School.";
   const canonicalPath = path || window.location.pathname;
   const cleanPath = canonicalPath === "/" ? "/" : (canonicalPath.endsWith("/") ? canonicalPath.slice(0, -1) : canonicalPath);
   const canonical = `${SCHOOL.siteUrl}${cleanPath}`;
+  const fullTitle = title.toLowerCase().includes("hill springs") ? title : `${title} | Hill Springs Academy, Maua`;
   useEffect(() => {
-    document.title = `${title} | ${SCHOOL.name}`;
+    document.title = fullTitle;
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement("meta"); meta.name = "description"; document.head.appendChild(meta); }
     meta.content = metaDescription;
@@ -50,43 +51,44 @@ export function PageHead({ title, text, description, path, image }) {
       if (!el) { el = document.createElement("meta"); el.setAttribute("property", property); document.head.appendChild(el); }
       el.content = content;
     };
-    setMeta("og:title", `${title} | ${SCHOOL.name}`);
+    setMeta("og:title", fullTitle);
     setMeta("og:description", metaDescription);
     setMeta("og:type", "website");
     setMeta("og:url", canonical);
     setMeta("og:site_name", SCHOOL.name);
     setMeta("og:image", image || `${SCHOOL.siteUrl}/logo.png`);
-    setMeta("og:image:alt", `${title} | ${SCHOOL.name}`);
+    setMeta("og:image:alt", `${title} | Hill Springs Academy, Maua, Meru County`);
     setMeta("og:locale", "en_KE");
     setMeta("og:image:width", "1200");
     setMeta("og:image:height", "630");
     setMeta("og:image:type", "image/png");
     setMeta("twitter:card", "summary_large_image");
-    setMeta("twitter:title", `${title} | ${SCHOOL.name}`);
+    setMeta("twitter:title", fullTitle);
     setMeta("twitter:description", metaDescription);
     setMeta("twitter:image", image || `${SCHOOL.siteUrl}/logo.png`);
-    setMeta("twitter:image:alt", `${title} | ${SCHOOL.name}`);
+    setMeta("twitter:image:alt", `${title} | Hill Springs Academy, Maua`);
     let ld = document.getElementById("school-jsonld");
     if (!ld) { ld = document.createElement("script"); ld.id = "school-jsonld"; ld.type = "application/ld+json"; document.head.appendChild(ld); }
     ld.textContent = JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
+      "@type": ["School", "EducationalOrganization"],
       name: SCHOOL.name,
+      alternateName: ["Hill Springs", "Hillsprings Academy", "Hill Springs Academy Maua", "Hill Sprungs Academy"],
       url: SCHOOL.siteUrl,
       description: SCHOOL.intro,
       slogan: SCHOOL.motto,
       email: SCHOOL.infoEmail,
-      logo: `${SCHOOL.siteUrl}/logo.png`,
+      logo: `${SCHOOL.siteUrl}/logo.png",
       address: { "@type": "PostalAddress", addressLocality: "Maua", addressRegion: "Meru County", addressCountry: "KE" },
       areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"],
       educationalLevel: ["Kindergarten", "Pre-Primary", "Junior School"],
       hasMap: "https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya",
       sameAs: Object.values(SCHOOL.social || {}).filter(Boolean)
     });
-  }, [title, metaDescription, canonical]);
+  }, [fullTitle, metaDescription, canonical, title, image]);
   return (
     <section className="pagehead">
-      <div className="wrap"><p className="eyebrow page-eyebrow">{SCHOOL.name} · Maua, Meru County</p><h1>{title}</h1>{text && <p>{text}</p>}</div>
+      <div className="wrap"><p className="eyebrow page-eyebrow">Hill Springs Academy · Maua, Meru County</p><h1>{title}</h1>{text && <p>{text}</p>}</div>
     </section>
   );
 }
@@ -137,11 +139,14 @@ export function BottomNav() {
 export function Footer() {
   const social = Object.entries(SCHOOL.social).filter(([, v]) => v);
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" itemScope itemType="https://schema.org/School">
       <div className="wrap foot-grid">
         <div>
-          <div className="brand light"><Logo size={48} /><span>{SCHOOL.name}</span></div>
-          <p>{SCHOOL.town}</p>
+          <div className="brand light"><Logo size={48} /><span itemProp="name">{SCHOOL.name}</span></div>
+          <p itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+            <span itemProp="addressLocality">Maua</span>, <span itemProp="addressRegion">Igembe South, Meru County</span>, <span itemProp="addressCountry">Kenya</span>
+          </p>
+          <p>Private CBE school · Kindergarten, Pre-Primary and Junior School</p>
           {social.length > 0 && <p className="social">{social.map(([k, v]) => <a key={k} href={v} target="_blank" rel="noopener noreferrer">{k[0].toUpperCase() + k.slice(1)}</a>)}</p>}
         </div>
         <div><h3>Explore</h3>{NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}</div>
@@ -153,7 +158,7 @@ export function Footer() {
         </div>
       </div>
       <div className="wrap legal">
-        © {new Date().getFullYear()} {SCHOOL.name}. Website by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>.
+        © {new Date().getFullYear()} {SCHOOL.name}, Maua, Meru County. Website by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>.
       </div>
     </footer>
   );
