@@ -1,7 +1,22 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation, Link } from "react-router-dom";
 import { Header, BottomNav, Footer, PageHead } from "./components.jsx";
-import { Home, About, Academics, Admissions, Gallery, ReadingMaterials, Contact, Directors, Privacy, Blog, Sitemap, SchoolLife, Fees, FAQ } from "./pages.jsx";
+import { Home } from "./pages.jsx";
+import {
+  About,
+  Academics,
+  Admissions,
+  Gallery,
+  ReadingMaterials,
+  Contact,
+  Directors,
+  Privacy,
+  Blog,
+  Sitemap,
+  SchoolLife,
+  Fees,
+  FAQ,
+} from "./pagesRest.jsx";
 import { AdminEmailCentre } from "./AdminEmailCentre.jsx";
 import { useTheme, useScroll } from "./hooks.js";
 
