@@ -25,6 +25,8 @@ export const SCHOOL = {
     { id: "vD-ZwMjRDPU", title: "The Water Cycle (classroom)", text: "Explore how water moves through our world." },
     { id: "R0K7VKkksyc", title: "Where does water come from?", text: "A simple science story for curious learners." },
   ],
+  // compatibility for existing Home until VideoCard + Watch more is fully deployed
+  get videoIds() { return this.videos.map(v => v.id); },
   readingMaterials: [
     { title: "Grade 1 English Reading Material", grade: "Grade 1", description: "Reading practice and language activities.", file: "/reading-materials/grade-1-english.pdf" },
     { title: "Grade 2 Mathematics Practice", grade: "Grade 2", description: "Mathematics revision and practice exercises.", file: "/reading-materials/grade-2-mathematics.pdf" },
