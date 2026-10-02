@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation, Link } from "react-router-dom";
 import { Header, BottomNav, Footer, PageHead } from "./components.jsx";
-import { Home, About, Academics, Admissions, Gallery, Contact, Directors, Privacy, Blog, Sitemap } from "./pages.jsx";
+import { Home, About, Academics, Admissions, Gallery, ReadingMaterials, Contact, Directors, Privacy, Blog, Sitemap } from "./pages.jsx";
 import { useTheme, useScroll } from "./hooks.js";
 
 const NotFound = () => (
@@ -35,6 +35,7 @@ export default function App() {
             <Route path="/academics" element={<Academics />} />
             <Route path="/admissions" element={<Admissions />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="/reading-materials" element={<ReadingMaterials />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
