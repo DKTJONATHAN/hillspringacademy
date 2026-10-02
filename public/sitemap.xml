@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://hillspringsacademy.sc.ke/</loc><priority>1.0</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/about</loc><priority>0.8</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/academics</loc><priority>0.9</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/admissions</loc><priority>1.0</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/fees</loc><priority>0.9</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/school-life</loc><priority>0.7</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/reading-materials</loc><priority>0.8</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/gallery</loc><priority>0.7</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/faq</loc><priority>0.8</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/directors</loc><priority>0.6</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/blog</loc><priority>0.7</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/blog/cbe-at-home-learning-beyond-the-classroom</loc><priority>0.7</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/blog/reading-together-builds-confident-learners</loc><priority>0.7</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/blog/why-play-matters-in-early-learning</loc><priority>0.7</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/blog/helping-children-build-healthy-study-habits</loc><priority>0.7</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/contact</loc><priority>0.9</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/sitemap</loc><priority>0.4</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/</loc><lastmod>2026-10-02</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/about</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/academics</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/admissions</loc><lastmod>2026-10-02</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/fees</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/school-life</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/reading-materials</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/gallery</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/faq</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/directors</loc><lastmod>2026-10-02</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/blog</loc><lastmod>2026-10-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/blog/cbe-at-home-learning-beyond-the-classroom</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/blog/reading-together-builds-confident-learners</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/blog/why-play-matters-in-early-learning</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/blog/helping-children-build-healthy-study-habits</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/contact</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/privacy</loc><lastmod>2026-10-02</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/sitemap</loc><lastmod>2026-10-02</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>
