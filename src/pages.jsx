@@ -474,9 +474,9 @@ export function Directors() {
 export function Privacy() {
  return <><PageHead title="Privacy & child protection" text="We respect the privacy, dignity and safety of every learner and family."/><section className="section"><div className="wrap prose"><h2>Information we collect</h2><p>When families contact the school, we may receive names, contact details and information they choose to share about a learner. The school should only collect information needed for education, admissions, communication and learner welfare.</p><h2>How information is used</h2><p>Information is used for school administration, learning support, safeguarding and responding to enquiries. Access should be limited to authorised staff and information should not be published without an appropriate lawful basis.</p><h2>Children’s images</h2><p>Photos, recordings and learner work should be shared only with appropriate parent or guardian consent and in line with the school’s safeguarding procedures. Do not submit sensitive learner information through this website.</p><h2>Your choices</h2><p>For privacy questions or requests, contact the school office using the contact details on this website. This page is a public-facing summary and should be reviewed against the school’s approved privacy policy.</p></div></section></>;
 }
-const BLOG_POSTS = 
-  const posts = [
+const BLOG_POSTS = [
     {
+      slug: "cbe-at-home-learning-beyond-the-classroom",
       title: "CBE at Home: Learning Beyond the Classroom",
       date: "October 2, 2026",
       intro: "Learning does not stop when the school day ends. For Kenyan families, ordinary moments at home can become useful opportunities to practise communication, problem-solving, creativity and responsibility.",
@@ -489,6 +489,7 @@ const BLOG_POSTS =
       closing: "KICD describes competency-based learning as an approach that connects knowledge with what learners can do, and its curriculum materials emphasise practical activities and learning beyond school. Families can support that process through simple, regular experiences at home."
     },
     {
+      slug: "reading-together-builds-confident-learners",
       title: "Reading Together Builds Confident Learners",
       date: "October 2, 2026",
       intro: "A reading habit does not have to begin with long study sessions. Ten or fifteen focused minutes with a book, story or age-appropriate text can become a powerful family routine.",
@@ -501,6 +502,7 @@ const BLOG_POSTS =
       closing: "Reading can also become a shared family activity: a parent, guardian or older sibling can read aloud, listen to a younger learner, or discuss a story. The routine matters more than making every session perfect."
     },
     {
+      slug: "why-play-matters-in-early-learning",
       title: "Why Play Matters in Early Learning",
       date: "October 2, 2026",
       intro: "Play is not simply a break from learning. For young children, play can create opportunities to communicate, experiment, make choices, solve problems and practise social skills.",
@@ -513,6 +515,7 @@ const BLOG_POSTS =
       closing: "KICD's curriculum framework places emphasis on learner engagement, practical experiences and the development of competencies. Play can provide one age-appropriate setting in which young learners practise those abilities."
     },
     {
+      slug: "helping-children-build-healthy-study-habits",
       title: "Helping Children Build Healthy Study Habits",
       date: "October 2, 2026",
       intro: "Good study habits are usually built through consistency rather than pressure. Children benefit when learning has a predictable place in the day and when adults help them develop routines they can gradually manage themselves.",
