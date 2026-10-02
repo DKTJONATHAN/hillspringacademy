@@ -78,6 +78,8 @@ export function PageHead({ title, text, description, path, image }) {
       logo: `${SCHOOL.siteUrl}/logo.png`,
       address: { "@type": "PostalAddress", addressLocality: "Maua", addressRegion: "Meru County", addressCountry: "KE" },
       areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"],
+      educationalLevel: ["Kindergarten", "Pre-Primary", "Junior School"],
+      hasMap: "https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya",
       sameAs: Object.values(SCHOOL.social || {}).filter(Boolean)
     });
   }, [title, metaDescription, canonical]);
