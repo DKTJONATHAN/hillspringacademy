@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SCHOOL, GALLERY, HERO } from "./data.js";
 import { Photo, PageHead, Icon } from "./components.jsx";
 
@@ -474,7 +474,7 @@ export function Directors() {
 export function Privacy() {
  return <><PageHead title="Privacy & child protection" text="We respect the privacy, dignity and safety of every learner and family."/><section className="section"><div className="wrap prose"><h2>Information we collect</h2><p>When families contact the school, we may receive names, contact details and information they choose to share about a learner. The school should only collect information needed for education, admissions, communication and learner welfare.</p><h2>How information is used</h2><p>Information is used for school administration, learning support, safeguarding and responding to enquiries. Access should be limited to authorised staff and information should not be published without an appropriate lawful basis.</p><h2>Children’s images</h2><p>Photos, recordings and learner work should be shared only with appropriate parent or guardian consent and in line with the school’s safeguarding procedures. Do not submit sensitive learner information through this website.</p><h2>Your choices</h2><p>For privacy questions or requests, contact the school office using the contact details on this website. This page is a public-facing summary and should be reviewed against the school’s approved privacy policy.</p></div></section></>;
 }
-export function Blog() {
+const BLOG_POSTS = 
   const posts = [
     {
       title: "CBE at Home: Learning Beyond the Classroom",
@@ -526,51 +526,17 @@ export function Blog() {
       closing: "The aim of a study routine is to help children become increasingly independent. Encourage them to organise materials, identify what they need help with and reflect on what they have understood."
     }
   ];
+;
 
-  return (
-    <>
-      <PageHead title="Ideas for Growing Minds" text="Practical learning, reading, play and family study guidance for parents and learners at Hill Springs Academy." />
-      <section className="section">
-        <div className="wrap">
-          <span className="eyebrow">Hill Springs Academy · Learning blog</span>
-          <h2>Ideas for growing minds</h2>
-          <p className="lead">Practical articles for families who want to support learning beyond the classroom. These articles are general educational guidance and should not be treated as a substitute for school-specific instructions.</p>
-          <div className="blog-grid">
-            {posts.map((post) => (
-              <article className="blog-card" key={post.title}>
-                <div className="blog-art" aria-hidden="true">✎</div>
-                <span className="eyebrow">{post.date}</span>
-                <h2>{post.title}</h2>
-                <p>{post.intro}</p>
-                <a className="textlink" href={`#${post.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>Read article</a>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="section alt">
-        <div className="wrap prose">
-          {posts.map((post) => {
-            const id = post.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-            return (
-              <article className="blog-post" id={id} key={post.title}>
-                <span className="eyebrow">{post.date} · Learning & family</span>
-                <h2>{post.title}</h2>
-                <p className="lead">{post.intro}</p>
-                {post.sections.map(([heading, text]) => (
-                  <section key={heading}>
-                    <h3>{heading}</h3>
-                    <p>{text}</p>
-                  </section>
-                ))}
-                <div className="card"><p><strong>For families:</strong> {post.closing}</p></div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-    </>
-  );
+export function Blog() {
+  const { slug } = useParams();
+  const post = BLOG_POSTS.find((item) => item.slug === slug);
+  if (slug) {
+    if (!post) return <><PageHead title="Article not found" text="This article could not be found." path="/blog"/><section className="section"><div className="wrap"><Link className="btn" to="/blog">Back to blog</Link></div></section></>;
+    const canonicalPath = `/blog/${post.slug}`;
+    return <><PageHead title={post.title} text={post.intro} description={`${post.intro.slice(0, 145)}…`} path={canonicalPath} image={`${SCHOOL.siteUrl}/social-preview.jpg`} /><article className="section"><div className="wrap prose blog-article"><Link className="textlink" to="/blog">← All articles</Link><span className="eyebrow">${post.date} · Learning & family</span><h1>${post.title}</h1><p className="lead">${post.intro}</p>{post.sections.map(([heading, body]) => <section key={heading}><h2>{heading}</h2><p>{body}</p></section>)}<div className="card"><p><strong>For families:</strong> {post.closing}</p></div><p><Link className="textlink" to="/blog">Explore more learning articles</Link></p></div></article></>;
+  }
+  return <><PageHead title="Ideas for Growing Minds" text="Practical learning, reading, play and family study guidance for parents and learners at Hill Springs Academy." path="/blog" image={`${SCHOOL.siteUrl}/social-preview.jpg`} /><section className="section"><div className="wrap"><span className="eyebrow">Hill Springs Academy · Learning blog</span><h2>Ideas for growing minds</h2><p className="lead">Practical articles for families who want to support learning beyond the classroom.</p><div className="blog-grid">{BLOG_POSTS.map((item) => <article className="blog-card" key={item.slug}><Link className="blog-card-link" to={`/blog/${item.slug}`} aria-label={`Read ${item.title}`}><div className="blog-art" aria-hidden="true">✎</div><span className="eyebrow">{item.date}</span><h2>{item.title}</h2><p>{item.intro}</p><span className="textlink">Read full article →</span></Link></article>)}</div></div></section></>;
 }
 export function Sitemap() {
   const links=[
