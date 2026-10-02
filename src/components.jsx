@@ -94,6 +94,7 @@ export const NAV = [
   ["/academics", "Academics", "book"],
   ["/admissions", "Admissions", "apply"],
   ["/school-life", "School Life", "image"],
+  ["/blog", "Blog", "book"],
   ["/reading-materials", "Resources", "book"],
   ["/contact", "Contact", "mail"],
 ];
