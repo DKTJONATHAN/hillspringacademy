@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
 
+# Do not crawl private or account-oriented paths. These rules are crawl guidance,
+# not access control; protect private data with authentication and server rules.
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /login/
+Disallow: /account/
+Disallow: /api/
+Disallow: /private/
+
 Sitemap: https://hillspringsacademy.sc.ke/sitemap.xml
