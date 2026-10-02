@@ -206,19 +206,3 @@ export function Home() {
     </>
   );
 }
-
-export {
-  About,
-  Academics,
-  Admissions,
-  Gallery,
-  ReadingMaterials,
-  SchoolLife,
-  Fees,
-  FAQ,
-  Contact,
-  Directors,
-  Privacy,
-  Blog,
-  Sitemap,
-} from "./pagesRest.jsx";
