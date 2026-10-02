@@ -70,7 +70,8 @@ export function PageHead({ title, text, description, path }) {
       email: SCHOOL.infoEmail,
       logo: `${SCHOOL.siteUrl}/logo.png`,
       address: { "@type": "PostalAddress", addressLocality: "Maua", addressRegion: "Meru County", addressCountry: "KE" },
-      areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"]
+      areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"],
+      sameAs: Object.values(SCHOOL.social || {}).filter(Boolean)
     });
   }, [title, metaDescription, canonical]);
   return (
