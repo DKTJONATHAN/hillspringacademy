@@ -147,8 +147,8 @@ export function Footer() {
         <div><h3>Explore</h3>{NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}</div>
         <div>
           <h3>Contact</h3>
-          <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
-          <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a>
+          <Link to="/admissions#enquiry">Send an admissions enquiry</Link><span>{SCHOOL.admissionsEmail}</span>
+          <Link to="/contact#contact-form">Send a general enquiry</Link><span>{SCHOOL.infoEmail}</span>
           {SCHOOL.phone && <span>{SCHOOL.phone}</span>}
         </div>
       </div>
