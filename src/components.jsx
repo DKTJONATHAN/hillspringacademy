@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { SCHOOL } from "./data.js";
 
@@ -32,10 +32,45 @@ export function Photo({ src, alt, ratio = "4/3" }) {
   );
 }
 
-export function PageHead({ title, text }) {
+export function PageHead({ title, text, description, path }) {
+  const metaDescription = description || text || "Hill Springs Academy in Maua, Meru County, Kenya — learning, admissions, school life and learner resources.";
+  const canonicalPath = path || window.location.pathname;
+  const canonical = `${SCHOOL.siteUrl}${canonicalPath === "/" ? "/" : canonicalPath.replace(/\\/$/, "")}`;
+  useEffect(() => {
+    document.title = `${title} | ${SCHOOL.name}`;
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement("meta"); meta.name = "description"; document.head.appendChild(meta); }
+    meta.content = metaDescription;
+    let canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (!canonicalEl) { canonicalEl = document.createElement("link"); canonicalEl.rel = "canonical"; document.head.appendChild(canonicalEl); }
+    canonicalEl.href = canonical;
+    const setMeta = (property, content) => {
+      let el = document.querySelector(`meta[property="${property}"]`);
+      if (!el) { el = document.createElement("meta"); el.setAttribute("property", property); document.head.appendChild(el); }
+      el.content = content;
+    };
+    setMeta("og:title", `${title} | ${SCHOOL.name}`);
+    setMeta("og:description", metaDescription);
+    setMeta("og:type", "website");
+    setMeta("og:url", canonical);
+    setMeta("og:site_name", SCHOOL.name);
+    let ld = document.getElementById("school-jsonld");
+    if (!ld) { ld = document.createElement("script"); ld.id = "school-jsonld"; ld.type = "application/ld+json"; document.head.appendChild(ld); }
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      name: SCHOOL.name,
+      url: SCHOOL.siteUrl,
+      description: SCHOOL.intro,
+      slogan: SCHOOL.motto,
+      email: SCHOOL.infoEmail,
+      address: { "@type": "PostalAddress", addressLocality: "Maua", addressRegion: "Meru County", addressCountry: "KE" },
+      areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"]
+    });
+  }, [title, metaDescription, canonical]);
   return (
     <section className="pagehead">
-      <div className="wrap"><h1>{title}</h1>{text && <p>{text}</p>}</div>
+      <div className="wrap"><p className="eyebrow page-eyebrow">{SCHOOL.name} · Maua, Meru County</p><h1>{title}</h1>{text && <p>{text}</p>}</div>
     </section>
   );
 }
