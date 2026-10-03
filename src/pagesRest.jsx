@@ -93,34 +93,7 @@ export function Academics() {
 export function Admissions() {
   const [step, setStep] = useState(0);
   const [open, setOpen] = useState(0);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState("");
   const S = SCHOOL.steps;
-  const sendEnquiry = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSent(false);
-    const form = e.currentTarget;
-    const f = new FormData(form);
-    try {
-      await submitSchoolEnquiry({
-        type: "admissions",
-        name: f.get("name"),
-        email: f.get("email"),
-        phone: f.get("phone"),
-        subject: "Student enrolment enquiry",
-        studentName: f.get("studentName"),
-        currentLevel: f.get("currentLevel"),
-        requestedLevel: f.get("requestedLevel"),
-        message: f.get("message"),
-        website: f.get("website"),
-      });
-      form.reset();
-      setSent(true);
-    } catch (err) {
-      setError(err.message || "We could not send your enquiry. Please try again.");
-    }
-  };
   return (
     <>
       <PageHead title="Admissions" text="Applying is simple. Our admissions office will guide you through each step." />
@@ -141,7 +114,7 @@ export function Admissions() {
               <p>{S[step].text}</p>
               <div className="btns">
                 {step > 0 && <button className="btn ghost dark" onClick={() => setStep(step - 1)}>Back</button>}
-                {step < S.length - 1 ? <button className="btn" onClick={() => setStep(step + 1)}>Next step</button> : <a className="btn" href="#enquiry">Start enrolment enquiry</a>}
+                {step < S.length - 1 ? <button className="btn" onClick={() => setStep(step + 1)}>Next step</button> : <Link className="btn" to="/apply">Start your application</Link>}
               </div>
             </div>
           </div>
@@ -150,23 +123,9 @@ export function Admissions() {
       <section className="section alt" id="enquiry">
         <div className="wrap">
           <span className="eyebrow">Enrol a learner</span>
-          <h2>Send an admissions enquiry</h2>
-          <p className="lead">Your enquiry is stored securely for the admissions team.</p>
-          <form className="enquiry-form" onSubmit={sendEnquiry}>
-            <div className="form-grid">
-              <label>Parent/guardian name<input name="name" required autoComplete="name" /></label>
-              <label>Email<input name="email" type="email" required autoComplete="email" /></label>
-              <label>Phone<input name="phone" autoComplete="tel" /></label>
-              <label>Learner name<input name="studentName" required /></label>
-              <label>Current level<input name="currentLevel" placeholder="e.g. Pre-Primary" /></label>
-              <label>Level requested<input name="requestedLevel" placeholder="e.g. Junior School" /></label>
-            </div>
-            <label>Message<textarea name="message" required placeholder="Tell us what you would like to know about admission." /></label>
-            <input name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" className="hp-field" />
-            {error && <p className="form-error" role="alert">{error}</p>}
-            {sent && <p className="form-success" role="status">Thank you. Your admissions enquiry has been sent to Hill Springs Academy.</p>}
-            <button className="btn" type="submit">Send admissions enquiry</button>
-          </form>
+          <h2>Apply online in a few minutes</h2>
+          <p className="lead">Create a free parent account, complete the admission form, and track your application. We will email you the decision.</p>
+          <div className="btns"><Link className="btn" to="/apply">Apply online</Link><Link className="btn ghost dark" to="/enquire">Make an enquiry</Link></div>
         </div>
       </section>
       <section className="section alt">
@@ -257,7 +216,7 @@ export function Fees() {
         <div className="wrap">
           <h2>Fee information</h2>
           <p>Fee structures can change from term to term. Please contact the admissions office for the latest details, payment options and any available support.</p>
-          <p><a className="btn" href="mailto:admissions@hillspringacademy.sc.ke">Email admissions</a></p>
+          <p><Link className="btn" to="/enquire">Ask about fees</Link></p>
         </div>
       </section>
     </>
@@ -318,7 +277,7 @@ export function Contact() {
           <div>
             <h2>Get in touch</h2>
             <div className="info">
-              <p><strong>Admissions</strong><a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a></p>
+              <p><strong>Admissions</strong><Link to="/apply">Apply online</Link></p>
               <p><strong>General</strong><a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a></p>
               <p><strong>Location</strong><span>{SCHOOL.town}</span></p>
             </div>

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { PageHead } from "./components.jsx";
-import { adminCall, adminSignIn, requestAdminPasswordReset, verifyAdminPasswordReset } from "./supabase.js";
+import { adminCall, adminSignIn, accountApi, appsApi } from "./supabase.js";
+import { SCHOOL } from "./data.js";
+import { getAdminEmails, rememberAdminEmail, maskEmail } from "./session.js";
 
 export function AdminEmailCentre() {
   const [token, setToken] = useState(() => localStorage.getItem("hsa_admin_token") || "");
@@ -12,7 +14,13 @@ export function AdminEmailCentre() {
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [resetStatus, setResetStatus] = useState("");
-  const [tab, setTab] = useState("messages");
+  const [tab, setTab] = useState("applications");
+  const [apps, setApps] = useState([]);
+  const [appFilter, setAppFilter] = useState("pending");
+  const [appStatus, setAppStatus] = useState("");
+  const [notes, setNotes] = useState({});
+  const [deciding, setDeciding] = useState("");
+  const [resetCooldown, setResetCooldown] = useState(0);
   const [conversations, setConversations] = useState([]);
   const [selected, setSelected] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -33,25 +41,53 @@ export function AdminEmailCentre() {
   };
 
   useEffect(() => {
-    if (token) loadConversations().catch(() => { localStorage.removeItem("hsa_admin_token"); setToken(""); });
+    if (token) { loadApps(); } if (token) loadConversations().catch(() => { localStorage.removeItem("hsa_admin_token"); setToken(""); });
   }, []);
+
+  useEffect(() => {
+    if (resetCooldown <= 0) return;
+    const t = setTimeout(() => setResetCooldown(resetCooldown - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resetCooldown]);
 
   const requestReset = async (e) => {
     e.preventDefault(); setResetStatus("");
-    try { await requestAdminPasswordReset(email); setResetStep("verify"); setResetStatus("If that email belongs to an administrator, a 6-digit verification code has been sent."); }
-    catch (err) { setResetStatus(err.message || "Unable to request a password reset."); }
+    const typed = email.trim().toLowerCase();
+    const known = getAdminEmails(SCHOOL.adminEmails);
+    // Browser-side check against the admin emails remembered in local storage (the server re-checks).
+    if (known.length && !known.includes(typed)) {
+      setResetStatus(`“${email}” is not an administrator email, so it cannot reset the admin password. Hint: ${known.map(maskEmail).join(", ")}. Please type the correct administrator email.`);
+      return;
+    }
+    try {
+      await accountApi({ action: "request_reset", email: typed, portal: "admin" });
+      setResetStep("verify"); setResetCooldown(60);
+      setResetStatus(`A 6-digit verification code has been sent to ${typed}. It expires in 10 minutes.`);
+    } catch (err) {
+      if (err.code === "NOT_ADMIN") {
+        const hints = err.data?.hints?.length ? ` Hint: ${err.data.hints.join(", ")}.` : "";
+        setResetStatus(`You are not an administrator, so you cannot reset the admin password.${hints} Please type the correct administrator email.`);
+      } else if (err.code === "NOT_REGISTERED") setResetStatus("No account exists for this administrator email yet. Ask the developer to create it in Supabase.");
+      else setResetStatus(err.message || "Unable to request a password reset.");
+    }
   };
 
   const verifyReset = async (e) => {
     e.preventDefault(); setResetStatus("");
-    try { await verifyAdminPasswordReset(email, resetCode, newPassword); setResetStatus("Password updated successfully. You can now sign in."); setResetMode(false); setResetStep("request"); setResetCode(""); setNewPassword(""); }
-    catch (err) { setResetStatus(err.message || "Unable to reset password."); }
+    try {
+      await accountApi({ action: "verify_reset", email: email.trim().toLowerCase(), code: resetCode, newPassword, portal: "admin" });
+      setResetStatus("Password updated successfully. You can now sign in.");
+      setResetMode(false); setResetStep("request"); setResetCode(""); setNewPassword("");
+    } catch (err) { setResetStatus(err.message || "Unable to reset password."); }
   };
 
   const login = async (e) => {
     e.preventDefault(); setLoginError("");
     try {
       const data = await adminSignIn(email, password);
+      try { await appsApi({ action: "whoami" }, data.access_token); }
+      catch { throw new Error("This account is not an administrator. Parents can sign in on the Admissions page."); }
+      rememberAdminEmail(email);
       localStorage.setItem("hsa_admin_token", data.access_token);
       setToken(data.access_token);
       setPassword("");
@@ -100,6 +136,22 @@ export function AdminEmailCentre() {
     } catch (err) { setStatus(err.message || "Campaign failed."); }
   };
 
+  const loadApps = async (status = appFilter) => {
+    try { const d = await appsApi({ action: "list_applications", status: status === "all" ? "" : status }, token); setApps(d.applications || []); setAppStatus(""); }
+    catch (err) { setAppStatus(err.message); }
+  };
+  const decide = async (a, decision) => {
+    const word = decision === "accepted" ? "ACCEPT" : "REJECT";
+    if (!window.confirm(`${word} ${a.learner_name}? An email will be sent to ${a.parent_email} straight away.`)) return;
+    setDeciding(a.id); setAppStatus("");
+    try {
+      const d = await appsApi({ action: "decide_application", id: a.id, decision, note: notes[a.id] || "" }, token);
+      setAppStatus(d.emailSent ? `${a.learner_name}: ${decision}. Email sent to ${a.parent_email}.` : `${a.learner_name}: ${decision}, but the email failed (${d.emailError || "unknown"}). Please contact the parent.`);
+      await loadApps();
+    } catch (err) { setAppStatus(err.message); }
+    setDeciding("");
+  };
+
   const logout = () => { localStorage.removeItem("hsa_admin_token"); setToken(""); setSelected(null); };
 
   const filtered = useMemo(() => conversations.filter(c => {
@@ -133,12 +185,35 @@ export function AdminEmailCentre() {
       <section className="section"><div className="wrap">
         <div className="admin-toolbar">
           <div>
-            {["messages","subscribers","compose"].map(x => <button key={x} className={tab===x?"btn small":"btn small ghost dark"} onClick={() => { setTab(x); if (x==="subscribers") loadSubscribers().catch(err=>setStatus(err.message)); }}>
-              {x==="messages"?"Messages":x==="subscribers"?"Subscribers":"Compose email"}
+            {["applications","messages","subscribers","compose"].map(x => <button key={x} className={tab===x?"btn small":"btn small ghost dark"} onClick={() => { setTab(x); if (x==="subscribers") loadSubscribers().catch(err=>setStatus(err.message)); if (x==="applications") loadApps(); }}>
+              {x==="applications"?"Applications":x==="messages"?"Enquiries":x==="subscribers"?"Subscribers":"Compose email"}
             </button>)}
           </div>
           <button className="btn small ghost dark" onClick={logout}>Sign out</button>
         </div>
+
+        {tab==="applications" && <div>
+          <div className="chips">
+            {["pending","accepted","rejected","all"].map(x => <button key={x} className={appFilter===x?"on":""} onClick={()=>{ setAppFilter(x); loadApps(x); }}>{x}</button>)}
+          </div>
+          {appStatus && <p className={appStatus.includes("failed")||appStatus.includes("already")?"form-error":"form-success"} role="status">{appStatus}</p>}
+          {apps.length===0 && <div className="card"><p>No {appFilter==="all"?"":appFilter+" "}applications.</p></div>}
+          <div style={{display:"grid",gap:16}}>
+          {apps.map(a => <div className="card app-card" key={a.id}>
+            <div className="thread-head"><div><span className="eyebrow">{new Date(a.created_at).toLocaleDateString()}</span><h3>{a.learner_name} <small>· {a.requested_level}</small></h3></div><span className={"badge "+a.status}>{a.status}</span></div>
+            <p><strong>Parent:</strong> {a.parent_name} · <a href={`mailto:${a.parent_email}`}>{a.parent_email}</a>{a.phone ? ` · ${a.phone}` : ""}</p>
+            <p>{[a.gender, a.learner_dob && `Born ${a.learner_dob}`, a.current_level && `Current: ${a.current_level}`, a.previous_school && `Previous school: ${a.previous_school}`, a.entry_term && `Entry: ${a.entry_term}`].filter(Boolean).join(" · ")}</p>
+            {a.notes && <p><strong>Notes:</strong> {a.notes}</p>}
+            {a.status==="pending" ? <>
+              <label>Optional note to parent (included in the email)<textarea value={notes[a.id]||""} onChange={e=>setNotes({...notes,[a.id]:e.target.value})} placeholder="e.g. Please bring the birth certificate on reporting day." /></label>
+              <div className="app-actions">
+                <button className="btn" disabled={deciding===a.id} onClick={()=>decide(a,"accepted")}>Accept student</button>
+                <button className="btn danger" disabled={deciding===a.id} onClick={()=>decide(a,"rejected")}>Reject</button>
+              </div>
+            </> : <p>Decided {a.decided_at ? new Date(a.decided_at).toLocaleString() : ""} by {a.decided_by}. {a.decision_email_error ? `Email problem: ${a.decision_email_error}` : "Parent notified by email."}</p>}
+          </div>)}
+          </div>
+        </div>}
 
         {tab==="messages" && <div className="admin-grid">
           <div className="card admin-list">

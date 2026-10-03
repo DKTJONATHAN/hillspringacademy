@@ -78,7 +78,7 @@ export function PageHead({ title, text, description, path, image }) {
       description: SCHOOL.intro,
       slogan: SCHOOL.motto,
       email: SCHOOL.infoEmail,
-      logo: `${SCHOOL.siteUrl}/logo.png",
+      logo: `${SCHOOL.siteUrl}/logo.png`,
       address: { "@type": "PostalAddress", addressLocality: "Maua", addressRegion: "Meru County", addressCountry: "KE" },
       areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"],
       educationalLevel: ["Kindergarten", "Pre-Primary", "Junior School"],
@@ -118,10 +118,10 @@ export function Header({ theme, toggle, scrolled }) {
           <button className="icon-btn" onClick={toggle} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
             <Icon n={theme === "dark" ? "sun" : "moon"} />
           </button>
-          <Link to="/admissions" className="btn small">Apply now</Link>
+          <Link to="/apply" className="btn small">Apply now</Link>
         </div>
       </div>
-      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/fees","School Fees"], ["/faq","FAQ"], ["/gallery","Gallery"], ["/directors","Leadership"], ["/blog","Blog"], ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
+      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/apply","Apply online"], ["/enquire","Make an enquiry"], ["/fees","School Fees"], ["/faq","FAQ"], ["/gallery","Gallery"], ["/directors","Leadership"], ["/blog","Blog"], ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
     </header>
   );
 }
@@ -152,8 +152,8 @@ export function Footer() {
         <div><h3>Explore</h3>{NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}</div>
         <div>
           <h3>Contact</h3>
-          <Link to="/admissions#enquiry">Send an admissions enquiry</Link><span>{SCHOOL.admissionsEmail}</span>
-          <Link to="/contact#contact-form">Send a general enquiry</Link><span>{SCHOOL.infoEmail}</span>
+          <Link to="/apply">Apply online</Link><span>{SCHOOL.admissionsEmail}</span>
+          <Link to="/enquire">Make an enquiry</Link><span>{SCHOOL.infoEmail}</span>
           {SCHOOL.phone && <span>{SCHOOL.phone}</span>}
         </div>
       </div>
