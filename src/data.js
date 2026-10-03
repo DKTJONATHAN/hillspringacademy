@@ -101,18 +101,19 @@ export const SCHOOL = {
   ],
 };
 
-/* Gallery: prefer real school photos. Add files under public/Gallery/ then list them here.
+/* Gallery: add files under public/Gallery/ then list each one here.
+   Paths are case-sensitive. Prefer short filenames without spaces.
    Avoid clear face-forward portraits of children. */
 export const GALLERY = [
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua, Meru County", cat: "Campus" },
   { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua", cat: "Transport" },
-  { src: "/Gallery/school-gate.webp", alt: "Entrance to Hill Springs Academy, Maua", cat: "Campus" },
-  { src: "/Gallery/school-bus.webp", alt: "School transport at Hill Springs Academy, Meru County", cat: "Transport" },
+  { src: "/Gallery/Gemini_Generated_Image_41vrfl41vrfl41vr.webp", alt: "Learners and campus life at Hill Springs Academy, Maua", cat: "School life" },
+  { src: "/Gallery/Gemini_Generated_Image_c99nfoc99nfoc99n%20(1).webp", alt: "School community at Hill Springs Academy, Meru County", cat: "School life" },
 ];
 
 /* Hero slides — local photos first for authenticity and performance */
 export const HERO = [
   { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua, Meru County", title: "Hill Springs Academy, Maua", text: "A private CBE school in Meru County." },
   { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua", title: "Getting to school", text: "Transport for learners — confirm routes with admissions." },
-  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy campus entrance in Maua", title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
+  { src: "/Gallery/Gemini_Generated_Image_41vrfl41vrfl41vr.webp", alt: "Hill Springs Academy campus life in Maua", title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
 ];
