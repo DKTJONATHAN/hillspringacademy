@@ -66,9 +66,15 @@ export function Home() {
   const visibleVideos = showMoreVideos ? videos : videos.slice(0, 2);
 
   useEffect(() => {
-    document.title = "Hill Springs Academy | Private School in Maua, Meru County";
+    const fullTitle = "Hill Springs Academy | Private School in Maua, Meru County";
+    document.title = fullTitle;
     const desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute("content", "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. Kindergarten, Pre-Primary and Junior School. Admissions open.");
+    let titleMeta = document.querySelector('meta[name="title"]');
+    if (!titleMeta) { titleMeta = document.createElement("meta"); titleMeta.name = "title"; document.head.appendChild(titleMeta); }
+    titleMeta.content = fullTitle;
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", fullTitle);
   }, []);
 
   return (
@@ -83,8 +89,8 @@ export function Home() {
             </h1>
             <p>Hill Springs Academy is a private school in Maua, Igembe South, Meru County. We teach Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education (CBE), with strong teaching, clear values and a caring community.</p>
             <div className="btns">
-              <Link to="/admissions" className="btn">How to apply</Link>
-              <Link to="/about" className="btn ghost">About the school</Link>
+              <Link to="/signup" className="btn">Sign up</Link>
+              <Link to="/admissions" className="btn ghost">How to apply</Link>
             </div>
             <div className="tiles">
               {tiles.map(([to, ic, l]) => (
@@ -209,8 +215,11 @@ export function Home() {
       <section className="cta">
         <div className="wrap reveal">
           <h2>Admissions are open at Hill Springs Academy</h2>
-          <p>Write to the admissions office in Maua and we will guide you through every step.</p>
-          <Link className="btn white" to="/apply">Apply online</Link>
+          <p>Create a free parent account, then apply online. We will guide you through every step.</p>
+          <div className="btns" style={{ justifyContent: "center" }}>
+            <Link className="btn white" to="/signup">Sign up</Link>
+            <Link className="btn ghost" style={{ borderColor: "#fff", color: "#fff" }} to="/apply">Apply online</Link>
+          </div>
         </div>
       </section>
     </>
