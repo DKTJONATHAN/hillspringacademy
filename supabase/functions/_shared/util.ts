@@ -73,11 +73,12 @@ export async function rateLimit(key: string, windowSec: number, max: number): Pr
   }
 }
 
+/** When TURNSTILE_SECRET is unset, skip (so production keeps working until you set the secret). Once set, missing/invalid tokens fail closed. */
 export async function verifyTurnstile(token: unknown, ip: string): Promise<boolean> {
   const secret = Deno.env.get("TURNSTILE_SECRET") || "";
   if (!secret) {
-    console.error("TURNSTILE_SECRET missing");
-    return false;
+    console.warn("TURNSTILE_SECRET not set — captcha not enforced yet");
+    return true;
   }
   const t = String(token ?? "").trim();
   if (!t) return false;
@@ -119,7 +120,6 @@ export async function findUserByEmail(email: string): Promise<{ id: string; emai
       return { id: data[0].id, email_confirmed_at: data[0].email_confirmed_at ?? null };
     }
   } catch { /* fall through */ }
-  // Fallback while RPC is not yet deployed
   for (let page = 1; page <= 20; page++) {
     const { data, error } = await db.auth.admin.listUsers({ page, perPage: 200 });
     if (error) throw error;
@@ -155,7 +155,7 @@ function aalFromJwt(req: Request): string {
   }
 }
 
-/** Admin required. Prefer aal2 (MFA); if REQUIRE_ADMIN_MFA is not "true", aal1 still works until MFA is rolled out. */
+/** Admin required. Set REQUIRE_ADMIN_MFA=true after TOTP is rolled out. */
 export async function requireAdmin(req: Request) {
   const user = await userFromRequest(req);
   if (!user?.id || !(await isAdminUserId(user.id))) return null;
