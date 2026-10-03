@@ -8,7 +8,7 @@ React + Vite + React Router. Built by Jonathan Mwaniki (zandani.co.ke).
 
 ## Edit content
 - Text, emails, phone, address, notices: `src/data.js`
-- Gallery photos: add files to `public/gallery/`, then set `src` for each item in `GALLERY` (`src/data.js`)
+- **Gallery photos (automatic):** drop `.webp` / `.jpg` / `.png` / `.gif` / `.avif` files into `public/Gallery/`. They appear on `/gallery` after the next build or `npm run dev` — no code edits needed. Optional alt-text overrides: `GALLERY_OVERRIDES` in `src/data.js`.
 - Logo: save as `public/logo.png` (shows a "LOGO" placeholder until it exists)
 - Colours: CSS variables at the top of `src/styles.css`
 
@@ -27,4 +27,4 @@ React + Vite + React Router. Built by Jonathan Mwaniki (zandani.co.ke).
 Pages serves `index.html` for unknown paths when there is no `404.html`, so routes like `/gallery` work on refresh. Do not add a `404.html`.
 
 ## App-like features
-Page transitions, scroll progress bar, light/dark toggle, hero carousel, tabbed levels, step-by-step admissions, FAQ accordion, gallery lightbox with keyboard arrows, and a mobile bottom tab bar.
+Page transitions, scroll progress bar, light/dark toggle, hero carousel, tabbed levels, step-by-step admissions, FAQ accordion, gallery lightbox, and a mobile bottom tab bar.
