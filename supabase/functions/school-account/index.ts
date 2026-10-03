@@ -7,11 +7,10 @@ const RESEND_COOLDOWN_SEC = 60;
 const MAX_ATTEMPTS = 5;
 
 async function findUser(email: string) {
-  // listUsers is paginated; filter by email through the admin API.
   for (let page = 1; page <= 20; page++) {
     const { data, error } = await db.auth.admin.listUsers({ page, perPage: 200 });
     if (error) throw error;
-    const hit = data.users.find(u => (u.email || "").toLowerCase() === email);
+    const hit = data.users.find(u => norm(u.email) === email);
     if (hit) return hit;
     if (data.users.length < 200) break;
   }
@@ -53,19 +52,17 @@ Deno.serve(async req => {
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
   let p: any;
   try { p = await req.json(); } catch { return json({ error: "Invalid request." }, 400); }
-  if (p.website) return json({ ok: true }); // honeypot
+  if (p.website) return json({ ok: true });
 
   try {
     const email = norm(p.email);
     if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400);
 
-    // ---- Check whether an email has an account (used to give friendly sign-in messages) ----
     if (p.action === "check") {
       const user = await findUser(email);
       return json({ ok: true, exists: Boolean(user), verified: Boolean(user?.email_confirmed_at) });
     }
 
-    // ---- Register (parent) ----
     if (p.action === "register") {
       const fullName = clean(p.fullName, 120), phone = clean(p.phone, 30), password = String(p.password ?? "");
       if (fullName.length < 2) return json({ error: "Please enter your full name." }, 400);
@@ -89,7 +86,6 @@ Deno.serve(async req => {
       return json({ ok: true, needsVerification: true, wait: Boolean((r as any).wait) });
     }
 
-    // ---- Verify sign-up code ----
     if (p.action === "verify_signup") {
       const user = await findUser(email);
       if (!user) return json({ error: "We could not find that account. Please register.", code: "NOT_REGISTERED" }, 404);
@@ -101,7 +97,6 @@ Deno.serve(async req => {
       return json({ ok: true });
     }
 
-    // ---- Resend sign-up code ----
     if (p.action === "resend_signup") {
       const user = await findUser(email);
       if (!user || user.email_confirmed_at) return json({ ok: true });
@@ -111,18 +106,17 @@ Deno.serve(async req => {
       return json({ ok: true });
     }
 
-    // ---- Request password reset ----
     if (p.action === "request_reset") {
       const portal = p.portal === "admin" ? "admin" : "parent";
-      if (portal === "admin") {
-        if (!(await isAdminEmail(email))) {
-          const { data: admins } = await db.from("school_admins").select("email").limit(5);
-          return json({
-            error: "That email is not an administrator email, so it cannot be used to reset the admin password. Please type the correct administrator email.",
-            code: "NOT_ADMIN", hints: (admins || []).map(a => maskEmail(a.email)),
-          }, 403);
-        }
+      if (portal === "admin" && !(await isAdminEmail(email))) {
+        // Do not reveal the administrator email list. The live school_admins
+        // table intentionally contains user_id/name/role/active, not email.
+        return json({
+          error: "That email is not an administrator email, so it cannot be used to reset the admin password.",
+          code: "NOT_ADMIN",
+        }, 403);
       }
+
       const user = await findUser(email);
       if (!user) {
         return json({ error: "You do not have an account yet. Please register first.", code: "NOT_REGISTERED" }, 404);
@@ -136,7 +130,6 @@ Deno.serve(async req => {
       return json({ ok: true });
     }
 
-    // ---- Verify reset code + set new password ----
     if (p.action === "verify_reset") {
       const portal = p.portal === "admin" ? "admin" : "parent";
       if (portal === "admin" && !(await isAdminEmail(email))) return json({ error: "That email is not an administrator.", code: "NOT_ADMIN" }, 403);
@@ -148,7 +141,7 @@ Deno.serve(async req => {
       if (codeBad) return json({ error: codeBad }, 400);
       const u = await db.auth.admin.updateUserById(user.id, { password: String(p.newPassword) });
       if (u.error) throw u.error;
-      await db.auth.admin.signOut(user.id).catch(() => {}); // sign out other sessions
+      await db.auth.admin.signOut(user.id).catch(() => {});
       return json({ ok: true });
     }
 
