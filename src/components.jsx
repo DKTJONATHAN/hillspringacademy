@@ -256,7 +256,7 @@ export function Footer() {
       <div className="wrap legal">
         <span>© {new Date().getFullYear()} {SCHOOL.name}. All rights reserved.</span>
         <span className="legal-right">
-          Website by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>
+          Website developed by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>
           {" · "}
           <Link to="/privacy">Privacy</Link>
         </span>
