@@ -188,8 +188,7 @@ export async function hashCode(email: string, purpose: string, code: string) {
 }
 
 export function passwordProblem(pw: string) {
-  if (pw.length < 12) return "Password must be at least 12 characters.";
-  if (!/[A-Za-z]/.test(pw) || !/\d/.test(pw)) return "Password must contain at least one letter and one number.";
+  if (pw.length < 8) return "Password must be at least 8 characters.";
   return "";
 }
 
