@@ -1,11 +1,4 @@
 User-agent: *
 Allow: /
 
-# Crawl rules are guidance, not access control.
-Disallow: /dashboard/
-Disallow: /login/
-Disallow: /account/
-Disallow: /api/
-Disallow: /private/
-
 Sitemap: https://hillspringsacademy.sc.ke/sitemap.xml
