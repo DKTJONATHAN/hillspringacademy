@@ -81,8 +81,16 @@ export function PageHead({ title, text, description, path, image }) {
       description: SCHOOL.intro,
       slogan: SCHOOL.motto,
       email: SCHOOL.infoEmail,
+      telephone: SCHOOL.phoneTel || SCHOOL.phone || undefined,
       logo: `${SCHOOL.siteUrl}/logo.png`,
-      address: { "@type": "PostalAddress", addressLocality: "Maua", addressRegion: "Meru County", addressCountry: "KE" },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SCHOOL.poBox || undefined,
+        addressLocality: "Maua",
+        addressRegion: "Meru County",
+        postalCode: "60600",
+        addressCountry: "KE",
+      },
       areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"],
       educationalLevel: ["Kindergarten", "Pre-Primary", "Junior School"],
       hasMap: "https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya",
@@ -96,7 +104,6 @@ export function PageHead({ title, text, description, path, image }) {
   );
 }
 
-/* Primary desktop nav — keep short so the bar never compresses */
 export const NAV = [
   ["/", "Home", "home"],
   ["/about", "About", "about"],
@@ -178,36 +185,81 @@ export function BottomNav() {
 }
 
 export function Footer() {
-  const social = Object.entries(SCHOOL.social).filter(([, v]) => v);
+  const social = Object.entries(SCHOOL.social || {}).filter(([, v]) => v);
   return (
     <footer className="site-footer" itemScope itemType="https://schema.org/School">
       <div className="wrap foot-grid">
-        <div>
-          <div className="brand light"><Logo size={48} /><span itemProp="name">{SCHOOL.name}</span></div>
-          <p itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-            <span itemProp="addressLocality">Maua</span>, <span itemProp="addressRegion">Igembe South, Meru County</span>, <span itemProp="addressCountry">Kenya</span>
-          </p>
-          <p>Private CBE school · Kindergarten, Pre-Primary and Junior School</p>
-          {social.length > 0 && <p className="social">{social.map(([k, v]) => <a key={k} href={v} target="_blank" rel="noopener noreferrer">{k[0].toUpperCase() + k.slice(1)}</a>)}</p>}
+        <div className="foot-brand">
+          <div className="brand light">
+            <Logo size={52} />
+            <div>
+              <span className="foot-name" itemProp="name">{SCHOOL.name}</span>
+              <span className="foot-tag">Private CBE school · Maua</span>
+            </div>
+          </div>
+          <p className="foot-blurb">Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education.</p>
+          {social.length > 0 && (
+            <p className="social">
+              {social.map(([k, v]) => (
+                <a key={k} href={v} target="_blank" rel="noopener noreferrer">{k[0].toUpperCase() + k.slice(1)}</a>
+              ))}
+            </p>
+          )}
         </div>
-        <div>
+
+        <div className="foot-col">
           <h3>Explore</h3>
-          {NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}
-          <Link to="/blog">Blog</Link>
-          <Link to="/school-life">School life</Link>
+          <nav className="foot-links" aria-label="Footer explore">
+            {NAV.slice(1).map(([to, l]) => (
+              <Link key={to} to={to}>{l}</Link>
+            ))}
+            <Link to="/reading-materials">Resources</Link>
+            <Link to="/blog">Blog</Link>
+            <Link to="/school-life">School life</Link>
+          </nav>
         </div>
-        <div>
+
+        <div className="foot-col">
           <h3>Contact</h3>
-          <Link to="/signup">Sign up</Link>
-          <Link to="/apply">Apply online</Link>
-          <span>{SCHOOL.admissionsEmail}</span>
-          <Link to="/enquire">Make an enquiry</Link>
-          <span>{SCHOOL.infoEmail}</span>
-          {SCHOOL.phone && <span>{SCHOOL.phone}</span>}
+          <ul className="foot-contact">
+            {SCHOOL.phone && (
+              <li>
+                <span className="fc-label">Phone</span>
+                <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone.replace(/\s/g, "")}`} itemProp="telephone">{SCHOOL.phone}</a>
+              </li>
+            )}
+            {SCHOOL.poBox && (
+              <li itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+                <span className="fc-label">Postal</span>
+                <span itemProp="streetAddress">{SCHOOL.poBox}</span>
+                <span className="fc-sub">
+                  <span itemProp="addressLocality">Maua</span>,{" "}
+                  <span itemProp="addressRegion">Meru County</span>,{" "}
+                  <span itemProp="addressCountry">Kenya</span>
+                </span>
+              </li>
+            )}
+            <li>
+              <span className="fc-label">Email</span>
+              <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a>
+              <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
+            </li>
+            <li className="foot-actions">
+              <Link to="/contact">Contact form</Link>
+              <Link to="/apply">Apply online</Link>
+              <Link to="/enquire">Make an enquiry</Link>
+            </li>
+          </ul>
         </div>
       </div>
+
       <div className="wrap legal">
-        © {new Date().getFullYear()} {SCHOOL.name}, Maua, Meru County. Website by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>.
+        <span>© {new Date().getFullYear()} {SCHOOL.name}. All rights reserved.</span>
+        <span className="legal-right">
+          Website by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>
+          {" · "}
+          <Link to="/privacy">Privacy</Link>
+        </span>
       </div>
     </footer>
   );
