@@ -61,9 +61,15 @@ function VideoCard({ id, title, text }) {
 
 export function Home() {
   const [showMoreVideos, setShowMoreVideos] = useState(false);
-  const tiles = [["/admissions", "apply", "Apply"], ["/academics", "book", "Academics"], ["/gallery", "image", "Gallery"], ["/contact", "mail", "Contact"]];
+  const tiles = [
+    ["/admissions", "apply", "Apply"],
+    ["/academics", "book", "Academics"],
+    ["/reading-materials", "book", "Resources"],
+    ["/gallery", "image", "Gallery"],
+  ];
   const videos = SCHOOL.videos || [];
   const visibleVideos = showMoreVideos ? videos : videos.slice(0, 2);
+  const resourceCount = (SCHOOL.readingMaterials || []).length;
 
   useEffect(() => {
     const fullTitle = "Hill Springs Academy | Private School in Maua, Meru County";
@@ -90,7 +96,7 @@ export function Home() {
             <p>Hill Springs Academy is a private school in Maua, Igembe South, Meru County. We teach Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education (CBE), with strong teaching, clear values and a caring community.</p>
             <div className="btns">
               <Link to="/signup" className="btn">Sign up</Link>
-              <Link to="/admissions" className="btn ghost">How to apply</Link>
+              <Link to="/reading-materials" className="btn ghost">Learning resources</Link>
             </div>
             <div className="tiles">
               {tiles.map(([to, ic, l]) => (
@@ -116,6 +122,36 @@ export function Home() {
                 <p>{v.text}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Learning resources — clear path for students */}
+      <section className="section alt" id="resources">
+        <div className="wrap split">
+          <div>
+            <span className="eyebrow">For learners & families</span>
+            <h2>Learning resources</h2>
+            <p>
+              Download notes, practice papers and assessment materials for your grade.
+              {resourceCount > 0
+                ? ` We currently have ${resourceCount} resources available, including Grade 7 SBA materials and notes for lower grades.`
+                : " New materials are added regularly."}
+            </p>
+            <p>Open the resources page, choose your grade, and download the PDFs you need.</p>
+            <div className="btns">
+              <Link to="/reading-materials" className="btn">Go to resources</Link>
+            </div>
+          </div>
+          <div className="card">
+            <h3>What you will find</h3>
+            <ul className="checks">
+              <li>Grade 1 hygiene notes</li>
+              <li>Grade 4 & 5 subject notes</li>
+              <li>Grade 7 SBA question papers</li>
+              <li>Teacher and learner copies where available</li>
+            </ul>
+            <Link to="/reading-materials" className="textlink">Browse all resources →</Link>
           </div>
         </div>
       </section>
