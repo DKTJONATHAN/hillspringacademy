@@ -45,11 +45,13 @@ export async function adminSignIn(email, password) {
 export const adminCall = (token, body) =>
   callFunction("school-email-center", body, token);
 
+// Admin password reset now uses the same school-account verification system
+// as parent accounts. This matches the production school_admins user_id schema.
 export const requestAdminPasswordReset = (email) =>
-  callFunction("school-admin-auth", { action: "request_reset", email });
+  callFunction("school-account", { action: "request_reset", email, portal: "admin" });
 
 export const verifyAdminPasswordReset = (email, code, new_password) =>
-  callFunction("school-admin-auth", { action: "verify_reset", email, code, new_password });
+  callFunction("school-account", { action: "verify_reset", email, code, newPassword: new_password, portal: "admin" });
 
 // ---------------- Parent accounts, applications, admin decisions ----------------
 export const accountApi = (body) => callFunction("school-account", body);
