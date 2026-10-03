@@ -16,9 +16,7 @@ export const SCHOOL = {
   admissionsEmail: "admissions@hillspringacademy.sc.ke",
   infoEmail: "info@hillspringacademy.sc.ke",
   phone: "",
-  // Levels shown in the application form dropdown. Edit freely.
   applyLevels: ["Playgroup","PP1","PP2","Grade 1","Grade 2","Grade 3","Grade 4","Grade 5","Grade 6","Grade 7","Grade 8","Grade 9"],
-  // Optional: extra admin emails remembered in the browser (the server still decides who is an admin).
   adminEmails: [],
   address: "Maua, Igembe South, Meru County, Kenya",
   hours: "",
@@ -35,8 +33,60 @@ export const SCHOOL = {
     { id: "uwK-cVMt_08", title: "Counting 1 to 30", text: "Mathematical activities: counting numbers 1 to 30 for CBC early years." },
   ],
   get videoIds() { return this.videos.map(v => v.id); },
-  // Grade 7 resources — files live in public/reading-material/
+  // Files live in public/reading-material/
   readingMaterials: [
+    // —— Grade 1 ——
+    {
+      title: "Hygiene Grade 1 Notes",
+      grade: "Grade 1",
+      description: "Hygiene learning notes for Grade 1.",
+      file: resourceFile("HYG GRADE 1 NOTES.pdf"),
+    },
+    // —— Grade 4 ——
+    {
+      title: "CRE Grade 4 Notes",
+      grade: "Grade 4",
+      description: "Christian Religious Education notes for Grade 4.",
+      file: resourceFile("CRE GRADE 4 NOTE..pdf"),
+    },
+    {
+      title: "Home Science Grade 4 Notes",
+      grade: "Grade 4",
+      description: "Home Science notes for Grade 4.",
+      file: resourceFile("HSCI GRADE 4 NOTES.pdf"),
+    },
+    {
+      title: "Music Grade 4 Notes",
+      grade: "Grade 4",
+      description: "Music notes for Grade 4.",
+      file: resourceFile("MUSIC GRADE 4 NOTES.pdf"),
+    },
+    {
+      title: "Physical Education Grade 4 Notes",
+      grade: "Grade 4",
+      description: "Physical Education notes for Grade 4.",
+      file: resourceFile("PE GRADE 4 NOTES.pdf"),
+    },
+    {
+      title: "Social Studies Grade 4 Notes",
+      grade: "Grade 4",
+      description: "Social Studies notes for Grade 4.",
+      file: resourceFile("SST GRADE 4 NOTES..pdf"),
+    },
+    // —— Grade 5 ——
+    {
+      title: "CRE Grade 5 Notes",
+      grade: "Grade 5",
+      description: "Christian Religious Education notes for Grade 5.",
+      file: resourceFile("CRE GRADE 5 NOTES.pdf"),
+    },
+    {
+      title: "Social Studies Grade 5 Notes",
+      grade: "Grade 5",
+      description: "Social Studies notes for Grade 5.",
+      file: resourceFile("SOCIAL GRADE 5 NOTES.pdf"),
+    },
+    // —— Grade 7 (SBA 2026) ——
     {
       title: "CRE Grade 7 SBA Question Paper 2026",
       grade: "Grade 7",
@@ -170,11 +220,6 @@ export const SCHOOL = {
   ],
 };
 
-/*
-  Gallery photos are auto-discovered from public/Gallery/ at build/dev time.
-  Just drop .webp / .jpg / .png / .gif / .avif files there — no code change needed.
-  Optional: override alt text or category for a specific file name below.
-*/
 const GALLERY_OVERRIDES = {
   "school-gate.webp": { alt: "Hill Springs Academy school gate in Maua, Meru County", cat: "Campus" },
   "school-bus.webp": { alt: "Hill Springs Academy school bus in Maua", cat: "Transport" },
@@ -185,7 +230,6 @@ export const GALLERY = GALLERY_AUTO.map((item) => {
   return { src: item.src, alt: o.alt || item.alt, cat: o.cat || item.cat };
 });
 
-/* Hero: prefer known campus photos when present, otherwise first gallery images */
 function pickHero() {
   const byFile = Object.fromEntries(GALLERY_AUTO.map((g) => [g.file, g]));
   const preferred = ["school-gate.webp", "school-bus.webp"];
