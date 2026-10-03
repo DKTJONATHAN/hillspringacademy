@@ -1,8 +1,12 @@
 -- Hill Springs Academy: parent accounts, applications, reset codes
--- Run in Supabase SQL editor. Safe to re-run.
+-- Canonical schema for the production Supabase project.
+-- Safe to re-run; existing production tables/data are preserved.
 
 create table if not exists public.school_admins (
-  email text primary key,
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  name text not null default '',
+  role text not null default 'admin' check (role in ('admin','editor')),
+  active boolean not null default true,
   created_at timestamptz not null default now()
 );
 
@@ -13,7 +17,6 @@ create table if not exists public.school_profiles (
   created_at timestamptz not null default now()
 );
 
--- One-time 6-digit codes (stored hashed, never in plain text)
 create table if not exists public.school_codes (
   id uuid primary key default gen_random_uuid(),
   email text not null,
@@ -51,15 +54,14 @@ create table if not exists public.school_applications (
 create index if not exists school_applications_status_idx on public.school_applications (status, created_at desc);
 create index if not exists school_applications_user_idx on public.school_applications (user_id);
 
--- Link enquiries made by signed-in parents (table already exists from school-submit)
 alter table public.school_conversations add column if not exists user_id uuid;
 
--- All access goes through Edge Functions using the secret key.
--- RLS on with no policies = the browser (publishable key) can read nothing directly.
 alter table public.school_admins enable row level security;
 alter table public.school_profiles enable row level security;
 alter table public.school_codes enable row level security;
 alter table public.school_applications enable row level security;
 
--- Add your admin email(s). Replace the example, then run:
--- insert into public.school_admins (email) values ('admin@example.com') on conflict do nothing;
+-- IMPORTANT:
+-- Do not add browser RLS policies to these protected tables.
+-- All access is intentionally routed through Edge Functions using the Supabase secret key.
+-- Admin membership is identified by school_admins.user_id, not an email column.
