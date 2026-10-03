@@ -7,9 +7,9 @@ const secretKeysRaw = Deno.env.get("SUPABASE_SECRET_KEYS") || "{}";
 const secretKeys = JSON.parse(secretKeysRaw);
 const SUPABASE_SECRET_KEY = secretKeys.default || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") || "";
-const FROM = "Hill Springs Academy <info@hillspringacademy.sc.ke>";
-const SCHOOL_EMAIL = "info@hillspringacademy.sc.ke";
-const ADMISSIONS_EMAIL = "admissions@hillspringacademy.sc.ke";
+const FROM = "Hill Springs Academy <info@hillspringsacademy.sc.ke>";
+const SCHOOL_EMAIL = "info@hillspringsacademy.sc.ke";
+const ADMISSIONS_EMAIL = "admissions@hillspringsacademy.sc.ke";
 const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET_KEY);
 
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "content-type, apikey, authorization" } });
