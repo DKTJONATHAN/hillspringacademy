@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hill Springs Academy | Private School in Maua, Meru County</title>
+    <meta name="title" content="Hill Springs Academy | Private School in Maua, Meru County" />
     <meta name="description" content="Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. Kindergarten, Pre-Primary and Junior School. Admissions open." />
     <meta name="keywords" content="Hill Springs Academy, Hill Springs Academy Maua, Hill Springs, schools in Maua, private schools in Maua, Maua Meru County, CBE school Maua, private school Igembe South, Hill Sprungs Academy, Hillsprings Academy Maua" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -127,6 +128,9 @@
           "/about": "About Hill Springs Academy | Private School in Maua",
           "/academics": "Academics | Hill Springs Academy, Maua",
           "/admissions": "Admissions | Hill Springs Academy, Maua",
+          "/signup": "Join Hill Springs Academy | Sign up",
+          "/apply": "Apply to Hill Springs Academy | Maua",
+          "/enquire": "Make an enquiry | Hill Springs Academy",
           "/school-life": "School Life | Hill Springs Academy, Maua",
           "/gallery": "Gallery | Hill Springs Academy, Maua",
           "/reading-materials": "Learning Resources | Hill Springs Academy, Maua",
@@ -138,7 +142,11 @@
           "/privacy": "Privacy | Hill Springs Academy",
           "/sitemap": "Sitemap | Hill Springs Academy, Maua"
         };
-        if (titles[path]) document.title = titles[path];
+        if (titles[path]) {
+          document.title = titles[path];
+          var tm = document.querySelector('meta[name="title"]');
+          if (tm) tm.setAttribute("content", titles[path]);
+        }
         var link = document.querySelector('link[rel="canonical"]');
         if (link) link.href = origin + (path === "/" ? "/" : path);
       })();
