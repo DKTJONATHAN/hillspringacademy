@@ -4,6 +4,9 @@
    Empty strings are hidden automatically. */
 import { GALLERY_AUTO } from "./gallery.auto.js";
 
+/** Build a safe public URL for a file under public/reading-material/ */
+const resourceFile = (name) => "/reading-material/" + encodeURIComponent(name);
+
 export const SCHOOL = {
   siteUrl: "https://hillspringsacademy.sc.ke",
   name: "Hill Springs Academy",
@@ -32,16 +35,80 @@ export const SCHOOL = {
     { id: "uwK-cVMt_08", title: "Counting 1 to 30", text: "Mathematical activities: counting numbers 1 to 30 for CBC early years." },
   ],
   get videoIds() { return this.videos.map(v => v.id); },
+  // Grade 7 resources — files live in public/reading-material/
   readingMaterials: [
-    { title: "Grade 1 English Reading Material", grade: "Grade 1", description: "Reading practice and language activities.", file: "/reading-materials/grade-1-english.pdf" },
-    { title: "Grade 2 Mathematics Practice", grade: "Grade 2", description: "Mathematics revision and practice exercises.", file: "/reading-materials/grade-2-mathematics.pdf" },
-    { title: "Grade 3 Science Notes", grade: "Grade 3", description: "Science learning notes for revision.", file: "/reading-materials/grade-3-science.pdf" },
-    { title: "Grade 4 English Reading Material", grade: "Grade 4", description: "Reading comprehension and language practice.", file: "/reading-materials/grade-4-english.pdf" },
-    { title: "Grade 5 Mathematics Revision", grade: "Grade 5", description: "Revision notes and practice questions.", file: "/reading-materials/grade-5-mathematics.pdf" },
-    { title: "Grade 6 Science Notes", grade: "Grade 6", description: "Science notes and revision material.", file: "/reading-materials/grade-6-science.pdf" },
-    { title: "Grade 7 General Reading Material", grade: "Grade 7", description: "Learning and revision material for learners.", file: "/reading-materials/grade-7-reading.pdf" },
-    { title: "Grade 8 General Reading Material", grade: "Grade 8", description: "Learning and revision material for learners.", file: "/reading-materials/grade-8-reading.pdf" },
-    { title: "Grade 9 General Reading Material", grade: "Grade 9", description: "Learning and revision material for learners.", file: "/reading-materials/grade-9-reading.pdf" },
+    {
+      title: "CRE Grade 7 SBA Question Paper 2026",
+      grade: "Grade 7",
+      description: "Christian Religious Education school-based assessment question paper (Regular), 2026.",
+      file: resourceFile("CRE Grade 7 SBA QP 2026  Regular.pdf"),
+    },
+    {
+      title: "English Grade 7 Section A — Learner's Copy 2026",
+      grade: "Grade 7",
+      description: "English Section A assessment for learners, 2026.",
+      file: resourceFile("GRADE 7 SECTION A LEARNER'S 2026.pdf"),
+    },
+    {
+      title: "English Grade 7 Section A — Teacher's Copy 2026",
+      grade: "Grade 7",
+      description: "English Section A teacher's copy, 2026.",
+      file: resourceFile("GRADE 7 SECTION A TEACHER'S COPY 2026.pdf"),
+    },
+    {
+      title: "Integrated Science Grade 7 Question Paper",
+      grade: "Grade 7",
+      description: "Integrated Science Grade 7 question paper.",
+      file: resourceFile("INTSCI G7 QP.pdf"),
+    },
+    {
+      title: "Kiswahili Grade 7 Sehemu A — Nakala ya Mwanafunzi 2026",
+      grade: "Grade 7",
+      description: "Kiswahili Sehemu A, nakala ya mwanafunzi, 2026.",
+      file: resourceFile("KISWAHILI GRADE 7 SEHEMU A NAKALA YA MWANAFUNZI 2026.pdf"),
+    },
+    {
+      title: "Kiswahili Grade 7 Sehemu A — Nakala ya Mwalimu 2026",
+      grade: "Grade 7",
+      description: "Kiswahili Sehemu A, nakala ya mwalimu, 2026.",
+      file: resourceFile("KISWAHILI GRADE 7  SEHEMU A NAKALA YA MWALIMU 2026.pdf"),
+    },
+    {
+      title: "Kiswahili Grade 7 Sehemu B Question Paper 2026",
+      grade: "Grade 7",
+      description: "Kiswahili Sehemu B question paper (Regular & PI), 2026.",
+      file: resourceFile("KISWAHILI GRADE 7 SEHEMU B QUESTION PAPER 2026 Regular & PI.pdf"),
+    },
+    {
+      title: "Mathematics Grade 7 SBA Question Paper",
+      grade: "Grade 7",
+      description: "Mathematics school-based assessment question paper for Grade 7.",
+      file: resourceFile("MATHEMATICS GRADE 7 SBA - QP.pdf"),
+    },
+    {
+      title: "Pre-Technical Grade 7 SBA Question Paper",
+      grade: "Grade 7",
+      description: "Pre-Technical studies school-based assessment question paper.",
+      file: resourceFile("PRETECHNICAL GRADE 7 SBA QP.pdf"),
+    },
+    {
+      title: "Creative Arts & Sports Grade 7 SBA",
+      grade: "Grade 7",
+      description: "Creative Arts and Sports (CAS) Grade 7 SBA question paper.",
+      file: resourceFile("QP CAS GRADE 7 SBA.pdf"),
+    },
+    {
+      title: "Social Studies Grade 7 SBA Question Paper",
+      grade: "Grade 7",
+      description: "Social Studies (SST) Grade 7 school-based assessment question paper.",
+      file: resourceFile("SST QP GRADE 7 SBA..pdf"),
+    },
+    {
+      title: "Grade 7 SBA 2026 Assessment Answers",
+      grade: "Grade 7",
+      description: "Assessment answers pack for Grade 7 SBA 2026 (v2).",
+      file: resourceFile("grade7_sba_2026_assessment_answers-v2.pdf"),
+    },
   ],
   values: [
     { title: "Learning", text: "Curious, well-taught learners who understand more than they memorise." },
