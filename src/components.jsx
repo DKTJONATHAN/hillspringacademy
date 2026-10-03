@@ -96,15 +96,28 @@ export function PageHead({ title, text, description, path, image }) {
   );
 }
 
+/* Primary desktop nav — keep short so the bar never compresses */
 export const NAV = [
   ["/", "Home", "home"],
   ["/about", "About", "about"],
   ["/academics", "Academics", "book"],
   ["/admissions", "Admissions", "apply"],
-  ["/school-life", "School Life", "image"],
-  ["/blog", "Blog", "book"],
-  ["/reading-materials", "Resources", "book"],
+  ["/gallery", "Gallery", "image"],
   ["/contact", "Contact", "mail"],
+];
+
+const MORE_LINKS = [
+  ["/school-life", "School life"],
+  ["/blog", "Blog"],
+  ["/reading-materials", "Resources"],
+  ["/fees", "Fees"],
+  ["/faq", "FAQ"],
+  ["/signup", "Sign up"],
+  ["/apply", "Apply online"],
+  ["/enquire", "Make an enquiry"],
+  ["/directors", "Leadership"],
+  ["/privacy", "Privacy"],
+  ["/sitemap", "Sitemap"],
 ];
 
 export function Header({ theme, toggle, scrolled }) {
@@ -112,20 +125,44 @@ export function Header({ theme, toggle, scrolled }) {
   return (
     <header className={"site-header" + (scrolled ? " scrolled" : "")}>
       <div className="wrap bar">
-        <Link to="/" className="brand"><Logo size={scrolled ? 46 : 56} /><span>{SCHOOL.name}</span></Link>
+        <Link to="/" className="brand" onClick={() => setMenuOpen(false)}>
+          <Logo size={scrolled ? 44 : 52} />
+          <span className="brand-text">
+            <strong>{SCHOOL.short}</strong>
+            <small>Academy</small>
+          </span>
+        </Link>
+
         <nav aria-label="Main" className="top-nav">
-          {NAV.map(([to, label]) => <NavLink key={to} to={to} end={to === "/"}>{label}</NavLink>)}
+          {NAV.map(([to, label]) => (
+            <NavLink key={to} to={to} end={to === "/"}>{label}</NavLink>
+          ))}
         </nav>
-        <button className="menu-toggle" aria-expanded={menuOpen} aria-label={menuOpen ? "Close navigation" : "Open navigation"} onClick={() => setMenuOpen(v => !v)}>{menuOpen ? "×" : "☰"} <span>{menuOpen ? "Close" : "Menu"}</span></button>
+
         <div className="actions">
           <button className="icon-btn" onClick={toggle} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
-            <Icon n={theme === "dark" ? "sun" : "moon"} />
+            <Icon n={theme === "dark" ? "sun" : "moon"} size={18} />
           </button>
-          <Link to="/signup" className="btn small ghost">Sign up</Link>
-          <Link to="/apply" className="btn small">Apply now</Link>
+          <Link to="/signup" className="btn small ghost header-btn">Sign up</Link>
+          <Link to="/apply" className="btn small header-btn">Apply</Link>
+          <button
+            className="menu-toggle"
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? "×" : "☰"}
+          </button>
         </div>
       </div>
-      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/signup","Sign up"], ["/apply","Apply online"], ["/enquire","Make an enquiry"], ["/fees","School Fees"], ["/faq","FAQ"], ["/gallery","Gallery"], ["/directors","Leadership"], ["/blog","Blog"], ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to + label} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
+
+      {menuOpen && (
+        <nav className="mobile-menu" aria-label="All pages">
+          {[...NAV, ...MORE_LINKS].map(([to, label]) => (
+            <NavLink key={to + label} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>
+          ))}
+        </nav>
+      )}
     </header>
   );
 }
@@ -134,7 +171,7 @@ export function BottomNav() {
   return (
     <nav className="bottom-nav" aria-label="Main mobile">
       {NAV.map(([to, label, ic]) => (
-        <NavLink key={to} to={to} end={to === "/"}><Icon n={ic} size={22} /><span>{label}</span></NavLink>
+        <NavLink key={to} to={to} end={to === "/"}><Icon n={ic} size={20} /><span>{label}</span></NavLink>
       ))}
     </nav>
   );
@@ -153,12 +190,19 @@ export function Footer() {
           <p>Private CBE school · Kindergarten, Pre-Primary and Junior School</p>
           {social.length > 0 && <p className="social">{social.map(([k, v]) => <a key={k} href={v} target="_blank" rel="noopener noreferrer">{k[0].toUpperCase() + k.slice(1)}</a>)}</p>}
         </div>
-        <div><h3>Explore</h3>{NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}</div>
+        <div>
+          <h3>Explore</h3>
+          {NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}
+          <Link to="/blog">Blog</Link>
+          <Link to="/school-life">School life</Link>
+        </div>
         <div>
           <h3>Contact</h3>
           <Link to="/signup">Sign up</Link>
-          <Link to="/apply">Apply online</Link><span>{SCHOOL.admissionsEmail}</span>
-          <Link to="/enquire">Make an enquiry</Link><span>{SCHOOL.infoEmail}</span>
+          <Link to="/apply">Apply online</Link>
+          <span>{SCHOOL.admissionsEmail}</span>
+          <Link to="/enquire">Make an enquiry</Link>
+          <span>{SCHOOL.infoEmail}</span>
           {SCHOOL.phone && <span>{SCHOOL.phone}</span>}
         </div>
       </div>
