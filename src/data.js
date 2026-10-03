@@ -2,6 +2,8 @@
    Verified: name, town, emails, developer credit.
    Everything else is placeholder copy: replace with the school's real details.
    Empty strings are hidden automatically. */
+import { GALLERY_AUTO } from "./gallery.auto.js";
+
 export const SCHOOL = {
   siteUrl: "https://hillspringsacademy.sc.ke",
   name: "Hill Springs Academy",
@@ -101,19 +103,44 @@ export const SCHOOL = {
   ],
 };
 
-/* Gallery: add files under public/Gallery/ then list each one here.
-   Paths are case-sensitive. Prefer short filenames without spaces.
-   Avoid clear face-forward portraits of children. */
-export const GALLERY = [
-  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua, Meru County", cat: "Campus" },
-  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua", cat: "Transport" },
-  { src: "/Gallery/Gemini_Generated_Image_41vrfl41vrfl41vr.webp", alt: "Learners and campus life at Hill Springs Academy, Maua", cat: "School life" },
-  { src: "/Gallery/Gemini_Generated_Image_c99nfoc99nfoc99n%20(1).webp", alt: "School community at Hill Springs Academy, Meru County", cat: "School life" },
-];
+/*
+  Gallery photos are auto-discovered from public/Gallery/ at build/dev time.
+  Just drop .webp / .jpg / .png / .gif / .avif files there — no code change needed.
+  Optional: override alt text or category for a specific file name below.
+*/
+const GALLERY_OVERRIDES = {
+  "school-gate.webp": { alt: "Hill Springs Academy school gate in Maua, Meru County", cat: "Campus" },
+  "school-bus.webp": { alt: "Hill Springs Academy school bus in Maua", cat: "Transport" },
+};
 
-/* Hero slides — local photos first for authenticity and performance */
-export const HERO = [
-  { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua, Meru County", title: "Hill Springs Academy, Maua", text: "A private CBE school in Meru County." },
-  { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua", title: "Getting to school", text: "Transport for learners — confirm routes with admissions." },
-  { src: "/Gallery/Gemini_Generated_Image_41vrfl41vrfl41vr.webp", alt: "Hill Springs Academy campus life in Maua", title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
-];
+export const GALLERY = GALLERY_AUTO.map((item) => {
+  const o = GALLERY_OVERRIDES[item.file] || {};
+  return { src: item.src, alt: o.alt || item.alt, cat: o.cat || item.cat };
+});
+
+/* Hero: prefer known campus photos when present, otherwise first gallery images */
+function pickHero() {
+  const byFile = Object.fromEntries(GALLERY_AUTO.map((g) => [g.file, g]));
+  const preferred = ["school-gate.webp", "school-bus.webp"];
+  const slides = [];
+  for (const f of preferred) {
+    if (byFile[f]) slides.push(byFile[f]);
+  }
+  for (const g of GALLERY_AUTO) {
+    if (slides.length >= 3) break;
+    if (!preferred.includes(g.file)) slides.push(g);
+  }
+  const defaults = [
+    { title: "Hill Springs Academy, Maua", text: "A private CBE school in Meru County." },
+    { title: "Getting to school", text: "Transport for learners — confirm routes with admissions." },
+    { title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
+  ];
+  return slides.slice(0, 3).map((g, i) => ({
+    src: g.src,
+    alt: (GALLERY_OVERRIDES[g.file] && GALLERY_OVERRIDES[g.file].alt) || g.alt,
+    title: defaults[i]?.title || "Hill Springs Academy",
+    text: defaults[i]?.text || "Maua, Meru County",
+  }));
+}
+
+export const HERO = pickHero();
