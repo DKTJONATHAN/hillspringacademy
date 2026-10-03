@@ -17,12 +17,39 @@ export const norm = (e: unknown) => String(e ?? "").trim().toLowerCase();
 
 export function maskEmail(email: string) {
   const [u, d] = email.split("@");
+  if (!u || !d) return "***";
   return `${u.slice(0, 1)}${"*".repeat(Math.max(2, Math.min(u.length - 1, 6)))}@${d}`;
 }
 
-export async function isAdminEmail(email: string) {
-  const { data } = await db.from("school_admins").select("email").eq("email", norm(email)).maybeSingle();
+/**
+ * Checks the authenticated user's membership in the live school_admins table.
+ * The production schema identifies admins by auth.users.id, not by email.
+ */
+export async function isAdminUserId(userId: string) {
+  const { data, error } = await db
+    .from("school_admins")
+    .select("user_id")
+    .eq("user_id", userId)
+    .eq("active", true)
+    .maybeSingle();
+  if (error) throw error;
   return Boolean(data);
+}
+
+/** Backwards-compatible helper for flows that only have an email. */
+export async function isAdminEmail(email: string) {
+  const normalized = norm(email);
+  if (!validEmail(normalized)) return false;
+
+  // Resolve the Auth user first, then authorize by user_id.
+  for (let page = 1; page <= 20; page++) {
+    const { data, error } = await db.auth.admin.listUsers({ page, perPage: 200 });
+    if (error) throw error;
+    const hit = data.users.find(u => norm(u.email) === normalized);
+    if (hit) return isAdminUserId(hit.id);
+    if (data.users.length < 200) break;
+  }
+  return false;
 }
 
 /** Verifies the bearer token and returns the user (or null). */
@@ -35,14 +62,14 @@ export async function userFromRequest(req: Request) {
 
 export async function requireAdmin(req: Request) {
   const user = await userFromRequest(req);
-  if (!user?.email || !(await isAdminEmail(user.email))) return null;
+  if (!user?.id || !(await isAdminUserId(user.id))) return null;
   return user;
 }
 
 export function sixDigitCode() {
   const n = new Uint32Array(1);
   let v = 0;
-  do { crypto.getRandomValues(n); v = n[0]; } while (v >= 4294000000); // avoid modulo bias
+  do { crypto.getRandomValues(n); v = n[0]; } while (v >= 4294000000);
   return String(v % 1000000).padStart(6, "0");
 }
 
