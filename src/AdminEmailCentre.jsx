@@ -246,7 +246,7 @@ export function AdminEmailCentre() {
               {!resetMode && (
                 <label>
                   Password
-                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" minLength={12} />
+                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" minLength={8} />
                 </label>
               )}
               {resetMode && resetStep === "verify" && (
@@ -264,7 +264,7 @@ export function AdminEmailCentre() {
                   </label>
                   <label>
                     New password
-                    <input type="password" minLength={12} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required autoComplete="new-password" />
+                    <input type="password" minLength={8} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required autoComplete="new-password" />
                   </label>
                 </>
               )}
