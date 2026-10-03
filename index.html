@@ -35,29 +35,28 @@
     <meta name="ICBM" content="0.232, 37.941" />
     <meta name="theme-color" content="#c8102e" />
     <style id="critical-first-paint">
-      :root{color-scheme:light;--ink:#202124;--ink-2:#393b40;--accent:#c8102e;--paper:#f3f4f5;--muted:#637187;--line:#e2e7ee;--surface:#fff}
+      :root{color-scheme:light;--ink:#202124;--accent:#c8102e;--paper:#f3f4f5;--muted:#637187;--surface:#fff}
       *{box-sizing:border-box}
-      html{background:var(--paper)}
-      body{margin:0;background:var(--paper);color:var(--ink);font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
-      a{color:inherit;text-decoration:none}
+      html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+        font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+        -webkit-font-smoothing:antialiased}
       #root{min-height:100vh}
-      #root>header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:82px;padding:0 max(24px,calc((100% - 1160px)/2));background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(20,35,60,.05)}
-      #root>header p{margin:0;color:var(--ink);font-weight:800}
-      #root>header nav{display:flex;align-items:center;gap:22px}
-      #root>header nav a{color:var(--muted);font-size:.88rem;font-weight:700;padding:10px 0;border-bottom:2px solid transparent}
-      #root>header nav a:first-child,#root>header nav a:hover{color:var(--ink);border-color:var(--accent)}
-      #root>main{width:min(1160px,calc(100% - 48px));margin:0 auto;padding:clamp(56px,8vw,104px) 0;min-height:55vh}
-      #root>main h1{margin:0 0 22px;font-size:clamp(2.35rem,5vw,4.6rem);line-height:1.08;letter-spacing:-.045em}
-      #root>main p{max-width:700px;margin:0 0 18px;color:var(--muted)}
-      @media(max-width:720px){
-        #root>header{min-height:68px;padding:0 16px}
-        #root>header p{font-size:.88rem}
-        #root>header nav{display:none}
-        #root>main{width:min(100% - 32px,560px);padding:48px 0 60px}
-        #root>main h1{font-size:clamp(2.45rem,11vw,3.5rem)}
+      /* Branded splash while JS + CSS load (avoids plain HTML flash) */
+      .boot-shell{
+        min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:16px;padding:32px;text-align:center;background:var(--paper)
       }
+      .boot-shell img{width:72px;height:72px;object-fit:contain;border-radius:16px}
+      .boot-shell strong{display:block;font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+      .boot-shell small{display:block;margin-top:4px;font-size:.8rem;font-weight:600;color:var(--muted)}
+      .boot-bar{width:120px;height:3px;margin-top:8px;border-radius:99px;background:rgba(200,16,46,.15);overflow:hidden;position:relative}
+      .boot-bar::after{
+        content:"";position:absolute;inset:0 auto 0 0;width:40%;border-radius:99px;background:var(--accent);
+        animation:boot-slide 1s ease-in-out infinite
+      }
+      @keyframes boot-slide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+      @media (prefers-reduced-motion:reduce){.boot-bar::after{animation:none;width:100%}}
     </style>
-    <!-- Favicons (files in /public) -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
@@ -68,6 +67,7 @@
     <link rel="alternate" hreflang="x-default" href="https://hillspringsacademy.sc.ke/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="image" href="/logo.png" />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
@@ -86,10 +86,13 @@
           "description": "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya, offering Kindergarten, Pre-Primary and Junior School.",
           "slogan": "Building an excellent foundation for a brighter future",
           "email": "info@hillspringacademy.sc.ke",
+          "telephone": "+254710572419",
           "address": {
             "@type": "PostalAddress",
+            "streetAddress": "P.O. Box 377-60600 Maua",
             "addressLocality": "Maua",
             "addressRegion": "Meru County",
+            "postalCode": "60600",
             "addressCountry": "KE"
           },
           "geo": {
@@ -157,23 +160,25 @@
   </head>
   <body>
     <div id="root">
-      <header>
-        <p><strong>Hill Springs Academy</strong> · Maua, Meru County</p>
-        <nav aria-label="Hill Springs Academy">
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/academics">Academics</a>
-          <a href="/admissions">Admissions</a>
-          <a href="/contact">Contact</a>
-        </nav>
-      </header>
-      <main>
-        <h1>Hill Springs Academy</h1>
-        <p>Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. We offer Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education.</p>
-        <p>Building an excellent foundation for a brighter future. Schools in Maua, private schools in Maua, and families across Meru County are welcome to visit and enquire about admission.</p>
-        <p>Admissions: <a href="mailto:admissions@hillspringacademy.sc.ke">admissions@hillspringacademy.sc.ke</a>. General: <a href="mailto:info@hillspringacademy.sc.ke">info@hillspringacademy.sc.ke</a>.</p>
-      </main>
+      <div class="boot-shell" aria-busy="true" aria-live="polite">
+        <img src="/logo.png" width="72" height="72" alt="" />
+        <div>
+          <strong>Hill Springs Academy</strong>
+          <small>Maua, Meru County</small>
+        </div>
+        <div class="boot-bar" aria-hidden="true"></div>
+      </div>
     </div>
+    <noscript>
+      <div style="max-width:640px;margin:48px auto;padding:0 20px;font-family:system-ui,sans-serif;line-height:1.6">
+        <h1>Hill Springs Academy</h1>
+        <p>Private CBE school in Maua, Igembe South, Meru County, Kenya. Kindergarten, Pre-Primary and Junior School.</p>
+        <p>Phone: <a href="tel:+254710572419">+254 710 572419</a></p>
+        <p>P.O. Box 377-60600 Maua</p>
+        <p>Email: <a href="mailto:info@hillspringacademy.sc.ke">info@hillspringacademy.sc.ke</a></p>
+        <p>Please enable JavaScript to use the full website.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
