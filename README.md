@@ -12,6 +12,12 @@ React + Vite + React Router. Built by Jonathan Mwaniki (zandani.co.ke).
 - Logo: save as `public/logo.png` (shows a "LOGO" placeholder until it exists)
 - Colours: CSS variables at the top of `src/styles.css`
 
+## Accounts, applications and admin
+
+- `/apply` and `/enquire`: parent accounts (email code verification, password reset by 6-digit code), online admission form and enquiry form.
+- `/admin`: admins accept or reject applications (parent is emailed automatically), read enquiries, send newsletters.
+- Backend setup for Supabase: see `docs/SUPABASE_SETUP.md`. SQL is in `supabase/migrations/`.
+
 ## Deploy on Cloudflare Pages (from GitHub)
 1. Push this folder to a GitHub repository.
 2. Cloudflare dashboard > Workers & Pages > Create > Pages > Connect to Git, pick the repo.

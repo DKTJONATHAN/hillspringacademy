@@ -210,7 +210,7 @@ export function Home() {
         <div className="wrap reveal">
           <h2>Admissions are open at Hill Springs Academy</h2>
           <p>Write to the admissions office in Maua and we will guide you through every step.</p>
-          <Link className="btn white" to="/admissions#enquiry">Start an admissions enquiry</Link>
+          <Link className="btn white" to="/apply">Apply online</Link>
         </div>
       </section>
     </>

@@ -18,6 +18,7 @@ import {
   FAQ,
 } from "./pagesRest.jsx";
 import { AdminEmailCentre } from "./AdminEmailCentre.jsx";
+import { AccountPortal } from "./AccountPortal.jsx";
 import { useTheme, useScroll } from "./hooks.js";
 
 const NotFound = () => (
@@ -51,6 +52,8 @@ export default function App() {
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/academics" element={<Academics />} />
             <Route path="/admissions" element={<Admissions />} />
+            <Route path="/apply" element={<AccountPortal kind="admissions" />} />
+            <Route path="/enquire" element={<AccountPortal kind="enquiry" />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/reading-materials" element={<ReadingMaterials />} />
             <Route path="/contact" element={<Contact />} />

@@ -11,6 +11,10 @@ export const SCHOOL = {
   admissionsEmail: "admissions@hillspringacademy.sc.ke",
   infoEmail: "info@hillspringacademy.sc.ke",
   phone: "",
+  // Levels shown in the application form dropdown. Edit freely.
+  applyLevels: ["Playgroup","PP1","PP2","Grade 1","Grade 2","Grade 3","Grade 4","Grade 5","Grade 6","Grade 7","Grade 8","Grade 9"],
+  // Optional: extra admin emails remembered in the browser (the server still decides who is an admin).
+  adminEmails: [],
   address: "Maua, Igembe South, Meru County, Kenya",
   hours: "",
   motto: "BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE",
@@ -61,7 +65,7 @@ export const SCHOOL = {
     { title: "Character and values", text: "Respect, responsibility, honesty, cooperation and care for others are part of a balanced education." },
   ],
   parentInfo: [
-    { title: "Admissions guidance", text: "Contact the admissions office for the current admission form, available places, reporting requirements and the latest fee information." },
+    { title: "Admissions guidance", text: "Create a parent account to submit an application online. Contact the admissions office for available places, reporting requirements and the latest fee information." },
     { title: "Learning support", text: "Families can discuss a learner's transition, learning needs and progress with the school so that appropriate support can be planned." },
     { title: "Communication", text: "This website provides public information. For learner-specific or confidential matters, please contact the school directly." },
   ],
@@ -93,7 +97,7 @@ export const SCHOOL = {
     { q: "Where can I find fee information?", a: "Ask the admissions office for the current fee structure." },
   ],
   news: [
-    { date: "", title: "Admissions are open", text: "Email admissions@hillspringacademy.sc.ke to start an application." },
+    { date: "", title: "Admissions are open", text: "Create a free parent account and apply online to start an application." },
   ],
 };
 

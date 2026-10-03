@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { welcomeEmail } from "../_shared/email.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const secretKeysRaw = Deno.env.get("SUPABASE_SECRET_KEYS") || "{}";
@@ -48,7 +49,8 @@ Deno.serve(async req => {
       let welcomeEmailId = null;
       let welcomeEmailError = null;
       try {
-        const welcome = await sendEmail(email, "Welcome to Hill Springs Academy updates", `<div style="margin:0;padding:0;background:#f4f5f7;font-family:Arial,Helvetica,sans-serif;color:#202124"><div style="max-width:640px;margin:0 auto;padding:28px 16px"><div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.06)"><div style="background:#c8102e;padding:26px 28px;text-align:center"><img src="https://hillspringsacademy.sc.ke/logo.png" alt="Hill Springs Academy" style="max-height:82px;max-width:220px;width:auto;background:#fff;border-radius:10px;padding:7px;box-sizing:border-box"><div style="color:#fff;font-size:12px;letter-spacing:1.5px;margin-top:12px;font-weight:bold">HILL SPRINGS ACADEMY</div></div><div style="padding:32px 30px"><p style="margin:0 0 8px;color:#666;font-size:14px">WELCOME TO OUR SCHOOL COMMUNITY</p><h1 style="margin:0 0 18px;font-size:28px;line-height:1.2;color:#c8102e">Welcome, ${esc(firstName)}!</h1><p style="font-size:16px;line-height:1.7;margin:0 0 16px">Thank you for subscribing to Hill Springs Academy updates.</p><p style="font-size:15px;line-height:1.7;margin:0 0 20px">Hill Springs Academy is a school in Maua, Igembe South, Meru County, Kenya. We use our updates to share selected school notices, admissions information, learning resources and school news with families and members of our school community.</p><div style="background:#f7f7f7;border-left:4px solid #c8102e;padding:16px 18px;margin:22px 0"><p style="margin:0;font-size:15px;line-height:1.6"><strong>Our motto</strong><br>BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE</p></div><p style="font-size:15px;line-height:1.7;margin:0 0 22px">We are glad to have you with us and look forward to keeping you informed.</p><a href="https://hillspringsacademy.sc.ke" style="display:inline-block;background:#c8102e;color:#fff;text-decoration:none;padding:13px 20px;border-radius:8px;font-weight:bold">Visit Hill Springs Academy</a></div><div style="border-top:1px solid #eee;padding:20px 30px;color:#666;font-size:13px;line-height:1.6"><strong style="color:#333">Hill Springs Academy</strong><br>Maua, Igembe South, Meru County, Kenya<br><a href="mailto:${SCHOOL_EMAIL}" style="color:#c8102e">${SCHOOL_EMAIL}</a><br><br>You received this email because you subscribed to school updates on our website.</div></div><p style="text-align:center;color:#888;font-size:11px;margin:14px 0">Hill Springs Academy · ${new Date().getFullYear()}</p></div></div>`);
+        const wm = welcomeEmail({ name: firstName });
+        const welcome = await sendEmail(email, wm.subject, wm.html);
         welcomeEmailId = welcome?.id || null;
       } catch (e) {
         welcomeEmailError = e instanceof Error ? e.message : String(e);

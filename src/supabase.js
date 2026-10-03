@@ -12,7 +12,11 @@ async function callFunction(name, body, token = "") {
     body: JSON.stringify(body),
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok || data.error) throw new Error(data.error || `Request failed (${response.status})`);
+  if (!response.ok || data.error) {
+    const e = new Error(data.error || `Request failed (${response.status})`);
+    e.code = data.code; e.data = data;
+    throw e;
+  }
   return data;
 }
 
@@ -46,3 +50,33 @@ export const requestAdminPasswordReset = (email) =>
 
 export const verifyAdminPasswordReset = (email, code, new_password) =>
   callFunction("school-admin-auth", { action: "verify_reset", email, code, new_password });
+
+// ---------------- Parent accounts, applications, admin decisions ----------------
+export const accountApi = (body) => callFunction("school-account", body);
+export const appsApi = (body, token = "") => callFunction("school-applications", body, token);
+
+export async function passwordSignIn(email, password) {
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: SUPABASE_PUBLISHABLE_KEY },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || !data.access_token) {
+    const err = new Error(data.error_description || data.msg || "Unable to sign in.");
+    err.code = data.error_code || data.error || "";
+    throw err;
+  }
+  return data;
+}
+
+export async function refreshSession(refresh_token) {
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: SUPABASE_PUBLISHABLE_KEY },
+    body: JSON.stringify({ refresh_token }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || !data.access_token) throw new Error("Session expired.");
+  return data;
+}
