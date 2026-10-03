@@ -1,9 +1,7 @@
 User-agent: *
 Allow: /
 
-# Do not crawl private or account-oriented paths. These rules are crawl guidance,
-# not access control; protect private data with authentication and server rules.
-Disallow: /admin/
+# Crawl rules are guidance, not access control.
 Disallow: /dashboard/
 Disallow: /login/
 Disallow: /account/
