@@ -2,8 +2,8 @@
 // Palette: red #c8102e, black #202124, greys, white. No gradients (email-client safe).
 export const SITE_URL = (Deno.env.get("SITE_URL") || "https://hillspringsacademy.sc.ke").replace(/\/$/, "");
 export const SCHOOL_NAME = "Hill Springs Academy";
-export const SCHOOL_EMAIL = "info@hillspringacademy.sc.ke";
-export const ADMISSIONS_EMAIL = "admissions@hillspringacademy.sc.ke";
+export const SCHOOL_EMAIL = "info@hillspringsacademy.sc.ke";
+export const ADMISSIONS_EMAIL = "admissions@hillspringsacademy.sc.ke";
 export const FROM = `${SCHOOL_NAME} <${SCHOOL_EMAIL}>`;
 export const FROM_ADMISSIONS = `${SCHOOL_NAME} Admissions <${ADMISSIONS_EMAIL}>`;
 const MOTTO = "BUILDING AN EXCELLENT FOUNDATION FOR A BRIGHTER FUTURE";
