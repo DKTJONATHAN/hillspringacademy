@@ -23,7 +23,7 @@ const COPY = {
   },
 };
 
-const PW_HINT = "At least 12 characters, with a letter and a number.";
+const PW_HINT = "At least 8 characters. Choose any password you prefer.";
 
 function PasswordInput({ value, onChange, label = "Password", autoComplete = "current-password", minLength }) {
   const [show, setShow] = useState(false);
@@ -167,12 +167,12 @@ function AuthCard({ kind, onSignedIn }) {
           value={password}
           onChange={e => setPassword(e.target.value)}
           autoComplete={view === "login" ? "current-password" : "new-password"}
-          minLength={view === "login" ? undefined : 12}
+          minLength={view === "login" ? undefined : 8}
         />
       )}
       {(view === "register" || view === "verify") && <p className="field-hint">{PW_HINT}</p>}
       {(view === "verify" || view === "reset") && <CodeInput value={code} onChange={setCode} />}
-      {view === "reset" && <><PasswordInput label="New password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" minLength={12} /><p className="field-hint">{PW_HINT}</p></>}
+      {view === "reset" && <><PasswordInput label="New password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" minLength={8} /><p className="field-hint">{PW_HINT}</p></>}
 
       {msg.text && <p className={msg.type === "error" ? "form-error" : "form-success"} role={msg.type === "error" ? "alert" : "status"}>{msg.text}</p>}
 
