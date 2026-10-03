@@ -13,8 +13,8 @@ export const SCHOOL = {
   short: "Hill Springs",
   town: "Maua, Igembe South, Meru County, Kenya",
   centreCode: "15309228",
-  admissionsEmail: "admissions@hillspringacademy.sc.ke",
-  infoEmail: "info@hillspringacademy.sc.ke",
+  admissionsEmail: "admissions@hillspringsacademy.sc.ke",
+  infoEmail: "info@hillspringsacademy.sc.ke",
   phone: "+254 710 572419",
   phoneTel: "+254710572419",
   poBox: "P.O. Box 377-60600 Maua",
@@ -102,12 +102,6 @@ export const SCHOOL = {
       file: resourceFile("GRADE 7 SECTION A LEARNER'S 2026.pdf"),
     },
     {
-      title: "English Grade 7 Section A — Teacher's Copy 2026",
-      grade: "Grade 7",
-      description: "English Section A teacher's copy, 2026.",
-      file: resourceFile("GRADE 7 SECTION A TEACHER'S COPY 2026.pdf"),
-    },
-    {
       title: "Integrated Science Grade 7 Question Paper",
       grade: "Grade 7",
       description: "Integrated Science Grade 7 question paper.",
@@ -118,12 +112,6 @@ export const SCHOOL = {
       grade: "Grade 7",
       description: "Kiswahili Sehemu A, nakala ya mwanafunzi, 2026.",
       file: resourceFile("KISWAHILI GRADE 7 SEHEMU A NAKALA YA MWANAFUNZI 2026.pdf"),
-    },
-    {
-      title: "Kiswahili Grade 7 Sehemu A — Nakala ya Mwalimu 2026",
-      grade: "Grade 7",
-      description: "Kiswahili Sehemu A, nakala ya mwalimu, 2026.",
-      file: resourceFile("KISWAHILI GRADE 7  SEHEMU A NAKALA YA MWALIMU 2026.pdf"),
     },
     {
       title: "Kiswahili Grade 7 Sehemu B Question Paper 2026",
@@ -154,12 +142,6 @@ export const SCHOOL = {
       grade: "Grade 7",
       description: "Social Studies (SST) Grade 7 school-based assessment question paper.",
       file: resourceFile("SST QP GRADE 7 SBA..pdf"),
-    },
-    {
-      title: "Grade 7 SBA 2026 Assessment Answers",
-      grade: "Grade 7",
-      description: "Assessment answers pack for Grade 7 SBA 2026 (v2).",
-      file: resourceFile("grade7_sba_2026_assessment_answers-v2.pdf"),
     },
   ],
   values: [
@@ -212,7 +194,7 @@ export const SCHOOL = {
     "Kenyan CBC school"
   ],
   faqs: [
-    { q: "How do I get an admission form?", a: "Email admissions@hillspringacademy.sc.ke and we will send it to you." },
+    { q: "How do I get an admission form?", a: "Email admissions@hillspringsacademy.sc.ke and we will send it to you." },
     { q: "Can I visit the school before applying?", a: "Yes. Contact the admissions office to arrange a visit." },
     { q: "Does Hill Springs Academy offer school transport?", a: "Yes. Contact admissions to confirm current route coverage, availability, arrangements and charges." },
     { q: "Where can I find fee information?", a: "Ask the admissions office for the current fee structure." },
