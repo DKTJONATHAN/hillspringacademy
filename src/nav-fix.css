@@ -366,3 +366,24 @@
     flex-direction: column;
   }
 }
+
+
+/* Mobile header controls: keep theme toggle and hamburger pinned to the right. */
+@media (max-width: 820px) {
+  .site-header .wrap.bar {
+    justify-content: flex-start;
+    width: min(100% - 24px, 100%);
+  }
+  .site-header .brand { margin-right: auto; }
+  .site-header .actions {
+    margin-left: auto !important;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+  .site-header .actions .icon-btn,
+  .site-header .actions .menu-toggle {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+}
