@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageHead } from "./components.jsx";
 import { SCHOOL } from "./data.js";
-import { accountApi, appsApi, passwordSignIn } from "./supabase.js";
+import { accountApi, appsApi, passwordSignIn, subscribeToSchoolUpdates } from "./supabase.js";
 import { getToken, useParentSession } from "./session.js";
 
 const COPY = {
@@ -15,6 +15,11 @@ const COPY = {
     title: "Make an enquiry",
     text: "Create a parent account so we can reply to you and keep your conversation in one place.",
     eyebrow: "Enquiries",
+  },
+  signup: {
+    title: "Join Hill Springs Academy",
+    text: "Create your free parent member account to apply online, track applications, and receive school updates.",
+    eyebrow: "Membership",
   },
 };
 
@@ -42,7 +47,8 @@ function CodeInput({ value, onChange }) {
 }
 
 function AuthCard({ kind, onSignedIn }) {
-  const [view, setView] = useState("login"); // login | register | verify | forgot | reset
+  const startView = kind === "signup" ? "register" : "login";
+  const [view, setView] = useState(startView); // login | register | verify | forgot | reset
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -64,11 +70,18 @@ function AuthCard({ kind, onSignedIn }) {
   const ok = (text) => setMsg({ type: "success", text });
   const run = (fn) => async (e) => { e.preventDefault(); setBusy(true); setMsg({ type: "", text: "" }); try { await fn(); } finally { setBusy(false); } };
 
+  const sendWelcome = async (name) => {
+    try {
+      await subscribeToSchoolUpdates({ email: email.trim(), name: name || fullName || email.split("@")[0] });
+    } catch {
+      // Welcome email is best-effort; account creation must not fail if subscribe fails.
+    }
+  };
+
   const login = run(async () => {
     try {
       onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
-      // Work out the friendliest explanation.
       try {
         const c = await accountApi({ action: "check", email });
         if (!c.exists) return go("register", { type: "error", text: "You do not have an account yet. Please create one below." });
@@ -96,10 +109,13 @@ function AuthCard({ kind, onSignedIn }) {
   const verify = run(async () => {
     try {
       await accountApi({ action: "verify_signup", email, code });
+      await sendWelcome(fullName);
       onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
-      if (e1.message.includes("Invalid login") || e1.message.includes("invalid")) go("login", { type: "success", text: "Email verified. Please sign in." });
-      else err(e1.message);
+      if (e1.message.includes("Invalid login") || e1.message.includes("invalid")) {
+        await sendWelcome(fullName);
+        go("login", { type: "success", text: "Email verified. A welcome email is on its way. Please sign in." });
+      } else err(e1.message);
     }
   });
 
@@ -133,7 +149,7 @@ function AuthCard({ kind, onSignedIn }) {
 
   return (
     <form className="card enquiry-form auth-card" onSubmit={onSubmit} noValidate={false}>
-      <span className="eyebrow">{COPY[kind].eyebrow}</span>
+      <span className="eyebrow">{COPY[kind]?.eyebrow || "Account"}</span>
       <h2>{titles[view]}</h2>
 
       {view === "login" && <p>Sign in to continue. New here? <button type="button" className="linklike" onClick={() => go("register")}>Create an account</button></p>}
@@ -249,6 +265,20 @@ function EnquiryForm({ profile, onDone }) {
   );
 }
 
+function MemberWelcome({ profile }) {
+  return (
+    <div className="card">
+      <span className="eyebrow">Welcome</span>
+      <h2>You are a Hill Springs member{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}</h2>
+      <p>Your parent account is ready. A welcome email has been sent to your inbox. You can now apply online, make an enquiry, or return any time to track your submissions.</p>
+      <div className="btns" style={{ marginTop: 16 }}>
+        <Link className="btn" to="/apply">Apply for a learner</Link>
+        <Link className="btn ghost" to="/enquire">Make an enquiry</Link>
+      </div>
+    </div>
+  );
+}
+
 export function AccountPortal({ kind }) {
   const { session, signedIn, signOut } = useParentSession();
   const [data, setData] = useState({ profile: null, applications: [], enquiries: [] });
@@ -257,7 +287,7 @@ export function AccountPortal({ kind }) {
     catch (e) { if (e.message.includes("sign in")) signOut(); }
   };
   useEffect(() => { if (session) load(); }, [session?.email]);
-  const c = COPY[kind];
+  const c = COPY[kind] || COPY.signup;
 
   return (
     <>
@@ -267,14 +297,18 @@ export function AccountPortal({ kind }) {
           <div className="portal-grid">
             <AuthCard kind={kind} onSignedIn={signedIn} />
             <div className="card portal-side">
-              <h3>Why an account?</h3>
+              <h3>{kind === "signup" ? "Why join?" : "Why an account?"}</h3>
               <ul className="checks">
                 <li>Your details are saved securely, so you never retype them.</li>
                 <li>Track the status of your application or enquiry.</li>
-                <li>Receive decisions and replies by email.</li>
+                <li>Receive decisions, replies, and school updates by email.</li>
                 <li>Reset your password any time with a 6-digit code.</li>
               </ul>
-              <p>{kind === "admissions" ? "Just want to ask a question first?" : "Ready to enrol a learner?"} <Link className="textlink" to={kind === "admissions" ? "/enquire" : "/apply"}>{kind === "admissions" ? "Make an enquiry" : "Apply online"}</Link></p>
+              {kind === "signup" ? (
+                <p>Ready to enrol a learner? <Link className="textlink" to="/apply">Apply online</Link> after you create your account.</p>
+              ) : (
+                <p>{kind === "admissions" ? "Just want to ask a question first?" : "Ready to enrol a learner?"} <Link className="textlink" to={kind === "admissions" ? "/enquire" : "/apply"}>{kind === "admissions" ? "Make an enquiry" : "Apply online"}</Link></p>
+              )}
             </div>
           </div>
         ) : (
@@ -282,14 +316,25 @@ export function AccountPortal({ kind }) {
             <div className="admin-toolbar">
               <div><strong>Signed in as {session.email}</strong></div>
               <div>
-                <Link className="btn small ghost dark" to={kind === "admissions" ? "/enquire" : "/apply"}>{kind === "admissions" ? "Make an enquiry" : "Apply online"}</Link>{" "}
+                {kind !== "signup" && (
+                  <>
+                    <Link className="btn small ghost dark" to={kind === "admissions" ? "/enquire" : "/apply"}>{kind === "admissions" ? "Make an enquiry" : "Apply online"}</Link>{" "}
+                  </>
+                )}
                 <button className="btn small ghost dark" onClick={signOut}>Sign out</button>
               </div>
             </div>
-            {kind === "admissions" ? <AdmissionForm profile={data.profile} onDone={load} /> : <EnquiryForm profile={data.profile} onDone={load} />}
-            {kind === "admissions"
-              ? <SubmissionList title="Your applications" items={data.applications} titleOf={a => `${a.learner_name} · ${a.requested_level}`} />
-              : <SubmissionList title="Your enquiries" items={data.enquiries} titleOf={q => q.subject} />}
+            {kind === "signup" && <MemberWelcome profile={data.profile} />}
+            {kind === "admissions" && <AdmissionForm profile={data.profile} onDone={load} />}
+            {kind === "enquiry" && <EnquiryForm profile={data.profile} onDone={load} />}
+            {kind === "admissions" && <SubmissionList title="Your applications" items={data.applications} titleOf={a => `${a.learner_name} · ${a.requested_level}`} />}
+            {kind === "enquiry" && <SubmissionList title="Your enquiries" items={data.enquiries} titleOf={q => q.subject} />}
+            {kind === "signup" && (
+              <>
+                <SubmissionList title="Your applications" items={data.applications} titleOf={a => `${a.learner_name} · ${a.requested_level}`} />
+                <SubmissionList title="Your enquiries" items={data.enquiries} titleOf={q => q.subject} />
+              </>
+            )}
           </>
         )}
       </div></section>
