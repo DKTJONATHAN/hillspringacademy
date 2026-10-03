@@ -1,4 +1,11 @@
 /*
   X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Cross-Origin-Opener-Policy: same-origin
   X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://clpmfblwrpnqwbxgbtkd.supabase.co; frame-src https://challenges.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+
+/admin*
+  X-Robots-Tag: noindex
