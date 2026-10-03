@@ -23,7 +23,7 @@ const COPY = {
   },
 };
 
-const PW_HINT = "At least 8 characters, with a letter and a number.";
+const PW_HINT = "At least 12 characters, with a letter and a number.";
 
 function PasswordInput({ value, onChange, label = "Password", autoComplete = "current-password", minLength }) {
   const [show, setShow] = useState(false);
@@ -48,7 +48,7 @@ function CodeInput({ value, onChange }) {
 
 function AuthCard({ kind, onSignedIn }) {
   const startView = kind === "signup" ? "register" : "login";
-  const [view, setView] = useState(startView); // login | register | verify | forgot | reset
+  const [view, setView] = useState(startView);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -74,7 +74,7 @@ function AuthCard({ kind, onSignedIn }) {
     try {
       await subscribeToSchoolUpdates({ email: email.trim(), name: name || fullName || email.split("@")[0] });
     } catch {
-      // Welcome email is best-effort; account creation must not fail if subscribe fails.
+      // Welcome email is best-effort
     }
   };
 
@@ -82,24 +82,22 @@ function AuthCard({ kind, onSignedIn }) {
     try {
       onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
-      try {
-        const c = await accountApi({ action: "check", email });
-        if (!c.exists) return go("register", { type: "error", text: "You do not have an account yet. Please create one below." });
-        if (!c.verified) {
-          await accountApi({ action: "resend_signup", email }).catch(() => {});
-          setCooldown(60);
-          return go("verify", { type: "success", text: "Your email is not verified yet. We sent you a new 6-digit code." });
-        }
-        err("That password is not correct. If you forgot it, use “Forgot password”.");
-      } catch { err(e1.message || "Unable to sign in."); }
+      const text = e1.message || "Unable to sign in.";
+      if (/not confirmed|email not confirmed/i.test(text)) {
+        await accountApi({ action: "resend_signup", email }).catch(() => {});
+        setCooldown(60);
+        return go("verify", { type: "success", text: "Your email is not verified yet. We sent you a new 6-digit code." });
+      }
+      err("That email or password is not correct. If you are new, create an account. If you forgot your password, use “Forgot password”.");
     }
   });
 
   const register = run(async () => {
     try {
-      await accountApi({ action: "register", email, password, fullName, phone });
+      // Password is chosen here but only applied on the server at verify_signup
+      await accountApi({ action: "register", email, fullName, phone });
       setCooldown(60);
-      go("verify", { type: "success", text: `We sent a 6-digit code to ${email}. Enter it to confirm your email.` });
+      go("verify", { type: "success", text: `We sent a 6-digit code to ${email}. Enter it (and keep your password) to finish setup.` });
     } catch (e1) {
       if (e1.message.includes("already have an account")) go("login", { type: "error", text: e1.message });
       else err(e1.message);
@@ -108,7 +106,7 @@ function AuthCard({ kind, onSignedIn }) {
 
   const verify = run(async () => {
     try {
-      await accountApi({ action: "verify_signup", email, code });
+      await accountApi({ action: "verify_signup", email, code, password });
       await sendWelcome(fullName);
       onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
@@ -155,6 +153,7 @@ function AuthCard({ kind, onSignedIn }) {
       {view === "login" && <p>Sign in to continue. New here? <button type="button" className="linklike" onClick={() => go("register")}>Create an account</button></p>}
       {view === "register" && <p>Already registered? <button type="button" className="linklike" onClick={() => go("login")}>Sign in</button></p>}
       {view === "forgot" && <p>Enter the email you registered with and we will send you a 6-digit code.</p>}
+      {view === "verify" && <p>Enter the code from your email. Use the same password you chose when registering.</p>}
 
       {["login", "register", "forgot", "verify", "reset"].includes(view) && (
         <label>Email<input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" readOnly={view === "verify" || view === "reset"} /></label>
@@ -163,10 +162,17 @@ function AuthCard({ kind, onSignedIn }) {
         <label>Full name<input value={fullName} onChange={e => setFullName(e.target.value)} required autoComplete="name" /></label>
         <label>Phone<input value={phone} onChange={e => setPhone(e.target.value)} autoComplete="tel" /></label>
       </>}
-      {(view === "login" || view === "register") && <PasswordInput value={password} onChange={e => setPassword(e.target.value)} autoComplete={view === "login" ? "current-password" : "new-password"} minLength={view === "register" ? 8 : undefined} />}
-      {view === "register" && <p className="field-hint">{PW_HINT}</p>}
+      {(view === "login" || view === "register" || view === "verify") && (
+        <PasswordInput
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          autoComplete={view === "login" ? "current-password" : "new-password"}
+          minLength={view === "login" ? undefined : 12}
+        />
+      )}
+      {(view === "register" || view === "verify") && <p className="field-hint">{PW_HINT}</p>}
       {(view === "verify" || view === "reset") && <CodeInput value={code} onChange={setCode} />}
-      {view === "reset" && <><PasswordInput label="New password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" minLength={8} /><p className="field-hint">{PW_HINT}</p></>}
+      {view === "reset" && <><PasswordInput label="New password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" minLength={12} /><p className="field-hint">{PW_HINT}</p></>}
 
       {msg.text && <p className={msg.type === "error" ? "form-error" : "form-success"} role={msg.type === "error" ? "alert" : "status"}>{msg.text}</p>}
 
