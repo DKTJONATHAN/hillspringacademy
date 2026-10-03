@@ -277,9 +277,22 @@ export function Contact() {
           <div>
             <h2>Get in touch</h2>
             <div className="info">
-              <p><strong>Admissions</strong><Link to="/apply">Apply online</Link></p>
-              <p><strong>General</strong><a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a></p>
+              {SCHOOL.phone && (
+                <p>
+                  <strong>Phone</strong>
+                  <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone.replace(/\s/g, "")}`}>{SCHOOL.phone}</a>
+                </p>
+              )}
+              {SCHOOL.poBox && (
+                <p>
+                  <strong>Postal address</strong>
+                  <span>{SCHOOL.poBox}</span>
+                </p>
+              )}
               <p><strong>Location</strong><span>{SCHOOL.town}</span></p>
+              <p><strong>Admissions</strong><a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a></p>
+              <p><strong>General</strong><a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a></p>
+              <p><strong>Apply</strong><Link to="/apply">Apply online</Link></p>
             </div>
           </div>
           <form className="enquiry-form" onSubmit={send}>
