@@ -133,7 +133,7 @@ export function Header({ theme, toggle, scrolled }) {
     <header className={"site-header" + (scrolled ? " scrolled" : "")}>
       <div className="wrap bar">
         <Link to="/" className="brand" onClick={() => setMenuOpen(false)}>
-          <Logo size={scrolled ? 44 : 52} />
+          <Logo size={scrolled ? 56 : 68} />
           <span className="brand-text">
             <strong>{SCHOOL.short}</strong>
             <small>Academy</small>
@@ -191,7 +191,7 @@ export function Footer() {
       <div className="wrap foot-grid">
         <div className="foot-brand">
           <div className="brand light">
-            <Logo size={52} />
+            <Logo size={72} />
             <div>
               <span className="foot-name" itemProp="name">{SCHOOL.name}</span>
               <span className="foot-tag">Private CBE school · Maua</span>
