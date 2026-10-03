@@ -43,6 +43,9 @@ export function PageHead({ title, text, description, path, image }) {
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement("meta"); meta.name = "description"; document.head.appendChild(meta); }
     meta.content = metaDescription;
+    let titleMeta = document.querySelector('meta[name="title"]');
+    if (!titleMeta) { titleMeta = document.createElement("meta"); titleMeta.name = "title"; document.head.appendChild(titleMeta); }
+    titleMeta.content = fullTitle;
     let canonicalEl = document.querySelector('link[rel="canonical"]');
     if (!canonicalEl) { canonicalEl = document.createElement("link"); canonicalEl.rel = "canonical"; document.head.appendChild(canonicalEl); }
     canonicalEl.href = canonical;
@@ -118,10 +121,11 @@ export function Header({ theme, toggle, scrolled }) {
           <button className="icon-btn" onClick={toggle} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
             <Icon n={theme === "dark" ? "sun" : "moon"} />
           </button>
+          <Link to="/signup" className="btn small ghost">Sign up</Link>
           <Link to="/apply" className="btn small">Apply now</Link>
         </div>
       </div>
-      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/apply","Apply online"], ["/enquire","Make an enquiry"], ["/fees","School Fees"], ["/faq","FAQ"], ["/gallery","Gallery"], ["/directors","Leadership"], ["/blog","Blog"], ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
+      {menuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{[...NAV, ["/signup","Sign up"], ["/apply","Apply online"], ["/enquire","Make an enquiry"], ["/fees","School Fees"], ["/faq","FAQ"], ["/gallery","Gallery"], ["/directors","Leadership"], ["/blog","Blog"], ["/privacy","Privacy"], ["/sitemap","Sitemap"]].map(([to,label]) => <NavLink key={to + label} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>)}</nav>}
     </header>
   );
 }
@@ -152,6 +156,7 @@ export function Footer() {
         <div><h3>Explore</h3>{NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}</div>
         <div>
           <h3>Contact</h3>
+          <Link to="/signup">Sign up</Link>
           <Link to="/apply">Apply online</Link><span>{SCHOOL.admissionsEmail}</span>
           <Link to="/enquire">Make an enquiry</Link><span>{SCHOOL.infoEmail}</span>
           {SCHOOL.phone && <span>{SCHOOL.phone}</span>}
