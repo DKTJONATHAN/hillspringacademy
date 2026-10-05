@@ -220,12 +220,12 @@ function AdmissionForm({ profile, onDone }) {
     } catch (err) { setState({ busy: false, error: err.message, done: false }); }
   };
   if (state.done) return (
-    <div className="card"><span className="eyebrow">Application sent</span><h2>Thank you!</h2>
+    <div className="card portal-success-card"><span className="eyebrow">Application sent</span><h2>Thank you!</h2>
       <p>We have received your application and sent a confirmation to your email. The admissions team will review it and email you the decision. You can also follow the status below.</p>
       <button className="btn" onClick={() => setState({ busy: false, error: "", done: false })}>Apply for another learner</button></div>
   );
   return (
-    <form className="card enquiry-form" onSubmit={submit}>
+    <form className="card enquiry-form portal-form" onSubmit={submit}>
       <span className="eyebrow">Online admission form</span><h2>Learner application</h2>
       <div className="form-grid">
         <label>Parent/guardian name<input value={f.parentName} onChange={set("parentName")} required /></label>
@@ -271,6 +271,22 @@ function EnquiryForm({ profile, onDone }) {
   );
 }
 
+function PortalBrand({ kind }) {
+  const c = COPY[kind] || COPY.signup;
+  return (
+    <div className="portal-brandbar">
+      <div className="portal-brand-mark">
+        <img src="/logo.png" alt="Hill Springs Academy" />
+      </div>
+      <div>
+        <span className="portal-brand-kicker">Hill Springs Academy</span>
+        <strong>{c.eyebrow}</strong>
+        <p>{c.text}</p>
+      </div>
+    </div>
+  );
+}
+
 function MemberWelcome({ profile }) {
   return (
     <div className="card">
@@ -298,11 +314,12 @@ export function AccountPortal({ kind }) {
   return (
     <>
       <PageHead title={c.title} text={c.text} />
-      <section className="section"><div className="wrap portal">
+      <section className={"section portal-section portal-" + kind}><div className="wrap portal">
+        <PortalBrand kind={kind} />
         {!session ? (
-          <div className="portal-grid">
+          <div className="portal-grid portal-entry-grid">
             <AuthCard kind={kind} onSignedIn={signedIn} />
-            <div className="card portal-side">
+            <div className="card portal-side portal-info-card">
               <h3>{kind === "signup" ? "Why join?" : "Why an account?"}</h3>
               <ul className="checks">
                 <li>Your details are saved securely, so you never retype them.</li>
@@ -319,7 +336,7 @@ export function AccountPortal({ kind }) {
           </div>
         ) : (
           <>
-            <div className="admin-toolbar">
+            <div className="portal-toolbar">
               <div><strong>Signed in as {session.email}</strong></div>
               <div>
                 {kind !== "signup" && (
