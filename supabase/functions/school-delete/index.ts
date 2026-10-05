@@ -66,7 +66,6 @@ function aalFromJwt(req: Request): string {
   }
 }
 
-// Same administrator authorization as supabase/functions/_shared/util.ts.
 async function requireAdmin(req: Request) {
   const user = await userFromRequest(req);
   if (!user?.id || !(await getAdminRecord(user.id))) return null;
@@ -88,9 +87,10 @@ Deno.serve(async (req) => {
     if (!admin) return json({ error: "Administrator access only.", code: "NOT_ADMIN" }, 403, req);
 
     const p = await req.json().catch(() => ({}));
+    const action = clean(p.action, 80).toLowerCase();
+    const id = clean(p.id ?? p.conversation_id ?? p.conversationId, 80);
 
-    if (p.action === "delete_enquiry") {
-      const id = clean(p.id, 80);
+    if (["delete_enquiry", "deleteenquiry", "delete_conversation", "deleteconversation"].includes(action)) {
       if (!id) return json({ error: "Missing enquiry id." }, 400, req);
       if (!isUuid(id)) return json({ error: "Invalid enquiry id." }, 400, req);
 
