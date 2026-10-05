@@ -81,30 +81,30 @@ export function PageHead({ title, text, description, path, image }) {
       description: SCHOOL.intro,
       slogan: SCHOOL.motto,
       email: SCHOOL.infoEmail,
-      telephone: SCHOOL.phoneTel || SCHOOL.phone || undefined,
+      telephone: [SCHOOL.phoneTel, SCHOOL.phone2Tel].filter(Boolean),
       logo: `${SCHOOL.siteUrl}/logo.png`,
       address: {
         "@type": "PostalAddress",
         streetAddress: SCHOOL.poBox || undefined,
         addressLocality: "Maua",
         addressRegion: "Meru County",
-        postalCode: "60600",
         addressCountry: "KE",
       },
       areaServed: ["Maua", "Igembe South", "Meru County", "Kenya"],
-      educationalLevel: ["Kindergarten", "Pre-Primary", "Junior School"],
-      hasMap: "https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya",
-      sameAs: Object.values(SCHOOL.social || {}).filter(Boolean)
+      sameAs: Object.values(SCHOOL.social || {}).filter(Boolean),
     });
-  }, [fullTitle, metaDescription, canonical, title, image]);
+  }, [fullTitle, metaDescription, canonical, image, title]);
   return (
-    <section className="pagehead">
-      <div className="wrap"><p className="eyebrow page-eyebrow">Hill Springs Academy · Maua, Meru County</p><h1>{title}</h1>{text && <p>{text}</p>}</div>
-    </section>
+    <header className="page-head">
+      <div className="wrap">
+        <h1>{title}</h1>
+        {text && <p>{text}</p>}
+      </div>
+    </header>
   );
 }
 
-export const NAV = [
+const NAV = [
   ["/", "Home", "home"],
   ["/about", "About", "about"],
   ["/academics", "Academics", "book"],
@@ -113,74 +113,38 @@ export const NAV = [
   ["/contact", "Contact", "mail"],
 ];
 
-const MORE_LINKS = [
-  ["/school-life", "School life"],
-  ["/blog", "Blog"],
-  ["/reading-materials", "Resources"],
-  ["/fees", "Fees"],
-  ["/uniforms", "Uniforms"],
-  ["/faq", "FAQ"],
-  ["/signup", "Sign up"],
-  ["/apply", "Apply online"],
-  ["/enquire", "Make an enquiry"],
-  ["/directors", "Leadership"],
-  ["/privacy", "Privacy"],
-  ["/sitemap", "Sitemap"],
-];
-
-export function Header({ theme, toggle, scrolled }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+export function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [dark, setDark] = useState(() => document.documentElement.dataset.theme === "dark");
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    try { localStorage.setItem("hsa-theme", dark ? "dark" : "light"); } catch {}
+  }, [dark]);
   return (
-    <header className={"site-header" + (scrolled ? " scrolled" : "")}>
-      <div className="wrap bar">
-        <Link to="/" className="brand" onClick={() => setMenuOpen(false)}>
-          <Logo size={scrolled ? 56 : 68} />
-          <span className="brand-text">
-            <strong>{SCHOOL.short}</strong>
-            <small>Academy</small>
+    <nav className="nav" aria-label="Main">
+      <div className="wrap nav-inner">
+        <Link to="/" className="brand" onClick={() => setOpen(false)}>
+          <Logo size={48} />
+          <span>
+            <strong>{SCHOOL.name}</strong>
+            <small>Maua · Meru County</small>
           </span>
         </Link>
-
-        <nav aria-label="Main" className="top-nav">
-          {NAV.map(([to, label]) => (
-            <NavLink key={to} to={to} end={to === "/"}>{label}</NavLink>
+        <button type="button" className="nav-toggle" aria-expanded={open} aria-controls="main-menu" onClick={() => setOpen((v) => !v)}>
+          <span /><span /><span />
+        </button>
+        <div id="main-menu" className={"nav-links" + (open ? " open" : "")}>
+          {NAV.map(([to, label, icon]) => (
+            <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}>
+              <Icon n={icon} size={18} /> {label}
+            </NavLink>
           ))}
-        </nav>
-
-        <div className="actions">
-          <button className="icon-btn" onClick={toggle} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
-            <Icon n={theme === "dark" ? "sun" : "moon"} size={18} />
-          </button>
-          <Link to="/signup" className="btn small ghost header-btn">Sign up</Link>
-          <Link to="/apply" className="btn small header-btn">Apply</Link>
-          <button
-            className="menu-toggle"
-            aria-expanded={menuOpen}
-            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            {menuOpen ? "×" : "☰"}
+          <Link className="btn small" to="/apply" onClick={() => setOpen(false)}>Apply</Link>
+          <button type="button" className="theme-btn" onClick={() => setDark((d) => !d)} aria-label={dark ? "Light mode" : "Dark mode"}>
+            <Icon n={dark ? "sun" : "moon"} size={18} />
           </button>
         </div>
       </div>
-
-      {menuOpen && (
-        <nav className="mobile-menu" aria-label="All pages">
-          {[...NAV, ...MORE_LINKS].map(([to, label]) => (
-            <NavLink key={to + label} to={to} end={to === "/"} onClick={() => setMenuOpen(false)}>{label}</NavLink>
-          ))}
-        </nav>
-      )}
-    </header>
-  );
-}
-
-export function BottomNav() {
-  return (
-    <nav className="bottom-nav" aria-label="Main mobile">
-      {NAV.map(([to, label, ic]) => (
-        <NavLink key={to} to={to} end={to === "/"}><Icon n={ic} size={20} /><span>{label}</span></NavLink>
-      ))}
     </nav>
   );
 }
@@ -188,14 +152,14 @@ export function BottomNav() {
 export function Footer() {
   const social = Object.entries(SCHOOL.social || {}).filter(([, v]) => v);
   return (
-    <footer className="site-footer" itemScope itemType="https://schema.org/School">
+    <footer className="footer" itemScope itemType="https://schema.org/EducationalOrganization">
       <div className="wrap foot-grid">
-        <div className="foot-brand">
-          <div className="brand light">
-            <Logo size={72} />
+        <div className="foot-col brand-col">
+          <div className="foot-brand">
+            <Logo size={64} />
             <div>
-              <span className="foot-name" itemProp="name">{SCHOOL.name}</span>
-              <span className="foot-tag">Private CBE school · Maua</span>
+              <strong itemProp="name">{SCHOOL.name}</strong>
+              <span itemProp="slogan">{SCHOOL.motto}</span>
             </div>
           </div>
           <p className="foot-blurb">Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education.</p>
@@ -229,6 +193,12 @@ export function Footer() {
               <li>
                 <span className="fc-label">Phone</span>
                 <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone.replace(/\s/g, "")}`} itemProp="telephone">{SCHOOL.phone}</a>
+                {SCHOOL.phone2 && (
+                  <>
+                    {" · "}
+                    <a href={`tel:${SCHOOL.phone2Tel || SCHOOL.phone2.replace(/\s/g, "")}`}>{SCHOOL.phone2}</a>
+                  </>
+                )}
               </li>
             )}
             {SCHOOL.poBox && (
