@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { appsApi } from "./supabase.js";
 
-/** Manage website administrators (add by name, email, temporary password). */
+const roleLabel = (role) => role === "owner" ? "Owner" : role === "editor" ? "Editor" : "Admin";
+
 export function AdminAdminsTab({ token }) {
   const [admins, setAdmins] = useState([]);
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "admin" });
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [deleting, setDeleting] = useState("");
 
   const load = async () => {
     const data = await appsApi({ action: "list_admins" }, token);
@@ -15,29 +18,27 @@ export function AdminAdminsTab({ token }) {
 
   useEffect(() => {
     if (!token) return;
-    load().catch((err) => setStatus(err.message || "Unable to load admins."));
+    load().catch((err) => setError(err.message || "Unable to load administrators."));
   }, [token]);
 
   const createAdmin = async (e) => {
     e.preventDefault();
     setStatus("");
+    setError("");
     setBusy(true);
     try {
-      await appsApi(
-        {
-          action: "create_admin",
-          name: form.name.trim(),
-          email: form.email.trim(),
-          password: form.password,
-          role: form.role,
-        },
-        token
-      );
+      await appsApi({
+        action: "create_admin",
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
+        role: form.role,
+      }, token);
       setForm({ name: "", email: "", password: "", role: "admin" });
-      setStatus("Admin added. They can sign in at /admin with the email and password you set.");
+      setStatus("Administrator created successfully.");
       await load();
     } catch (err) {
-      setStatus(err.message || "Unable to add admin.");
+      setError(err.message || "Unable to add administrator.");
     } finally {
       setBusy(false);
     }
@@ -45,110 +46,186 @@ export function AdminAdminsTab({ token }) {
 
   const setRole = async (user_id, role) => {
     setStatus("");
+    setError("");
     try {
       await appsApi({ action: "set_admin_role", user_id, role }, token);
       await load();
-      setStatus("Admin role updated.");
+      setStatus("Administrator role updated.");
     } catch (err) {
-      setStatus(err.message || "Unable to update admin role.");
+      setError(err.message || "Unable to update administrator role.");
     }
   };
 
-  const setActive = async (user_id, active) => {
+  const deleteAdmin = async (admin) => {
+    const name = admin.name || admin.email || "this administrator";
+    const confirmed = window.confirm(
+      `PERMANENT DELETE\n\nYou are about to permanently delete ${name}.\n\nThis removes the administrator's account, access and administrator records. This action cannot be undone.\n\nContinue?`
+    );
+    if (!confirmed) return;
+
+    setDeleting(admin.user_id);
     setStatus("");
+    setError("");
+
     try {
-      await appsApi({ action: "set_admin_active", user_id, active }, token);
+      await appsApi({
+        action: "set_admin_active",
+        user_id: admin.user_id,
+        active: false,
+      }, token);
+
+      setStatus(`${name} was permanently deleted.`);
       await load();
-      setStatus(active ? "Admin reactivated." : "Admin deactivated.");
     } catch (err) {
-      setStatus(err.message || "Unable to update admin.");
+      setError(err.message || "Unable to permanently delete administrator.");
+    } finally {
+      setDeleting("");
     }
   };
+
+  const owners = admins.filter((a) => a.role === "owner").length;
+  const managers = admins.filter((a) => a.role !== "owner").length;
 
   return (
-    <div>
-      <div className="row-head" style={{ marginBottom: 16 }}>
+    <div className="admin-section">
+      <div className="admin-page-heading">
         <div>
-          <h3>Administrators</h3>
-          <p className="lede">
-            Owner administrators can add and manage administrators. Admins and editors can manage school operations according to their access. They sign in at /admin.
-          </p>
+          <span className="eyebrow">Security & access</span>
+          <h2>Administrator management</h2>
+          <p>Control who can access the Hill Springs Academy administration portal.</p>
+        </div>
+        <div className="admin-stat-pills">
+          <span><b>{admins.length}</b> total</span>
+          <span><b>{owners}</b> owners</span>
+          <span><b>{managers}</b> staff</span>
         </div>
       </div>
 
-      <form className="card" onSubmit={createAdmin} style={{ marginBottom: 24, maxWidth: 480 }}>
-        <h3>Add admin</h3>
-        <label>
-          Full name
-          <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required autoComplete="name" />
-        </label>
-        <label>
-          Email
-          <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
-        </label>
-        <label>
-          Temporary password
-          <input
-            type="text"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required
-            minLength={8}
-            autoComplete="new-password"
-            placeholder="At least 8 characters"
-          />
-        </label>
-        <label>
-          Access level
-          <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
-            <option value="admin">Admin — operational access</option>
-            <option value="editor">Editor — operational access</option>
-          </select>
-        </label>
-        <p style={{ fontSize: "0.9rem", opacity: 0.85 }}>
-          Passwords must be at least 8 characters. Owner administrators control who can add, deactivate or change other administrators.
-        </p>
-        {status && <p className="form-success" role="status">{status}</p>}
-        <button className="btn" type="submit" disabled={busy}>
-          {busy ? "Adding…" : "Add admin"}
-        </button>
-      </form>
+      {(status || error) && (
+        <div className={error ? "admin-alert error" : "admin-alert success"} role="status">
+          {error || status}
+        </div>
+      )}
 
-      <div className="card">
-        <h3>Current admins</h3>
-        {!admins.length && <p>No admins listed yet. Add one above after you sign in as an administrator.</p>}
-        <ul className="checks" style={{ listStyle: "none", padding: 0 }}>
-          {admins.map((a) => (
-            <li key={a.user_id} style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 12 }}>
-              <div style={{ flex: 1, minWidth: 200 }}>
-                <strong>{a.name || "—"}</strong>
-                <br />
-                <span>{a.email || a.user_id}</span>
-                <br />
-                <small>
-                  {a.active ? "Active" : "Inactive"} · {a.role === "owner" ? "Owner" : a.role === "editor" ? "Editor" : "Admin"}
-                </small>
-              </div>
-              {a.role !== "owner" && a.active && (
-                <select value={a.role === "editor" ? "editor" : "admin"} onChange={(e) => setRole(a.user_id, e.target.value)} aria-label={"Role for " + (a.name || a.email || "admin")}>
-                  <option value="admin">Admin</option>
-                  <option value="editor">Editor</option>
-                </select>
-              )}
-              {a.role !== "owner" && a.active ? (
-                <button type="button" className="btn small ghost dark" onClick={() => setActive(a.user_id, false)}>
-                  Deactivate
-                </button>
-              ) : a.role !== "owner" ? (
-                <button type="button" className="btn small" onClick={() => setActive(a.user_id, true)}>
-                  Reactivate
-                </button>
-              ) : (
-                <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>Owner</span>
-              )}
-            </li>
-          ))}
-        </ul>
+      <div className="admin-two-column">
+        <form className="admin-panel-card" onSubmit={createAdmin}>
+          <div className="admin-card-heading">
+            <div className="admin-icon">+</div>
+            <div>
+              <h3>Add administrator</h3>
+              <p>Create a new admin or editor account.</p>
+            </div>
+          </div>
+
+          <label>
+            Full name
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required autoComplete="name" placeholder="Full name" />
+          </label>
+
+          <label>
+            Email address
+            <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" placeholder="name@example.com" />
+          </label>
+
+          <label>
+            Temporary password
+            <input type="text" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
+          </label>
+
+          <label>
+            Access level
+            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
+              <option value="admin">Admin — operational access</option>
+              <option value="editor">Editor — operational access</option>
+            </select>
+          </label>
+
+          <div className="admin-info-box">
+            <strong>Owner protection</strong>
+            <span>Only owners can manage administrators. Owner accounts cannot be deleted or demoted from this portal.</span>
+          </div>
+
+          <button className="btn admin-primary-btn" type="submit" disabled={busy}>
+            {busy ? "Creating account…" : "Create administrator"}
+          </button>
+        </form>
+
+        <div className="admin-panel-card">
+          <div className="admin-card-heading">
+            <div className="admin-icon">✓</div>
+            <div>
+              <h3>Access levels</h3>
+              <p>How administrator roles are protected.</p>
+            </div>
+          </div>
+
+          <div className="role-explainer">
+            <div><span className="role-badge owner">Owner</span><p>Full control of administrators and school operations. Protected from deletion and demotion.</p></div>
+            <div><span className="role-badge admin">Admin</span><p>Operational administration access. Can be managed by an owner.</p></div>
+            <div><span className="role-badge editor">Editor</span><p>Operational access with editor-level permissions. Can be managed by an owner.</p></div>
+          </div>
+
+          <div className="admin-danger-note">
+            <strong>Permanent deletion</strong>
+            <span>Deleting an administrator removes their Auth account and school administrator record permanently. The action cannot be undone.</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="admin-panel-card admin-list-card">
+        <div className="admin-card-heading">
+          <div className="admin-icon">☰</div>
+          <div>
+            <h3>Current administrators</h3>
+            <p>Active accounts and their access levels.</p>
+          </div>
+        </div>
+
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr><th>Administrator</th><th>Role</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              {admins.map((a) => (
+                <tr key={a.user_id}>
+                  <td>
+                    <div className="admin-person">
+                      <div className="admin-avatar">{(a.name || a.email || "A").slice(0, 1).toUpperCase()}</div>
+                      <div><strong>{a.name || "Unnamed administrator"}</strong><span>{a.email || a.user_id}</span></div>
+                    </div>
+                  </td>
+                  <td>
+                    {a.role === "owner" ? (
+                      <span className="role-badge owner">Owner</span>
+                    ) : (
+                      <select value={a.role === "editor" ? "editor" : "admin"} onChange={(e) => setRole(a.user_id, e.target.value)} aria-label={"Role for " + (a.name || a.email || "administrator")}>
+                        <option value="admin">Admin</option>
+                        <option value="editor">Editor</option>
+                      </select>
+                    )}
+                  </td>
+                  <td><span className="status-dot"><i />Active</span></td>
+                  <td>
+                    {a.role === "owner" ? (
+                      <span className="protected-label">Protected owner</span>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn small danger-btn"
+                        disabled={deleting === a.user_id}
+                        onClick={() => deleteAdmin(a)}
+                      >
+                        {deleting === a.user_id ? "Deleting…" : "Delete permanently"}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {!admins.length && <div className="admin-empty">No administrators found.</div>}
+        </div>
       </div>
     </div>
   );
