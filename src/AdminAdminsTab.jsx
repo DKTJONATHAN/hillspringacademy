@@ -4,7 +4,7 @@ import { appsApi } from "./supabase.js";
 /** Manage website administrators (add by name, email, temporary password). */
 export function AdminAdminsTab({ token }) {
   const [admins, setAdmins] = useState([]);
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", role: "admin" });
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -29,16 +29,28 @@ export function AdminAdminsTab({ token }) {
           name: form.name.trim(),
           email: form.email.trim(),
           password: form.password,
+          role: form.role,
         },
         token
       );
-      setForm({ name: "", email: "", password: "" });
+      setForm({ name: "", email: "", password: "", role: "admin" });
       setStatus("Admin added. They can sign in at /admin with the email and password you set.");
       await load();
     } catch (err) {
       setStatus(err.message || "Unable to add admin.");
     } finally {
       setBusy(false);
+    }
+  };
+
+  const setRole = async (user_id, role) => {
+    setStatus("");
+    try {
+      await appsApi({ action: "set_admin_role", user_id, role }, token);
+      await load();
+      setStatus("Admin role updated.");
+    } catch (err) {
+      setStatus(err.message || "Unable to update admin role.");
     }
   };
 
@@ -59,7 +71,7 @@ export function AdminAdminsTab({ token }) {
         <div>
           <h3>Administrators</h3>
           <p className="lede">
-            Add people who can open the admin panel to manage admissions, enquiries and newsletters. They sign in at /admin.
+            The owner administrator can add and manage administrators. Admins and editors can manage school operations according to their access. They sign in at /admin.
           </p>
         </div>
       </div>
@@ -86,8 +98,15 @@ export function AdminAdminsTab({ token }) {
             placeholder="At least 8 characters"
           />
         </label>
+        <label>
+          Access level
+          <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
+            <option value="admin">Admin — operational access</option>
+            <option value="editor">Editor — operational access</option>
+          </select>
+        </label>
         <p style={{ fontSize: "0.9rem", opacity: 0.85 }}>
-          Share this password with them securely. They can change it later with “Forgot password” on the admin sign-in page.
+          Passwords must be at least 8 characters. The owner administrator controls who can add, deactivate or change other administrators.
         </p>
         {status && <p className="form-success" role="status">{status}</p>}
         <button className="btn" type="submit" disabled={busy}>
@@ -110,14 +129,22 @@ export function AdminAdminsTab({ token }) {
                   {a.active ? "Active" : "Inactive"} · {a.role}
                 </small>
               </div>
-              {a.active ? (
+              {a.role !== "owner" && a.active && (
+                <select value={a.role === "editor" ? "editor" : "admin"} onChange={(e) => setRole(a.user_id, e.target.value)} aria-label={"Role for " + (a.name || a.email || "admin")}>
+                  <option value="admin">Admin</option>
+                  <option value="editor">Editor</option>
+                </select>
+              )}
+              {a.role !== "owner" && a.active ? (
                 <button type="button" className="btn small ghost dark" onClick={() => setActive(a.user_id, false)}>
                   Deactivate
                 </button>
-              ) : (
+              ) : a.role !== "owner" ? (
                 <button type="button" className="btn small" onClick={() => setActive(a.user_id, true)}>
                   Reactivate
                 </button>
+              ) : (
+                <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>Owner</span>
               )}
             </li>
           ))}
