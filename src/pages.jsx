@@ -237,80 +237,80 @@ export function Home() {
           <div className="row-head reveal">
             <div>
               <span className="eyebrow">School uniform</span>
-              <h2>Official Junior Primary & Junior Secondary uniforms</h2>
+              <h2>Official Primary & Junior Secondary School (JSS) uniforms</h2>
             </div>
             <Link to="/contact" className="textlink">Ask admissions about uniform</Link>
           </div>
 
           <div className="uniform-level reveal">
-            <span className="eyebrow">Junior Primary</span>
-            <h3>Junior Primary School Uniform</h3>
+            <span className="eyebrow">Primary School</span>
+            <h3>Primary School Uniform</h3>
             <p className="uniform-intro">
-              These are the official Junior Primary uniform designs used by Hill Springs Academy. Junior Primary does not have a jumper; the approved sweater option is shown separately below.
+              These are the official Primary School uniform designs used by Hill Springs Academy. Primary School does not have a jumper; the approved sweater option is shown separately below.
             </p>
             <div className="uniform-grid">
               <figure className="uniform-card reveal" style={{ "--d": "0ms" }}>
                 <div className="uniform-image">
-                  <img src="/junior-primary-boy.jfif" alt="Official Hill Springs Academy Junior Primary boy wearing the school shirt" loading="lazy" width="900" height="1200" />
+                  <img src="/junior-primary-boy.jfif" alt="Official Hill Springs Academy Primary School boy wearing the school shirt" loading="lazy" width="900" height="1200" />
                 </div>
                 <figcaption>
-                  <strong>Junior Primary Boy — Shirt</strong>
-                  <span>The standard Junior Primary boys' uniform with the school shirt and approved colours.</span>
+                  <strong>Primary School Boy — Shirt</strong>
+                  <span>The standard Primary School boys' uniform with the school shirt and approved colours.</span>
                 </figcaption>
               </figure>
               <figure className="uniform-card reveal" style={{ "--d": "80ms" }}>
                 <div className="uniform-image">
-                  <img src="/junior-primary-girl.jfif" alt="Official Hill Springs Academy Junior Primary girls' school uniform" loading="lazy" width="900" height="1200" />
+                  <img src="/junior-primary-girl.jfif" alt="Official Hill Springs Academy Primary School girls' school uniform" loading="lazy" width="900" height="1200" />
                 </div>
                 <figcaption>
-                  <strong>Junior Primary Girl</strong>
+                  <strong>Primary School Girl</strong>
                   <span>Official girls' uniform, including the school colours and pattern.</span>
                 </figcaption>
               </figure>
               <figure className="uniform-card reveal" style={{ "--d": "160ms" }}>
                 <div className="uniform-image">
-                  <img src="/junior-primary-boy2.jfif" alt="Official Hill Springs Academy Junior Primary boy wearing the school sweater" loading="lazy" width="900" height="1200" />
+                  <img src="/junior-primary-boy2.jfif" alt="Official Hill Springs Academy Primary School boy wearing the school sweater" loading="lazy" width="900" height="1200" />
                 </div>
                 <figcaption>
-                  <strong>Junior Primary Boy — Sweater</strong>
-                  <span>The Junior Primary boy's sweater option for cooler days. Junior Primary does not use a jumper.</span>
+                  <strong>Primary School Boy — Sweater</strong>
+                  <span>The Primary School boy's sweater option for cooler days. Primary School does not use a jumper.</span>
                 </figcaption>
               </figure>
             </div>
           </div>
 
           <div className="uniform-level reveal">
-            <span className="eyebrow">Junior Secondary</span>
-            <h3>Junior Secondary School Uniform</h3>
+            <span className="eyebrow">Junior Secondary School (JSS)</span>
+            <h3>Junior Secondary School (JSS) School Uniform</h3>
             <p className="uniform-intro">
-              These are the official Junior Secondary uniform designs used by Hill Springs Academy, shown separately from Junior Primary.
+              These are the official Junior Secondary School (JSS) uniform designs used by Hill Springs Academy, shown separately from Primary School.
             </p>
             <div className="uniform-grid">
               <figure className="uniform-card reveal" style={{ "--d": "0ms" }}>
                 <div className="uniform-image">
-                  <img src="/senior-primary-boy.jfif" alt="Official Hill Springs Academy Junior Secondary boys' school uniform" loading="lazy" width="900" height="1200" />
+                  <img src="/senior-primary-boy.jfif" alt="Official Hill Springs Academy Junior Secondary School (JSS) boys' school uniform" loading="lazy" width="900" height="1200" />
                 </div>
                 <figcaption>
-                  <strong>Junior Secondary Boy</strong>
+                  <strong>Junior Secondary School (JSS) Boy</strong>
                   <span>Official boys' uniform and its approved colours and pattern.</span>
                 </figcaption>
               </figure>
               <figure className="uniform-card reveal" style={{ "--d": "80ms" }}>
                 <div className="uniform-image">
-                  <img src="/senior-primary-girl.jfif" alt="Official Hill Springs Academy Junior Secondary girls' school uniform" loading="lazy" width="900" height="1200" />
+                  <img src="/senior-primary-girl.jfif" alt="Official Hill Springs Academy Junior Secondary School (JSS) girls' school uniform" loading="lazy" width="900" height="1200" />
                 </div>
                 <figcaption>
-                  <strong>Junior Secondary Girl</strong>
+                  <strong>Junior Secondary School (JSS) Girl</strong>
                   <span>Official girls' uniform, including the school colours and pattern.</span>
                 </figcaption>
               </figure>
               <figure className="uniform-card reveal" style={{ "--d": "160ms" }}>
                 <div className="uniform-image">
-                  <img src="/senior-primary-girl-with-jumper.jfif" alt="Official Hill Springs Academy Junior Secondary girl wearing the approved jumper" loading="lazy" width="900" height="1200" />
+                  <img src="/senior-primary-girl-with-jumper.jfif" alt="Official Hill Springs Academy Junior Secondary School (JSS) girl wearing the approved jumper" loading="lazy" width="900" height="1200" />
                 </div>
                 <figcaption>
-                  <strong>Junior Secondary Girl with Jumper</strong>
-                  <span>The approved Junior Secondary jumper combination for cooler days.</span>
+                  <strong>Junior Secondary School (JSS) Girl with Jumper</strong>
+                  <span>The approved JSS jumper combination for cooler days.</span>
                 </figcaption>
               </figure>
             </div>
@@ -318,7 +318,7 @@ export function Home() {
 
           <div className="uniform-note reveal">
             <span aria-hidden="true">✓</span>
-            <p><strong>Official uniform reference:</strong> Junior Primary has no jumper. Please use the photographs above to distinguish the standard shirt uniform from the approved sweater option. Junior Secondary uniform requirements are shown separately. For current supplier, sizing, pricing or term-specific requirements, contact the school.</p>
+            <p><strong>Official uniform reference:</strong> Primary School has no jumper. Please use the photographs above to distinguish the standard shirt uniform from the approved sweater option. JSS uniform requirements are shown separately. For current supplier, sizing, pricing or term-specific requirements, contact the school.</p>
           </div>
         </div>
       </section>
