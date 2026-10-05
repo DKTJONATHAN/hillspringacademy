@@ -75,7 +75,7 @@ Deno.serve(async req => {
     }
 
     // ========================= Admin actions ============================
-    if (["whoami", "list_applications", "decide_application", "list_admins", "create_admin", "set_admin_active", "set_admin_role"].includes(p.action)) {
+    if (["whoami", "list_applications", "decide_application", "delete_application", "list_admins", "create_admin", "set_admin_active", "set_admin_role"].includes(p.action)) {
       const admin = await requireAdmin(req);
       if (!admin) return json({ error: "Administrator access only.", code: "NOT_ADMIN" }, 403);
 
@@ -87,6 +87,25 @@ Deno.serve(async req => {
         const { data, error } = await q;
         if (error) throw error;
         return json({ ok: true, applications: data });
+      }
+
+      if (p.action === "delete_application") {
+        const id = clean(p.id, 80);
+        if (!id) return json({ error: "Missing application id." }, 400);
+        const { data: existing, error: findError } = await db.from("school_applications")
+          .select("id,learner_name,parent_email,status")
+          .eq("id", id).maybeSingle();
+        if (findError) throw findError;
+        if (!existing) return json({ error: "Application not found." }, 404);
+        const del = await db.from("school_applications").delete().eq("id", id);
+        if (del.error) throw del.error;
+        await db.from("school_audit_log").insert({
+          actor_id: admin.id,
+          action: "application_deleted",
+          target: id,
+          ip: clientIp(req),
+        });
+        return json({ ok: true, deleted: id, status: existing.status });
       }
 
       if (p.action === "decide_application") {
