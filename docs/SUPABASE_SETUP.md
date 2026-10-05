@@ -16,7 +16,7 @@ Parents use normal **Supabase Auth** users (email + password). The 6-digit codes
 
 Run `supabase/migrations/001_accounts_applications.sql` in the SQL editor. It creates:
 
-- `school_admins(email)`: **who is an administrator** (the server's source of truth)
+- `school_admins(user_id, name, role, active)`: **who is an administrator** (the server's source of truth). Roles are `owner`, `admin`, or `editor`; only the active `owner` can add/deactivate/change administrators.
 - `school_profiles(user_id, full_name, phone)`
 - `school_codes`: hashed one-time 6-digit codes (`purpose` = `signup` | `reset`, 10-minute expiry, attempt counter)
 - `school_applications`: status `pending | accepted | rejected`, decision note, who/when, email result
@@ -24,13 +24,7 @@ Run `supabase/migrations/001_accounts_applications.sql` in the SQL editor. It cr
 
 RLS is enabled with **no policies** on the new tables: the browser can read nothing directly; everything goes through Edge Functions using the secret key. Keep it that way.
 
-Then add the admin(s):
-
-```sql
-insert into public.school_admins (email) values ('REAL-ADMIN-EMAIL@example.com') on conflict do nothing;
-```
-
-The admin must also exist as a Supabase Auth user (Dashboard > Authentication > Users > Add user, tick "Auto Confirm User").
+The initial active administrator is promoted to the `owner` role by migration `002_admin_hierarchy_audit.sql`. After that, use the Admins tab in the admin panel to add administrators; do not manually insert email-only admin rows. New accounts are created as `admin` or `editor` and only the owner can manage them.
 
 ## 2. Auth settings
 
@@ -67,14 +61,14 @@ All requests: `POST { action, email, ... }`. Errors return `{ error, code }`.
 | `register` | fullName, phone, password | creates unconfirmed user + profile, emails 6-digit code. If already verified: 409 `ALREADY_REGISTERED` ("You already have an account... use Forgot password") |
 | `verify_signup` | code | confirms email |
 | `resend_signup` | | new code (60 s cooldown) |
-| `request_reset` | `portal`: `parent` \| `admin` | **admin portal:** email must be in `school_admins`, else 403 `NOT_ADMIN` + masked `hints`. **Both:** no user -> 404 `NOT_REGISTERED` ("You do not have an account yet. Please register"); unverified -> 409 `NOT_VERIFIED`; else emails a 6-digit code |
+| `request_reset` | `portal`: `parent` \| `admin` | **admin portal:** email must belong to an active `school_admins.user_id`; inactive admins cannot reset passwords. **Both:** no user -> 404 `NOT_REGISTERED` ("You do not have an account yet. Please register"); unverified -> 409 `NOT_VERIFIED`; else emails a 6-digit code |
 | `verify_reset` | code, newPassword, portal | checks code, sets password, signs out other sessions |
 
-Rules implemented: password min 8 with a letter and a number; code = cryptographically random, stored as SHA-256 hash, expires in 10 min, single use, max 5 wrong attempts, 60 s resend cooldown; a honeypot field `website` is ignored if filled.
+Rules implemented: password minimum **8 characters**; code = cryptographically random, stored as SHA-256 hash, expires in 10 min, single use, max 5 wrong attempts, 60 s resend cooldown; a honeypot field `website` is ignored if filled.
 
 ### 4b. `school-applications` (needs `Authorization: Bearer <user access token>`)
 Parent actions: `submit_application`, `submit_enquiry`, `my_submissions`.
-Admin actions (caller's email must be in `school_admins`): `whoami`, `list_applications {status?}`, `decide_application {id, decision: "accepted"|"rejected", note?}`.
+Admin actions (caller must be an active `school_admins.user_id`): `whoami`, `list_applications {status?}`, `decide_application {id, decision: "accepted"|"rejected", note?}`.
 
 `decide_application` updates only rows still `pending` (prevents double emails), then emails the parent using the branded **acceptance** or **rejection** template. No acceptance letter is needed; the template is the letter. The Resend result is stored in `decision_email_id` / `decision_email_error`.
 
@@ -107,7 +101,9 @@ Newsletter subscribe/unsubscribe and the old public contact form. Only change: t
 
 ## 8. Security notes
 
-- Admin rights = row in `school_admins`, checked **server-side** on every admin call. The admin emails kept in the browser's local storage are only used to give friendlier hints.
+- Admin rights = active row in `school_admins`, checked **server-side** on every admin call. Admin management is owner-only. Deactivation also revokes the target user's Auth sessions. Browser-stored admin information is never the authorization source.
 - The "you already have an account / you do not have an account" messages reveal whether an email is registered (requested by the school). The 60 s code cooldown and 5-attempt limit reduce abuse. For stricter protection add per-IP rate limiting (e.g. Upstash) in `school-account`.
 - `Access-Control-Allow-Origin` is `*` in `_shared/util.ts`; tighten to the production origin once the domain is final.
 - Never put the Resend key or secret key in the React code.
+- `school_audit_log` records admin creation, role changes, deactivation/reactivation and password resets.
+- Configure `TURNSTILE_SECRET` in Supabase production secrets; without it, Turnstile cannot be enforced.
