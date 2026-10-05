@@ -118,6 +118,7 @@ const MORE_LINKS = [
   ["/blog", "Blog"],
   ["/reading-materials", "Resources"],
   ["/fees", "Fees"],
+  ["/uniforms", "Uniforms"],
   ["/faq", "FAQ"],
   ["/signup", "Sign up"],
   ["/apply", "Apply online"],
@@ -214,6 +215,8 @@ export function Footer() {
               <Link key={to} to={to}>{l}</Link>
             ))}
             <Link to="/reading-materials">Resources</Link>
+            <Link to="/fees">Fees</Link>
+            <Link to="/uniforms">Uniforms</Link>
             <Link to="/blog">Blog</Link>
             <Link to="/school-life">School life</Link>
           </nav>
