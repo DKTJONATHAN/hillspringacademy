@@ -15,6 +15,7 @@ import {
   Sitemap,
   SchoolLife,
   Fees,
+  Uniforms,
   FAQ,
 } from "./pagesRest.jsx";
 import { AdminEmailCentre } from "./AdminEmailCentre.jsx";
@@ -61,6 +62,7 @@ export default function App() {
             <Route path="/admin" element={<AdminEmailCentre />} />
             <Route path="/school-life" element={<SchoolLife />} />
             <Route path="/fees" element={<Fees />} />
+            <Route path="/uniforms" element={<Uniforms />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
