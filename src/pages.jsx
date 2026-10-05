@@ -281,6 +281,55 @@ export function Home() {
         </div>
       </section>
 
+      <section className="section uniform-section">
+        <div className="wrap">
+          <div className="row-head reveal">
+            <div>
+              <span className="eyebrow">School uniform</span>
+              <h2>Official Junior Secondary uniform</h2>
+            </div>
+            <Link to="/contact" className="textlink">Ask admissions about uniform</Link>
+          </div>
+          <p className="uniform-intro reveal">
+            These are the official Junior Secondary uniform designs used by Hill Springs Academy.
+            The photographs show the approved colours, patterns and garment combinations so parents can see what learners should wear.
+          </p>
+          <div className="uniform-grid">
+            <figure className="uniform-card reveal" style={{ "--d": "0ms" }}>
+              <div className="uniform-image">
+                <img src="/senior-primary-boy.jfif" alt="Official Hill Springs Academy Junior Secondary boys' school uniform" loading="lazy" width="900" height="1200" />
+              </div>
+              <figcaption>
+                <strong>Junior Secondary Boy</strong>
+                <span>Official boys' uniform and its approved colours and pattern.</span>
+              </figcaption>
+            </figure>
+            <figure className="uniform-card reveal" style={{ "--d": "80ms" }}>
+              <div className="uniform-image">
+                <img src="/senior-primary-girl.jfif" alt="Official Hill Springs Academy Junior Secondary girls' school uniform" loading="lazy" width="900" height="1200" />
+              </div>
+              <figcaption>
+                <strong>Junior Secondary Girl</strong>
+                <span>Official girls' uniform, including the school colours and pattern.</span>
+              </figcaption>
+            </figure>
+            <figure className="uniform-card reveal" style={{ "--d": "160ms" }}>
+              <div className="uniform-image">
+                <img src="/senior-primary-girl-with-jumper.jfif" alt="Official Hill Springs Academy Junior Secondary girls' school uniform with jumper" loading="lazy" width="900" height="1200" />
+              </div>
+              <figcaption>
+                <strong>Junior Secondary Girl with Jumper</strong>
+                <span>The approved jumper combination for cooler days and the school's uniform colours.</span>
+              </figcaption>
+            </figure>
+          </div>
+          <div className="uniform-note reveal">
+            <span aria-hidden="true">✓</span>
+            <p><strong>Official uniform reference:</strong> Please use the photographs above when checking the correct Junior Secondary uniform colours, patterns and jumper combination. For current supplier, sizing, pricing or term-specific requirements, contact the school.</p>
+          </div>
+        </div>
+      </section>
+
       <section className="section alt">
         <div className="wrap">
           <div className="row-head reveal">
