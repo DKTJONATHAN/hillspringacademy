@@ -828,3 +828,208 @@ textarea { min-height: 140px; resize: vertical; }
   .admin-record-actions{align-items:flex-start;flex-direction:column}
   .admin-record-actions .danger-btn{margin-left:0;width:100%}
 }
+
+
+/* ==========================================================
+   Hill Springs Academy — Application & Enquiry Portals
+   Logo-matched portal identity: red, silver-gray, black and
+   the light blue used around the academy emblem.
+   ========================================================== */
+.portal-section {
+  --portal-red: #ff0000;
+  --portal-red-dark: #d90000;
+  --portal-gray: #a6a6a6;
+  --portal-gray-light: #f1f1f1;
+  --portal-blue: #6f8fa8;
+  --portal-black: #111111;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(255,0,0,.07), transparent 24%),
+    radial-gradient(circle at 5% 90%, rgba(111,143,168,.08), transparent 26%),
+    #f7f7f7;
+}
+.portal-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5px;
+  background: linear-gradient(90deg, var(--portal-red) 0 58%, var(--portal-gray) 58% 82%, var(--portal-blue) 82% 100%);
+}
+.portal-section .wrap {
+  position: relative;
+}
+.portal-brandbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+  padding: 18px 22px;
+  border: 1px solid #d7d7d7;
+  border-left: 5px solid var(--portal-red);
+  border-radius: 18px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 12px 32px rgba(0,0,0,.06);
+}
+.portal-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  padding: 5px;
+  border: 2px solid var(--portal-gray);
+  border-radius: 50%;
+  background: #fff;
+}
+.portal-brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.portal-brandbar > div:last-child {
+  min-width: 0;
+}
+.portal-brand-kicker {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--portal-blue);
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.portal-brandbar strong {
+  display: block;
+  color: var(--portal-black);
+  font-size: clamp(1.25rem, 2.5vw, 1.7rem);
+  line-height: 1.15;
+}
+.portal-brandbar p {
+  margin: 5px 0 0;
+  max-width: 760px;
+  color: #5d5d5d;
+  font-size: .9rem;
+}
+.portal-entry-grid {
+  grid-template-columns: minmax(0, 540px) minmax(0, 1fr);
+  gap: 24px;
+}
+.portal-section .card,
+.portal-section form {
+  border-color: #d9d9d9;
+  box-shadow: 0 14px 36px rgba(0,0,0,.07);
+}
+.portal-section .portal-form,
+.portal-section .auth-card {
+  border-top: 4px solid var(--portal-red);
+}
+.portal-section .eyebrow {
+  color: var(--portal-red);
+}
+.portal-section h2,
+.portal-section h3 {
+  color: var(--portal-black);
+}
+.portal-section input,
+.portal-section select,
+.portal-section textarea {
+  border-color: #cfcfcf;
+  background: #fafafa;
+}
+.portal-section input:focus,
+.portal-section select:focus,
+.portal-section textarea:focus {
+  border-color: var(--portal-blue);
+  box-shadow: 0 0 0 3px rgba(111,143,168,.14);
+  outline: none;
+}
+.portal-section .btn:not(.ghost) {
+  background: var(--portal-red);
+  border-color: var(--portal-red);
+  box-shadow: 0 8px 18px rgba(255,0,0,.14);
+}
+.portal-section .btn:not(.ghost):hover {
+  background: var(--portal-red-dark);
+  border-color: var(--portal-red-dark);
+}
+.portal-section .btn.ghost,
+.portal-section .btn.ghost.dark {
+  color: var(--portal-black);
+  border-color: #cfcfcf;
+  background: #fff;
+}
+.portal-section .btn.ghost:hover,
+.portal-section .btn.ghost.dark:hover {
+  border-color: var(--portal-blue);
+  background: #f5f8fa;
+}
+.portal-info-card {
+  position: relative;
+  overflow: hidden;
+}
+.portal-info-card::after {
+  content: "";
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  right: -48px;
+  top: -48px;
+  border: 14px solid rgba(166,166,166,.18);
+  border-radius: 50%;
+}
+.portal-section .checks li::marker {
+  color: var(--portal-red);
+}
+.portal-section .textlink,
+.portal-section .linklike,
+.portal-section .pw-toggle {
+  color: var(--portal-red);
+}
+.portal-section .sub-row {
+  border-color: #dedede;
+}
+.portal-section .badge.pending,
+.portal-section .badge.new {
+  background: #fff0f0;
+  border-color: #ffb5b5;
+  color: var(--portal-red-dark);
+}
+.portal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding: 13px 16px;
+  border: 1px solid #d7d7d7;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,.05);
+}
+.portal-toolbar strong {
+  color: var(--portal-black);
+  overflow-wrap: anywhere;
+}
+.portal-success-card {
+  border-top: 4px solid var(--portal-blue) !important;
+}
+@media (max-width: 720px) {
+  .portal-brandbar {
+    grid-template-columns: 58px minmax(0,1fr);
+    gap: 13px;
+    padding: 14px;
+  }
+  .portal-brand-mark {
+    width: 58px;
+    height: 58px;
+  }
+  .portal-brandbar p {
+    font-size: .82rem;
+    line-height: 1.45;
+  }
+  .portal-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
