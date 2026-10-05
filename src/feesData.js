@@ -1,4 +1,4 @@
-/** Official Fees Structure 2026 — Hill Springs Academy */
+/** Official Fees Structure 2026 - Hill Springs Academy */
 
 export const FEES_META = {
   year: "2026",
@@ -76,29 +76,15 @@ function pdfEscape(s) {
 
 /** Minimal single-page PDF (no external libraries). */
 export function buildFeePdfBlob({ focusLabel, band }) {
-  const lines = [];
-  const add = (x, y, size, text, bold = false) => {
-    lines.push("BT");
-    lines.push(`/${bold ? "F2" : "F1"} ${size} Tf`);
-    lines.push(`${x} ${y} Td`);
-    lines.push(`(${pdfEscape(text)}) Tj`);
-    lines.push("ET");
-  };
-
   // Page size A4 in points
   const W = 595;
   const H = 842;
   let y = H - 50;
 
-  // Red header bar via filled rect
-  const headerOps = [
-    "0.784 0.063 0.180 rg",
-    `0 ${H - 70} ${W} 70 re f`,
-    "1 1 1 rg",
-  ];
-
   const content = [];
-  content.push(...headerOps);
+  content.push("0.784 0.063 0.180 rg");
+  content.push(`0 ${H - 70} ${W} 70 re f`);
+  content.push("1 1 1 rg");
   content.push("BT /F2 16 Tf 40 805 Td (HILL SPRINGS ACADEMY) Tj ET");
   content.push("BT /F1 9 Tf 40 788 Td (P.O. Box 377-60600 Maua  |  Tel: +254 710 572419) Tj ET");
   content.push("BT /F1 9 Tf 40 775 Td (admissions@hillspringsacademy.sc.ke) Tj ET");
@@ -118,7 +104,6 @@ export function buildFeePdfBlob({ focusLabel, band }) {
     y -= 8;
   }
 
-  // Term amounts
   content.push("0.1 0.11 0.125 rg");
   let x = 40;
   for (const t of band.terms) {
@@ -129,9 +114,6 @@ export function buildFeePdfBlob({ focusLabel, band }) {
   y -= 40;
 
   content.push("0.784 0.063 0.180 rg");
-  content.push(`BT /F2 10 Tf 40 ${y} Td (Admission for new pupils \320 Ksh ${FEES_META.admissionNewPupil}) Tj ET`.replace("\320", "—"));
-  // Use ASCII hyphen to avoid encoding issues
-  content.pop();
   content.push(`BT /F2 10 Tf 40 ${y} Td (Admission for new pupils - Ksh ${FEES_META.admissionNewPupil}) Tj ET`);
   y -= 22;
 
@@ -139,7 +121,7 @@ export function buildFeePdfBlob({ focusLabel, band }) {
   content.push(`BT /F2 10 Tf 40 ${y} Td (The above amount covers:) Tj ET`);
   y -= 16;
   for (const item of FEES_META.covers) {
-    content.push(`BT /F1 10 Tf 48 ${y} Td (${pdfEscape("• " + item)}) Tj ET`);
+    content.push(`BT /F1 10 Tf 48 ${y} Td (${pdfEscape("- " + item)}) Tj ET`);
     y -= 14;
   }
   y -= 6;
@@ -165,7 +147,6 @@ export function buildFeePdfBlob({ focusLabel, band }) {
   const stream = content.join("\n");
   const streamLen = new TextEncoder().encode(stream).length;
 
-  // Build PDF with objects
   const parts = [];
   parts.push("%PDF-1.4\n");
 
