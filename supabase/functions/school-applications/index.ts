@@ -222,11 +222,21 @@ Deno.serve(async req => {
           const { data: target } = await db.from("school_admins").select("role,active").eq("user_id", userId).maybeSingle();
           if (!target) return json({ error: "Administrator not found." }, 404);
           if (target.role === "owner") return json({ error: "An owner cannot be deactivated. Change their role first." }, 400);
-          const up = await db.from("school_admins").update({ active }).eq("user_id", userId);
+          if (!active) {
+            await db.auth.admin.signOut(userId, "global").catch(() => {});
+            const delAdmin = await db.from("school_admins").delete().eq("user_id", userId);
+            if (delAdmin.error) throw delAdmin.error;
+            const delProfile = await db.from("school_profiles").delete().eq("user_id", userId);
+            if (delProfile.error) throw delProfile.error;
+            const deletedUser = await db.auth.admin.deleteUser(userId);
+            if (deletedUser.error) throw deletedUser.error;
+            await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_deleted", target: userId, ip: clientIp(req) });
+            return json({ ok: true, user_id: userId, active: false, deleted: true });
+          }
+          const up = await db.from("school_admins").update({ active: true }).eq("user_id", userId);
           if (up.error) throw up.error;
-          if (!active) await db.auth.admin.signOut(userId, "global").catch(() => {});
-          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: active ? "admin_reactivated" : "admin_deactivated", target: userId, ip: clientIp(req) });
-          return json({ ok: true, user_id: userId, active });
+          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_reactivated", target: userId, ip: clientIp(req) });
+          return json({ ok: true, user_id: userId, active: true });
         }
 
         if (p.action === "set_admin_role") {
