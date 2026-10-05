@@ -346,3 +346,113 @@ textarea { min-height: 140px; resize: vertical; }
 .app-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
 .btn.danger { background: #202124; }
 @media (max-width: 860px) { .portal-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Official school uniform ---------- */
+.uniform-section {
+  background: var(--paper);
+}
+.uniform-intro {
+  max-width: 820px;
+  margin: -6px 0 28px;
+  color: var(--muted);
+}
+.uniform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.uniform-card {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.uniform-image {
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+  padding: 18px;
+  background: #eef0f2;
+}
+.uniform-image img {
+  display: block;
+  width: 100%;
+  height: 440px;
+  object-fit: contain;
+  object-position: center;
+}
+.uniform-card figcaption {
+  display: grid;
+  gap: 6px;
+  padding: 18px 20px 20px;
+}
+.uniform-card figcaption strong {
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+.uniform-card figcaption span {
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.55;
+}
+.uniform-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 17px 19px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.uniform-note > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-weight: 900;
+}
+.uniform-note p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.55;
+}
+.uniform-note strong {
+  color: var(--ink);
+}
+@media (max-width: 900px) {
+  .uniform-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .uniform-card:last-child {
+    grid-column: 1 / -1;
+    width: min(100%, 460px);
+    justify-self: center;
+  }
+}
+@media (max-width: 620px) {
+  .uniform-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .uniform-card:last-child {
+    grid-column: auto;
+    width: 100%;
+  }
+  .uniform-image {
+    min-height: 360px;
+  }
+  .uniform-image img {
+    height: 380px;
+  }
+  .uniform-note {
+    padding: 15px;
+  }
+}
