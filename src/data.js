@@ -17,6 +17,8 @@ export const SCHOOL = {
   infoEmail: "info@hillspringsacademy.sc.ke",
   phone: "+254 710 572419",
   phoneTel: "+254710572419",
+  phone2: "0733 693 685",
+  phone2Tel: "+254733693685",
   poBox: "P.O. Box 377-60600 Maua",
   applyLevels: ["Playgroup","PP1","PP2","Grade 1","Grade 2","Grade 3","Grade 4","Grade 5","Grade 6","Grade 7","Grade 8","Grade 9"],
   adminEmails: [],
