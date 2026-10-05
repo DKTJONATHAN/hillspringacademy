@@ -4,7 +4,7 @@ import { FEES_META, FEE_BANDS, FEE_CLASSES, downloadFeePdf } from "./feesData.js
 import { SCHOOL, GALLERY } from "./data.js";
 import { BLOG_POSTS } from "./blogData.js";
 import { PageHead, Photo } from "./components.jsx";
-import { submitEnquiry, subscribeToSchoolUpdates } from "./supabase.js";
+import { submitSchoolEnquiry } from "./supabase.js";
 
 export function About() {
   return (
@@ -362,7 +362,7 @@ export function Contact() {
     e.preventDefault();
     setState({ busy: true, error: "", done: false });
     try {
-      await submitEnquiry(form);
+      await submitSchoolEnquiry(form);
       setState({ busy: false, error: "", done: true });
       setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
     } catch (err) {
@@ -450,7 +450,7 @@ export function Blog() {
     return (
       <>
         <PageHead title={post.title} text={post.excerpt || ""} path={`/blog/${post.slug}`} />
-        <section className="section"><div className="wrap card"><div dangerouslySetInnerHTML={{ __html: post.html || post.body || "" }} /></div></section>
+        <section className="section"><div className="wrap card"><p>{post.excerpt}</p><Link to="/blog">Back to blog</Link></div></section>
       </>
     );
   }
