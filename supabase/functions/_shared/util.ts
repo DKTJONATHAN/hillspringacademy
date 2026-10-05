@@ -73,7 +73,7 @@ export async function rateLimit(key: string, windowSec: number, max: number): Pr
   }
 }
 
-/** When TURNSTILE_SECRET is unset, skip (so production keeps working until you set the secret). Once set, missing/invalid tokens fail closed. */
+/** Turnstile is enforced whenever TURNSTILE_SECRET is configured; production should configure it. */
 export async function verifyTurnstile(token: unknown, ip: string): Promise<boolean> {
   const secret = Deno.env.get("TURNSTILE_SECRET") || "";
   if (!secret) {
@@ -101,15 +101,23 @@ export async function verifyTurnstile(token: unknown, ip: string): Promise<boole
   }
 }
 
-export async function isAdminUserId(userId: string) {
-  const { data, error } = await db
-    .from("school_admins")
-    .select("user_id")
-    .eq("user_id", userId)
-    .eq("active", true)
-    .maybeSingle();
+export async function getAdminRecord(userId: string) {
+  const { data, error } = await db.from("school_admins")
+    .select("user_id,name,role,active").eq("user_id", userId).eq("active", true).maybeSingle();
   if (error) throw error;
-  return Boolean(data);
+  return data;
+}
+
+export async function isAdminUserId(userId: string) {
+  return Boolean(await getAdminRecord(userId));
+}
+
+export async function requireAdminManager(req: Request) {
+  const user = await requireAdmin(req);
+  if (!user) return null;
+  const admin = await getAdminRecord(user.id);
+  if (!admin || admin.role !== "owner") return null;
+  return { user, admin };
 }
 
 export async function findUserByEmail(email: string): Promise<{ id: string; email_confirmed_at: string | null } | null> {
