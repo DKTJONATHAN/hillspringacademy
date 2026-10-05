@@ -9,42 +9,225 @@ import { submitSchoolEnquiry } from "./supabase.js";
 export function About() {
   return (
     <>
-      <PageHead title="About Hill Springs Academy" text="A private CBE school in Maua, Meru County." path="/about" />
+      <PageHead
+        title="About Hill Springs Academy"
+        text="A private CBE school in Maua, Igembe South, Meru County — Kindergarten, Pre-Primary and Junior School."
+        path="/about"
+      />
+
       <section className="section">
         <div className="wrap split">
           <div>
             <span className="eyebrow">Who we are</span>
             <h2>{SCHOOL.name}</h2>
+            <p className="lede">{SCHOOL.motto}</p>
             <p>{SCHOOL.intro}</p>
-            <p>We serve families in Maua, Igembe South and across Meru County with Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education.</p>
-            <ul className="checks">
-              <li>Location: {SCHOOL.town}</li>
-              <li>Motto: {SCHOOL.motto}</li>
-              {SCHOOL.centreCode && <li>Centre code: {SCHOOL.centreCode}</li>}
-            </ul>
+            <p>
+              We serve families in Maua, Igembe South and across Meru County. Our focus is strong teaching,
+              clear values and a caring community so every child can build knowledge, skills and character
+              under Kenya’s Competency-Based Education (CBE).
+            </p>
+            <div className="btns" style={{ marginTop: 20 }}>
+              <Link className="btn" to="/admissions">Admissions</Link>
+              <Link className="btn ghost" to="/contact">Contact us</Link>
+            </div>
           </div>
           <div className="card">
-            <h3>Our values</h3>
-            {(SCHOOL.values || []).map((v) => (
-              <div key={v.title} style={{ marginBottom: 12 }}>
-                <strong>{v.title}</strong>
+            <h3>At a glance</h3>
+            <ul className="checks">
+              <li><strong>School:</strong> {SCHOOL.name}</li>
+              <li><strong>Location:</strong> {SCHOOL.town}</li>
+              <li><strong>Curriculum:</strong> Kenya’s Competency-Based Education (CBE)</li>
+              <li><strong>Levels:</strong> Kindergarten, Pre-Primary, Junior School</li>
+              {SCHOOL.centreCode && <li><strong>Centre code:</strong> {SCHOOL.centreCode}</li>}
+              {SCHOOL.poBox && <li><strong>Postal:</strong> {SCHOOL.poBox}</li>}
+              {SCHOOL.phone && (
+                <li>
+                  <strong>Phone:</strong>{" "}
+                  <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone}`}>{SCHOOL.phone}</a>
+                </li>
+              )}
+              <li>
+                <strong>Email:</strong>{" "}
+                <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a>
+              </li>
+              <li>
+                <strong>Admissions:</strong>{" "}
+                <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="wrap">
+          <span className="eyebrow">What guides us</span>
+          <h2>Our values</h2>
+          <p className="lede">
+            These principles shape daily life at Hill Springs Academy — in the classroom, on the field and with families.
+          </p>
+          <div className="cols">
+            {(SCHOOL.values || []).map((v, n) => (
+              <article className="card reveal" key={v.title} style={{ "--d": `${n * 80}ms` }}>
+                <h3>{v.title}</h3>
                 <p>{v.text}</p>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
-      <section className="section alt">
+
+      <section className="section">
         <div className="wrap">
           <span className="eyebrow">Learning stages</span>
           <h2>From early years to Junior School</h2>
+          <p className="lede">
+            We offer a continuous pathway from the first years of school through Junior School, so learners grow
+            with familiar teachers, clear expectations and age-appropriate support.
+          </p>
           <div className="cols">
-            {(SCHOOL.stages || SCHOOL.levels || []).map((s) => (
-              <article className="card" key={s.title}>
+            {(SCHOOL.stages || SCHOOL.levels || []).map((s, n) => (
+              <article className="card reveal" key={s.title} style={{ "--d": `${n * 80}ms` }}>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </article>
             ))}
+          </div>
+          {(SCHOOL.applyLevels || []).length > 0 && (
+            <div style={{ marginTop: 28 }}>
+              <h3>Classes we admit</h3>
+              <ul className="tags dark">
+                {SCHOOL.applyLevels.map((l) => (
+                  <li key={l}>{l}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="wrap">
+          <span className="eyebrow">Competency-Based Education</span>
+          <h2>How we teach</h2>
+          <p className="lede">
+            CBE helps learners build knowledge, practical skills, values and positive attitudes — not only
+            recall of facts. Teaching at Hill Springs Academy connects classroom ideas with everyday life in Maua and Meru County.
+          </p>
+          <div className="cols">
+            {(SCHOOL.learningApproach || []).map((x, n) => (
+              <article className="card reveal" key={x.title} style={{ "--d": `${n * 80}ms` }}>
+                <h3>{x.title}</h3>
+                <p>{x.text}</p>
+              </article>
+            ))}
+          </div>
+          {(SCHOOL.subjects || []).length > 0 && (
+            <div style={{ marginTop: 28 }}>
+              <h3>Core subject areas</h3>
+              <ul className="tags dark">
+                {SCHOOL.subjects.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+              <p style={{ marginTop: 12 }}>
+                <Link className="textlink" to="/academics">See the full academics page →</Link>
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap split">
+          <div>
+            <span className="eyebrow">Beyond the classroom</span>
+            <h2>School life</h2>
+            <p>
+              Learning at Hill Springs Academy includes sports, creative activities, clubs and community involvement.
+              These experiences build confidence, teamwork and healthy habits alongside academic progress.
+            </p>
+            <ul className="tags dark" style={{ marginTop: 16 }}>
+              {(SCHOOL.activities || []).map((a) => (
+                <li key={a}>{a}</li>
+              ))}
+            </ul>
+            <p style={{ marginTop: 16 }}>
+              <Link className="textlink" to="/school-life">Explore school life →</Link>
+            </p>
+          </div>
+          <div className="card">
+            <h3>For parents and guardians</h3>
+            <ul className="checks">
+              {(SCHOOL.parentInfo || []).map((p) => (
+                <li key={p.title}>
+                  <strong>{p.title}:</strong> {p.text}
+                </li>
+              ))}
+            </ul>
+            <div className="btns" style={{ marginTop: 16 }}>
+              <Link className="btn small" to="/fees">Fees 2026</Link>
+              <Link className="btn small ghost" to="/uniforms">Uniforms</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="wrap split">
+          <div>
+            <span className="eyebrow">Find us</span>
+            <h2>Visit Hill Springs Academy in Maua</h2>
+            <p>
+              We are based in Maua, Igembe South, Meru County. Families looking for private schools in Maua
+              and across Meru County are welcome to contact the office to arrange a visit, confirm places and
+              ask about fees, transport and reporting dates.
+            </p>
+            <ul className="checks">
+              <li>{SCHOOL.address || SCHOOL.town}</li>
+              {SCHOOL.poBox && <li>{SCHOOL.poBox}</li>}
+              {SCHOOL.phone && (
+                <li>
+                  Phone:{" "}
+                  <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone}`}>{SCHOOL.phone}</a>
+                </li>
+              )}
+            </ul>
+            <a
+              className="textlink"
+              href="https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open on Google Maps ↗
+            </a>
+          </div>
+          <div className="map-card">
+            <iframe
+              title="Hill Springs Academy on Google Maps, Maua, Meru County"
+              src="https://www.google.com/maps?q=Hill+Springs+Academy,+Maua,+Kenya&output=embed"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              style={{ width: "100%", height: "320px", border: 0 }}
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="cta">
+        <div className="wrap">
+          <h2>Ready to join Hill Springs Academy?</h2>
+          <p>Create a parent account, apply online, or contact admissions for places and fee details.</p>
+          <div className="btns" style={{ justifyContent: "center" }}>
+            <Link className="btn white" to="/signup">Sign up</Link>
+            <Link className="btn ghost" style={{ borderColor: "#fff", color: "#fff" }} to="/apply">
+              Apply online
+            </Link>
+            <Link className="btn ghost" style={{ borderColor: "#fff", color: "#fff" }} to="/enquire">
+              Make an enquiry
+            </Link>
           </div>
         </div>
       </section>
