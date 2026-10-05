@@ -95,7 +95,7 @@ export function PageHead({ title, text, description, path, image }) {
     });
   }, [fullTitle, metaDescription, canonical, image, title]);
   return (
-    <header className="page-head">
+    <header className="pagehead">
       <div className="wrap">
         <h1>{title}</h1>
         {text && <p>{text}</p>}
@@ -113,38 +113,84 @@ const NAV = [
   ["/contact", "Contact", "mail"],
 ];
 
-export function Navbar() {
+/** Site header used by App.jsx — accepts theme/toggle/scrolled from useTheme + useScroll */
+export function Header({ theme = "light", toggle, scrolled = false }) {
   const [open, setOpen] = useState(false);
-  const [dark, setDark] = useState(() => document.documentElement.dataset.theme === "dark");
   useEffect(() => {
-    document.documentElement.dataset.theme = dark ? "dark" : "light";
-    try { localStorage.setItem("hsa-theme", dark ? "dark" : "light"); } catch {}
-  }, [dark]);
+    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
   return (
-    <nav className="nav" aria-label="Main">
-      <div className="wrap nav-inner">
+    <header className={"site-header" + (scrolled ? " scrolled" : "")}>
+      <div className="wrap bar">
         <Link to="/" className="brand" onClick={() => setOpen(false)}>
           <Logo size={48} />
-          <span>
+          <span className="brand-text">
             <strong>{SCHOOL.name}</strong>
             <small>Maua · Meru County</small>
           </span>
         </Link>
-        <button type="button" className="nav-toggle" aria-expanded={open} aria-controls="main-menu" onClick={() => setOpen((v) => !v)}>
-          <span /><span /><span />
-        </button>
-        <div id="main-menu" className={"nav-links" + (open ? " open" : "")}>
-          {NAV.map(([to, label, icon]) => (
-            <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}>
-              <Icon n={icon} size={18} /> {label}
-            </NavLink>
+        <nav className="top-nav" aria-label="Main">
+          {NAV.map(([to, label]) => (
+            <NavLink key={to} to={to} end={to === "/"}>{label}</NavLink>
           ))}
-          <Link className="btn small" to="/apply" onClick={() => setOpen(false)}>Apply</Link>
-          <button type="button" className="theme-btn" onClick={() => setDark((d) => !d)} aria-label={dark ? "Light mode" : "Dark mode"}>
-            <Icon n={dark ? "sun" : "moon"} size={18} />
+        </nav>
+        <div className="actions">
+          <Link className="btn small header-btn" to="/apply">Apply</Link>
+          <Link className="btn small ghost header-btn" to="/enquire">Enquire</Link>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={toggle}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <Icon n={theme === "dark" ? "sun" : "moon"} size={18} />
+          </button>
+          <button
+            type="button"
+            className="menu-toggle"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? "×" : "☰"}
           </button>
         </div>
       </div>
+      {open && (
+        <nav id="mobile-menu" className="mobile-menu" aria-label="Mobile">
+          {NAV.map(([to, label]) => (
+            <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}>{label}</NavLink>
+          ))}
+          <Link to="/apply" onClick={() => setOpen(false)}>Apply online</Link>
+          <Link to="/enquire" onClick={() => setOpen(false)}>Make an enquiry</Link>
+          <Link to="/fees" onClick={() => setOpen(false)}>Fees</Link>
+          <Link to="/reading-materials" onClick={() => setOpen(false)}>Reading materials</Link>
+        </nav>
+      )}
+    </header>
+  );
+}
+
+/** Keep Navbar as an alias so any older imports still work */
+export const Navbar = Header;
+
+/** Mobile bottom navigation — 6 primary destinations */
+export function BottomNav() {
+  return (
+    <nav className="bottom-nav" aria-label="Mobile primary">
+      {NAV.map(([to, label, icon]) => (
+        <NavLink key={to} to={to} end={to === "/"}>
+          <Icon n={icon} size={19} />
+          <span>{label}</span>
+        </NavLink>
+      ))}
     </nav>
   );
 }
@@ -152,14 +198,14 @@ export function Navbar() {
 export function Footer() {
   const social = Object.entries(SCHOOL.social || {}).filter(([, v]) => v);
   return (
-    <footer className="footer" itemScope itemType="https://schema.org/EducationalOrganization">
+    <footer className="site-footer" itemScope itemType="https://schema.org/EducationalOrganization">
       <div className="wrap foot-grid">
         <div className="foot-col brand-col">
           <div className="foot-brand">
             <Logo size={64} />
             <div>
-              <strong itemProp="name">{SCHOOL.name}</strong>
-              <span itemProp="slogan">{SCHOOL.motto}</span>
+              <strong className="foot-name" itemProp="name">{SCHOOL.name}</strong>
+              <span className="foot-tag" itemProp="slogan">{SCHOOL.motto}</span>
             </div>
           </div>
           <p className="foot-blurb">Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education.</p>
