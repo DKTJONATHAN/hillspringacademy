@@ -71,7 +71,7 @@ export function AdminAdminsTab({ token }) {
         <div>
           <h3>Administrators</h3>
           <p className="lede">
-            The owner administrator can add and manage administrators. Admins and editors can manage school operations according to their access. They sign in at /admin.
+            Owner administrators can add and manage administrators. Admins and editors can manage school operations according to their access. They sign in at /admin.
           </p>
         </div>
       </div>
@@ -106,7 +106,7 @@ export function AdminAdminsTab({ token }) {
           </select>
         </label>
         <p style={{ fontSize: "0.9rem", opacity: 0.85 }}>
-          Passwords must be at least 8 characters. The owner administrator controls who can add, deactivate or change other administrators.
+          Passwords must be at least 8 characters. Owner administrators control who can add, deactivate or change other administrators.
         </p>
         {status && <p className="form-success" role="status">{status}</p>}
         <button className="btn" type="submit" disabled={busy}>
@@ -126,7 +126,7 @@ export function AdminAdminsTab({ token }) {
                 <span>{a.email || a.user_id}</span>
                 <br />
                 <small>
-                  {a.active ? "Active" : "Inactive"} · {a.role}
+                  {a.active ? "Active" : "Inactive"} · {a.role === "owner" ? "Owner" : a.role === "editor" ? "Editor" : "Admin"}
                 </small>
               </div>
               {a.role !== "owner" && a.active && (
