@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { PageHead } from "./components.jsx";
-import { adminCall, adminSignIn, appsApi } from "./supabase.js";
+import { adminCall, adminDeleteCall, adminSignIn, appsApi } from "./supabase.js";
 import { AdminAdminsTab } from "./AdminAdminsTab.jsx";
 import { getAdminToken, setAdminToken, clearAdminToken } from "./session.js";
 
@@ -30,6 +30,8 @@ export function AdminEmailCentre() {
   const [appStatus, setAppStatus] = useState("");
   const [notes, setNotes] = useState({});
   const [deciding, setDeciding] = useState("");
+  const [deletingApp, setDeletingApp] = useState("");
+  const [deletingEnquiry, setDeletingEnquiry] = useState("");
   const [resetCooldown, setResetCooldown] = useState(0);
   const [conversations, setConversations] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -208,6 +210,25 @@ export function AdminEmailCentre() {
     }
   };
 
+  const deleteEnquiry = async () => {
+    if (!selected) return;
+    const label = selected.subject || selected.requester_name || selected.name || "this enquiry";
+    if (!window.confirm(`PERMANENT DELETE\\n\\nYou are about to permanently delete "${label}".\\n\\nThe enquiry and its message history will be permanently removed. This cannot be undone.\\n\\nContinue?`)) return;
+    setDeletingEnquiry(selected.id);
+    setStatus("");
+    try {
+      await adminDeleteCall(token, { action: "delete_enquiry", id: selected.id });
+      setSelected(null);
+      setMessages([]);
+      await loadConversations();
+      setStatus("Enquiry permanently deleted.");
+    } catch (err) {
+      setStatus(err.message || "Unable to permanently delete enquiry.");
+    } finally {
+      setDeletingEnquiry("");
+    }
+  };
+
   const decide = async (id, decision) => {
     setDeciding(id + decision);
     setAppStatus("");
@@ -219,6 +240,22 @@ export function AdminEmailCentre() {
       setAppStatus(err.message || "Decision failed.");
     } finally {
       setDeciding("");
+    }
+  };
+
+  const deleteApplication = async (application) => {
+    const label = application.learner_name || application.parent_name || "this application";
+    if (!window.confirm(`PERMANENT DELETE\\n\\nYou are about to permanently delete the admission application for "${label}".\\n\\nThis removes the application from the admissions records. This cannot be undone.\\n\\nContinue?`)) return;
+    setDeletingApp(application.id);
+    setAppStatus("");
+    try {
+      await appsApi({ action: "delete_application", id: application.id }, token);
+      await loadApps();
+      setAppStatus("Admission application permanently deleted.");
+    } catch (err) {
+      setAppStatus(err.message || "Unable to permanently delete application.");
+    } finally {
+      setDeletingApp("");
     }
   };
 
@@ -390,7 +427,8 @@ export function AdminEmailCentre() {
                     <article className="admin-panel-card" key={a.id}>
                       <div className="admin-card-topline"><span className={"status-badge " + a.status}>{a.status}</span><small>{a.created_at ? new Date(a.created_at).toLocaleDateString() : ""}</small></div>
                       <h3>{a.learner_name}</h3><p className="muted">{a.requested_level} · {a.parent_name}</p><p>{a.parent_email}</p>
-                      {a.status === "pending" && <><label>Decision note<textarea value={notes[a.id] || ""} onChange={(e) => setNotes({ ...notes, [a.id]: e.target.value })} /></label><div className="btns"><button className="btn small" disabled={!!deciding} onClick={() => decide(a.id, "accepted")}>Accept</button><button className="btn small ghost dark" disabled={!!deciding} onClick={() => decide(a.id, "rejected")}>Reject</button></div></>}
+                      {a.status === "pending" && <><label>Decision note<textarea value={notes[a.id] || ""} onChange={(e) => setNotes({ ...notes, [a.id]: e.target.value })} /></label><div className="btns"><button className="btn small" disabled={!!deciding || !!deletingApp} onClick={() => decide(a.id, "accepted")}>Accept</button><button className="btn small ghost dark" disabled={!!deciding || !!deletingApp} onClick={() => decide(a.id, "rejected")}>Reject</button></div></>}
+                      <div className="admin-record-actions"><span>{a.status === "pending" ? "Pending decision" : "Decision recorded"}</span><button type="button" className="btn small danger-btn" disabled={deletingApp === a.id} onClick={() => deleteApplication(a)}>{deletingApp === a.id ? "Deleting…" : "Delete permanently"}</button></div>
                     </article>
                   ))}
                   {!apps.length && <div className="admin-empty">No applications in this filter.</div>}
@@ -414,7 +452,7 @@ export function AdminEmailCentre() {
                       <h3>{selected.subject}</h3>
                       <div className="message-thread">{messages.map((m, i) => <div className={"message-bubble " + (m.sender_type === "admin" ? "outgoing" : "incoming")} key={i}><small>{m.sender_type}</small><p>{m.body}</p></div>)}</div>
                       <label>Reply<textarea value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Write your reply…" /></label>
-                      <div className="btns"><button className="btn small" onClick={sendReply}>Send through Resend</button><button className="btn small ghost dark" onClick={closeConversation}>Close enquiry</button></div>
+                      <div className="btns"><button className="btn small" onClick={sendReply}>Send through Resend</button><button className="btn small ghost dark" onClick={closeConversation} disabled={!!deletingEnquiry}>Close enquiry</button><button className="btn small danger-btn" onClick={deleteEnquiry} disabled={deletingEnquiry === selected.id}>{deletingEnquiry === selected.id ? "Deleting…" : "Delete permanently"}</button></div>
                       {status && <p className="form-success">{status}</p>}
                     </>}
                   </div>
