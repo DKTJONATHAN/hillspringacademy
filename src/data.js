@@ -214,28 +214,30 @@ export const GALLERY = GALLERY_AUTO.map((item) => {
   return { src: item.src, alt: o.alt || item.alt, cat: o.cat || item.cat };
 });
 
-function pickHero() {
-  const byFile = Object.fromEntries(GALLERY_AUTO.map((g) => [g.file, g]));
-  const preferred = ["school-gate.webp", "school-bus.webp"];
-  const slides = [];
-  for (const f of preferred) {
-    if (byFile[f]) slides.push(byFile[f]);
-  }
-  for (const g of GALLERY_AUTO) {
-    if (slides.length >= 3) break;
-    if (!preferred.includes(g.file)) slides.push(g);
-  }
-  const defaults = [
-    { title: "Hill Springs Academy, Maua", text: "A private CBE school in Meru County." },
-    { title: "Getting to school", text: "Transport for learners — confirm routes with admissions." },
-    { title: "A place to grow", text: "Kindergarten, Pre-Primary and Junior School." },
-  ];
-  return slides.slice(0, 3).map((g, i) => ({
-    src: g.src,
-    alt: (GALLERY_OVERRIDES[g.file] && GALLERY_OVERRIDES[g.file].alt) || g.alt,
-    title: defaults[i]?.title || "Hill Springs Academy",
-    text: defaults[i]?.text || "Maua, Meru County",
-  }));
-}
-
-export const HERO = pickHero();
+/** Hero carousel — 4 slides, auto-swipe in the home Carousel component */
+export const HERO = [
+  {
+    src: "/logo.png",
+    alt: "Hill Springs Academy logo",
+    title: "Hill Springs Academy",
+    text: "A private CBE school in Maua, Meru County.",
+  },
+  {
+    src: "/primary-school-jumper.jfif",
+    alt: "Primary School official jumper",
+    title: "Primary School jumper",
+    text: "Official Primary School uniform jumper for cooler days.",
+  },
+  {
+    src: "/senior-primary-girl-with-jumper.jfif",
+    alt: "Junior Secondary School (JSS) uniform with jumper",
+    title: "JSS uniform jumper",
+    text: "Official Junior Secondary School jumper combination.",
+  },
+  {
+    src: "/Gallery/school-bus.webp",
+    alt: "Hill Springs Academy school bus in Maua",
+    title: "School transport",
+    text: "Transport for learners — confirm routes with admissions.",
+  },
+];
