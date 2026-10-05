@@ -45,6 +45,9 @@ export async function adminSignIn(email, password) {
 export const adminCall = (token, body) =>
   callFunction("school-email-center", body, token);
 
+export const adminDeleteCall = (token, body) =>
+  callFunction("school-delete", body, token);
+
 // Admin password reset now uses the same school-account verification system
 // as parent accounts. This matches the production school_admins user_id schema.
 export const requestAdminPasswordReset = (email) =>
