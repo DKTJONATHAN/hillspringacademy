@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { EnquiryForm } from "./EnquiryForm.jsx";
 import { PageHead } from "./components.jsx";
 import { SCHOOL } from "./data.js";
 import { accountApi, appsApi, passwordSignIn, subscribeToSchoolUpdates } from "./supabase.js";
@@ -94,7 +95,6 @@ function AuthCard({ kind, onSignedIn }) {
 
   const register = run(async () => {
     try {
-      // Password is chosen here but only applied on the server at verify_signup
       await accountApi({ action: "register", email, fullName, phone });
       setCooldown(60);
       go("verify", { type: "success", text: `We sent a 6-digit code to ${email}. Enter it (and keep your password) to finish setup.` });
@@ -149,12 +149,10 @@ function AuthCard({ kind, onSignedIn }) {
     <form className="card enquiry-form auth-card" onSubmit={onSubmit} noValidate={false}>
       <span className="eyebrow">{COPY[kind]?.eyebrow || "Account"}</span>
       <h2>{titles[view]}</h2>
-
       {view === "login" && <p>Sign in to continue. New here? <button type="button" className="linklike" onClick={() => go("register")}>Create an account</button></p>}
       {view === "register" && <p>Already registered? <button type="button" className="linklike" onClick={() => go("login")}>Sign in</button></p>}
       {view === "forgot" && <p>Enter the email you registered with and we will send you a 6-digit code.</p>}
       {view === "verify" && <p>Enter the code from your email. Use the same password you chose when registering.</p>}
-
       {["login", "register", "forgot", "verify", "reset"].includes(view) && (
         <label>Email<input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" readOnly={view === "verify" || view === "reset"} /></label>
       )}
@@ -163,23 +161,15 @@ function AuthCard({ kind, onSignedIn }) {
         <label>Phone<input value={phone} onChange={e => setPhone(e.target.value)} autoComplete="tel" /></label>
       </>}
       {(view === "login" || view === "register" || view === "verify") && (
-        <PasswordInput
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          autoComplete={view === "login" ? "current-password" : "new-password"}
-          minLength={view === "login" ? undefined : 8}
-        />
+        <PasswordInput value={password} onChange={e => setPassword(e.target.value)} autoComplete={view === "login" ? "current-password" : "new-password"} minLength={view === "login" ? undefined : 8} />
       )}
       {(view === "register" || view === "verify") && <p className="field-hint">{PW_HINT}</p>}
       {(view === "verify" || view === "reset") && <CodeInput value={code} onChange={setCode} />}
       {view === "reset" && <><PasswordInput label="New password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" minLength={8} /><p className="field-hint">{PW_HINT}</p></>}
-
       {msg.text && <p className={msg.type === "error" ? "form-error" : "form-success"} role={msg.type === "error" ? "alert" : "status"}>{msg.text}</p>}
-
       <button className="btn" type="submit" disabled={busy}>
         {busy ? "Please wait…" : { login: "Sign in", register: "Create account", verify: "Verify email", forgot: "Send code", reset: "Update password" }[view]}
       </button>
-
       {view === "login" && <button type="button" className="btn small ghost dark" onClick={() => go("forgot")}>Forgot password?</button>}
       {(view === "verify" || view === "reset") && (
         <button type="button" className="btn small ghost dark" disabled={cooldown > 0} onClick={view === "verify" ? resend : forgot}>
@@ -245,32 +235,6 @@ function AdmissionForm({ profile, onDone }) {
   );
 }
 
-function EnquiryForm({ profile, onDone }) {
-  const [f, setF] = useState({ subject: "", topic: "admissions", message: "" });
-  const [state, setState] = useState({ busy: false, error: "", done: false });
-  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
-  const submit = async (e) => {
-    e.preventDefault(); setState({ busy: true, error: "", done: false });
-    try {
-      await appsApi({ action: "submit_enquiry", ...f }, await getToken());
-      setF({ subject: "", topic: "admissions", message: "" }); setState({ busy: false, error: "", done: true }); onDone();
-    } catch (err) { setState({ busy: false, error: err.message, done: false }); }
-  };
-  return (
-    <form className="card enquiry-form" onSubmit={submit}>
-      <span className="eyebrow">Send an enquiry</span><h2>How can we help{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}?</h2>
-      <div className="form-grid">
-        <label>Topic<select value={f.topic} onChange={set("topic")}><option value="admissions">Admissions</option><option value="contact">General</option></select></label>
-        <label>Subject<input value={f.subject} onChange={set("subject")} placeholder="What is this about?" /></label>
-      </div>
-      <label>Message<textarea value={f.message} onChange={set("message")} required /></label>
-      {state.error && <p className="form-error" role="alert">{state.error}</p>}
-      {state.done && <p className="form-success" role="status">Thank you. We have your enquiry and will reply by email.</p>}
-      <button className="btn" type="submit" disabled={state.busy}>{state.busy ? "Sending…" : "Send enquiry"}</button>
-    </form>
-  );
-}
-
 function PortalBrand({ kind }) {
   const c = COPY[kind] || COPY.signup;
   return (
@@ -310,10 +274,16 @@ export function AccountPortal({ kind }) {
   };
   useEffect(() => { if (session) load(); }, [session?.email]);
   const c = COPY[kind] || COPY.signup;
+  const [params] = useSearchParams();
+  const subjectHint = kind === "enquiry" ? (params.get("subject") || "").trim() : "";
+  const pageTitle = subjectHint ? `Enquire: ${subjectHint}` : c.title;
+  const pageText = subjectHint
+    ? `Send an enquiry about ${subjectHint}. Sign in so we can reply by email.`
+    : c.text;
 
   return (
     <>
-      <PageHead title={c.title} text={c.text} />
+      <PageHead title={pageTitle} text={pageText} path={kind === "enquiry" ? "/enquire" : undefined} />
       <section className={"section portal-section portal-" + kind}><div className="wrap portal">
         <PortalBrand kind={kind} />
         {!session ? (
