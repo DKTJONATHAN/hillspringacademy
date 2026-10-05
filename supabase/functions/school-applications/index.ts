@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { db, json, cors, validEmail, clean, norm, userFromRequest, requireAdmin, findUserByEmail, isAdminUserId, passwordProblem } from "../_shared/util.ts";
+import { db, json, cors, validEmail, clean, norm, userFromRequest, requireAdmin, requireAdminManager, findUserByEmail, isAdminUserId, passwordProblem, clientIp } from "../_shared/util.ts";
 import { sendEmail, acceptanceEmail, rejectionEmail, applicationReceivedEmail, enquiryReceivedEmail, esc,
   FROM_ADMISSIONS, ADMISSIONS_EMAIL, SCHOOL_EMAIL, layout } from "../_shared/email.ts";
 
@@ -75,7 +75,7 @@ Deno.serve(async req => {
     }
 
     // ========================= Admin actions ============================
-    if (["whoami", "list_applications", "decide_application", "list_admins", "create_admin", "set_admin_active"].includes(p.action)) {
+    if (["whoami", "list_applications", "decide_application", "list_admins", "create_admin", "set_admin_active", "set_admin_role"].includes(p.action)) {
       const admin = await requireAdmin(req);
       if (!admin) return json({ error: "Administrator access only.", code: "NOT_ADMIN" }, 403);
 
@@ -110,34 +110,32 @@ Deno.serve(async req => {
         return json({ ok: true, status: decision, emailSent: Boolean(emailId), emailError });
       }
 
-      if (p.action === "list_admins") {
-        const { data: rows, error } = await db.from("school_admins")
-          .select("user_id,name,role,active,created_at")
-          .order("created_at", { ascending: true });
-        if (error) throw error;
-        const admins = [];
-        for (const row of rows || []) {
-          let email = "";
-          try {
-            const { data: u } = await db.auth.admin.getUserById(row.user_id);
-            email = u?.user?.email || "";
-          } catch { /* ignore */ }
-          admins.push({
-            user_id: row.user_id,
-            name: row.name || "",
-            email,
-            role: row.role,
-            active: row.active,
-            created_at: row.created_at,
-          });
-        }
-        return json({ ok: true, admins });
-      }
+      if (["list_admins", "create_admin", "set_admin_active", "set_admin_role"].includes(p.action)) {
+        const manager = await requireAdminManager(req);
+        if (!manager) return json({ error: "Only the owner administrator can manage administrators.", code: "OWNER_REQUIRED" }, 403);
 
-      if (p.action === "create_admin") {
+        if (p.action === "list_admins") {
+          const { data: rows, error } = await db.from("school_admins")
+            .select("user_id,name,role,active,created_at")
+            .order("created_at", { ascending: true });
+          if (error) throw error;
+          const admins = [];
+          for (const row of rows || []) {
+            let email = "";
+            try {
+              const { data: u } = await db.auth.admin.getUserById(row.user_id);
+              email = u?.user?.email || "";
+            } catch { /* ignore */ }
+            admins.push({ user_id: row.user_id, name: row.name || "", email, role: row.role, active: row.active, created_at: row.created_at });
+          }
+          return json({ ok: true, admins });
+        }
+
+        if (p.action === "create_admin") {
         const name = clean(p.name, 120);
         const email = norm(p.email);
         const password = String(p.password ?? "");
+        const role = p.role === "editor" ? "editor" : "admin";
         if (!name) return json({ error: "Please enter the admin's name." }, 400);
         if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400);
         const badPw = passwordProblem(password);
@@ -152,7 +150,7 @@ Deno.serve(async req => {
               return json({ error: "This email is already an active administrator." }, 409);
             }
             await db.auth.admin.updateUserById(existing.id, { password, email_confirm: true });
-            const up = await db.from("school_admins").update({ name, role: "admin", active: true }).eq("user_id", existing.id);
+            const up = await db.from("school_admins").update({ name, role, active: true }).eq("user_id", existing.id);
             if (up.error) throw up.error;
             await db.from("school_profiles").upsert({ user_id: existing.id, full_name: name });
             return json({ ok: true, reactivated: true, email });
@@ -173,11 +171,12 @@ Deno.serve(async req => {
         const ins = await db.from("school_admins").upsert({
           user_id: userId,
           name,
-          role: "admin",
+          role,
           active: true,
         });
         if (ins.error) throw ins.error;
         await db.from("school_profiles").upsert({ user_id: userId, full_name: name });
+        await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_created", target: email, details: { name, role }, ip: clientIp(req) });
 
         try {
           const html = layout({
@@ -192,17 +191,40 @@ Deno.serve(async req => {
           await sendEmail({ to: email, subject: "Admin access — Hill Springs Academy", html, replyTo: SCHOOL_EMAIL });
         } catch (e) { console.error(e); }
 
-        return json({ ok: true, created: true, email });
-      }
+        return json({ ok: true, created: true, email, role });
+        }
 
-      if (p.action === "set_admin_active") {
-        const userId = clean(p.user_id, 80);
-        if (!userId) return json({ error: "Missing admin id." }, 400);
-        if (userId === admin.id) return json({ error: "You cannot deactivate your own account." }, 400);
-        const active = p.active === true || p.active === "true";
-        const up = await db.from("school_admins").update({ active }).eq("user_id", userId);
-        if (up.error) throw up.error;
-        return json({ ok: true, user_id: userId, active });
+        if (p.action === "set_admin_active") {
+          const userId = clean(p.user_id, 80);
+          if (!userId) return json({ error: "Missing admin id." }, 400);
+          if (userId === manager.user.id) return json({ error: "You cannot deactivate your own account." }, 400);
+          const active = p.active === true || p.active === "true";
+          const { data: target } = await db.from("school_admins").select("role,active").eq("user_id", userId).maybeSingle();
+          if (!target) return json({ error: "Administrator not found." }, 404);
+          if (target.role === "owner") return json({ error: "An owner cannot be deactivated. Change their role first." }, 400);
+          const up = await db.from("school_admins").update({ active }).eq("user_id", userId);
+          if (up.error) throw up.error;
+          if (!active) await db.auth.admin.signOut(userId, "global").catch(() => {});
+          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: active ? "admin_reactivated" : "admin_deactivated", target: userId, details: { active }, ip: clientIp(req) });
+          return json({ ok: true, user_id: userId, active });
+        }
+
+        if (p.action === "set_admin_role") {
+          const userId = clean(p.user_id, 80);
+          const role = p.role === "editor" ? "editor" : p.role === "admin" ? "admin" : "";
+          if (!userId || !role) return json({ error: "A valid admin id and role are required." }, 400);
+          if (userId === manager.user.id) return json({ error: "You cannot change your own role." }, 400);
+          const { data: target } = await db.from("school_admins").select("role,active").eq("user_id", userId).maybeSingle();
+          if (!target) return json({ error: "Administrator not found." }, 404);
+          if (target.role === "owner" && role !== "owner") {
+            const { count } = await db.from("school_admins").select("user_id", { count: "exact", head: true }).eq("role", "owner").eq("active", true);
+            if ((count ?? 0) <= 1) return json({ error: "There must always be at least one active owner." }, 400);
+          }
+          const up = await db.from("school_admins").update({ role }).eq("user_id", userId);
+          if (up.error) throw up.error;
+          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_role_changed", target: userId, details: { from: target.role, to: role }, ip: clientIp(req) });
+          return json({ ok: true, user_id: userId, role });
+        }
       }
     }
 
