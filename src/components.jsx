@@ -21,7 +21,7 @@ export const Icon = ({ n, size = 22 }) => (
 export function Logo({ size = 56 }) {
   const [failed, setFailed] = useState(false);
   if (failed) return <span className="logo-ph" style={{ width: size, height: size }} aria-hidden="true">HSA</span>;
-  return <img src="/logo.jpg" alt="Hill Springs Academy, Maua" width={size} height={size} onError={() => setFailed(true)} style={{ objectFit: "contain" }} />;
+  return <img src="/logo.png" alt="Hill Springs Academy, Maua" width={size} height={size} onError={() => setFailed(true)} style={{ objectFit: "contain" }} />;
 }
 
 export function Photo({ src, alt, ratio = "4/3" }) {
@@ -59,7 +59,7 @@ export function PageHead({ title, text, description, path, image }) {
     setMeta("og:type", "website");
     setMeta("og:url", canonical);
     setMeta("og:site_name", SCHOOL.name);
-    setMeta("og:image", image || `${SCHOOL.siteUrl}/logo.jpg`);
+    setMeta("og:image", image || `${SCHOOL.siteUrl}/logo.png`);
     setMeta("og:image:alt", `${title} | Hill Springs Academy, Maua, Meru County`);
     setMeta("og:locale", "en_KE");
     setMeta("og:image:width", "1200");
@@ -68,7 +68,7 @@ export function PageHead({ title, text, description, path, image }) {
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", fullTitle);
     setMeta("twitter:description", metaDescription);
-    setMeta("twitter:image", image || `${SCHOOL.siteUrl}/logo.jpg`);
+    setMeta("twitter:image", image || `${SCHOOL.siteUrl}/logo.png`);
     setMeta("twitter:image:alt", `${title} | Hill Springs Academy, Maua`);
     let ld = document.getElementById("school-jsonld");
     if (!ld) { ld = document.createElement("script"); ld.id = "school-jsonld"; ld.type = "application/ld+json"; document.head.appendChild(ld); }
@@ -82,7 +82,7 @@ export function PageHead({ title, text, description, path, image }) {
       slogan: SCHOOL.motto,
       email: SCHOOL.infoEmail,
       telephone: SCHOOL.phoneTel || SCHOOL.phone || undefined,
-      logo: `${SCHOOL.siteUrl}/logo.jpg`,
+      logo: `${SCHOOL.siteUrl}/logo.png`,
       address: {
         "@type": "PostalAddress",
         streetAddress: SCHOOL.poBox || undefined,
