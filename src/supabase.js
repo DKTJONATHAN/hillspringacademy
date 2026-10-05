@@ -2,13 +2,15 @@ const SUPABASE_URL = "https://clpmfblwrpnqwbxgbtkd.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable__Va_EquGjJC_2AYwYB1fJQ_4OLIQdcR";
 
 async function callFunction(name, body, token = "") {
-  const response = await fetch(`${SUPABASE_URL}/functions/v1/${name}`, {
+  const endpoint = `${SUPABASE_URL}/functions/v1/${name}`;
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       apikey: SUPABASE_PUBLISHABLE_KEY,
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
+    cache: "no-store",
     body: JSON.stringify(body),
   });
   const data = await response.json().catch(() => ({}));
@@ -46,7 +48,11 @@ export const adminCall = (token, body) =>
   callFunction("school-email-center", body, token);
 
 export const adminDeleteCall = (token, body = {}) =>
-  callFunction("school-delete", { ...body, action: "delete_enquiry" }, token);
+  callFunction(
+    "school-delete",
+    { id: body.id, conversation_id: body.conversation_id || body.conversationId, action: "delete_enquiry" },
+    token
+  );
 
 export const requestAdminPasswordReset = (email) =>
   callFunction("school-account", { action: "request_reset", email, portal: "admin" });
