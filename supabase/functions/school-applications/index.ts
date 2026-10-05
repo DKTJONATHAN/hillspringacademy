@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { db, json, cors, validEmail, clean, norm, userFromRequest, requireAdmin } from "../_shared/util.ts";
+import { db, json, cors, validEmail, clean, norm, userFromRequest, requireAdmin, findUserByEmail, isAdminUserId, passwordProblem } from "../_shared/util.ts";
 import { sendEmail, acceptanceEmail, rejectionEmail, applicationReceivedEmail, enquiryReceivedEmail, esc,
   FROM_ADMISSIONS, ADMISSIONS_EMAIL, SCHOOL_EMAIL, layout } from "../_shared/email.ts";
 
@@ -38,11 +38,11 @@ Deno.serve(async req => {
         }).select("id").single();
         if (ins.error) throw ins.error;
         const out: any = { ok: true, id: ins.data.id };
-        try { // confirmation to parent
+        try {
           const m = applicationReceivedEmail({ parent, learner, level });
           await sendEmail({ to: email, subject: m.subject, html: m.html, from: FROM_ADMISSIONS, replyTo: ADMISSIONS_EMAIL });
         } catch (e) { out.parentEmailError = String(e); console.error(e); }
-        try { // alert to school
+        try {
           const html = layout({ eyebrow: "New application", title: "A new admission application", body:
             `<p><strong>${esc(learner)}</strong> for <strong>${esc(level)}</strong><br>Parent: ${esc(parent)} (${esc(email)})</p><p>Open the admin dashboard to review and decide.</p>` });
           await sendEmail({ to: ADMISSIONS_EMAIL, subject: `New application: ${learner} (${level})`, html, replyTo: email });
@@ -67,7 +67,7 @@ Deno.serve(async req => {
           await sendEmail({ to: email, subject: m.subject, html: m.html, replyTo: SCHOOL_EMAIL });
         } catch (e) { console.error(e); }
         try {
-          const html = layout({ eyebrow: "New enquiry", title: esc(subject), body: `<p><strong>${esc(name)}</strong> &lt;${esc(email)}&gt;</p><div style="white-space:pre-wrap;background:#f7f7f8;padding:14px;border-radius:8px">${esc(message)}</div>` });
+          const html = layout({ eyebrow: "New enquiry", title: esc(subject), body: `<p><strong>${esc(name)}</strong> <${esc(email)}></p><div style="white-space:pre-wrap;background:#f7f7f8;padding:14px;border-radius:8px">${esc(message)}</div>` });
           await sendEmail({ to: kind === "admissions" ? ADMISSIONS_EMAIL : SCHOOL_EMAIL, subject: `New enquiry: ${subject}`, html, replyTo: email });
         } catch (e) { console.error(e); }
         return json(out);
@@ -75,7 +75,7 @@ Deno.serve(async req => {
     }
 
     // ========================= Admin actions ============================
-    if (["whoami", "list_applications", "decide_application"].includes(p.action)) {
+    if (["whoami", "list_applications", "decide_application", "list_admins", "create_admin", "set_admin_active"].includes(p.action)) {
       const admin = await requireAdmin(req);
       if (!admin) return json({ error: "Administrator access only.", code: "NOT_ADMIN" }, 403);
 
@@ -93,7 +93,6 @@ Deno.serve(async req => {
         const decision = p.decision === "accepted" ? "accepted" : p.decision === "rejected" ? "rejected" : "";
         if (!decision) return json({ error: "Decision must be accepted or rejected." }, 400);
         const note = clean(p.note, 1000);
-        // Only decide once: guards against double clicks sending two emails.
         const upd = await db.from("school_applications")
           .update({ status: decision, decision_note: note || null, decided_by: norm(admin.email), decided_at: new Date().toISOString() })
           .eq("id", p.id).eq("status", "pending").select("*").maybeSingle();
@@ -109,6 +108,101 @@ Deno.serve(async req => {
         } catch (e) { emailError = e instanceof Error ? e.message : String(e); console.error(e); }
         await db.from("school_applications").update({ decision_email_id: emailId, decision_email_error: emailError }).eq("id", a.id);
         return json({ ok: true, status: decision, emailSent: Boolean(emailId), emailError });
+      }
+
+      if (p.action === "list_admins") {
+        const { data: rows, error } = await db.from("school_admins")
+          .select("user_id,name,role,active,created_at")
+          .order("created_at", { ascending: true });
+        if (error) throw error;
+        const admins = [];
+        for (const row of rows || []) {
+          let email = "";
+          try {
+            const { data: u } = await db.auth.admin.getUserById(row.user_id);
+            email = u?.user?.email || "";
+          } catch { /* ignore */ }
+          admins.push({
+            user_id: row.user_id,
+            name: row.name || "",
+            email,
+            role: row.role,
+            active: row.active,
+            created_at: row.created_at,
+          });
+        }
+        return json({ ok: true, admins });
+      }
+
+      if (p.action === "create_admin") {
+        const name = clean(p.name, 120);
+        const email = norm(p.email);
+        const password = String(p.password ?? "");
+        if (!name) return json({ error: "Please enter the admin's name." }, 400);
+        if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400);
+        const badPw = passwordProblem(password);
+        if (badPw) return json({ error: badPw }, 400);
+
+        let userId: string | null = null;
+        const existing = await findUserByEmail(email);
+        if (existing) {
+          if (await isAdminUserId(existing.id)) {
+            const { data: row } = await db.from("school_admins").select("active").eq("user_id", existing.id).maybeSingle();
+            if (row?.active) {
+              return json({ error: "This email is already an active administrator." }, 409);
+            }
+            await db.auth.admin.updateUserById(existing.id, { password, email_confirm: true });
+            const up = await db.from("school_admins").update({ name, role: "admin", active: true }).eq("user_id", existing.id);
+            if (up.error) throw up.error;
+            await db.from("school_profiles").upsert({ user_id: existing.id, full_name: name });
+            return json({ ok: true, reactivated: true, email });
+          }
+          userId = existing.id;
+          await db.auth.admin.updateUserById(userId, { password, email_confirm: true });
+        } else {
+          const created = await db.auth.admin.createUser({
+            email,
+            password,
+            email_confirm: true,
+            user_metadata: { full_name: name, role: "admin" },
+          });
+          if (created.error) throw created.error;
+          userId = created.data.user!.id;
+        }
+
+        const ins = await db.from("school_admins").upsert({
+          user_id: userId,
+          name,
+          role: "admin",
+          active: true,
+        });
+        if (ins.error) throw ins.error;
+        await db.from("school_profiles").upsert({ user_id: userId, full_name: name });
+
+        try {
+          const html = layout({
+            eyebrow: "Admin access",
+            title: "You have been added as an administrator",
+            body: `<p>Hello ${esc(name)},</p>
+              <p>You can sign in to the Hill Springs Academy admin panel to manage admissions, enquiries and newsletters.</p>
+              <p><strong>Sign-in page:</strong> <a href="https://hillspringsacademy.sc.ke/admin">hillspringsacademy.sc.ke/admin</a></p>
+              <p><strong>Email:</strong> ${esc(email)}<br>
+              Use the temporary password you were given, then change it with “Forgot password” if you prefer.</p>`,
+          });
+          await sendEmail({ to: email, subject: "Admin access — Hill Springs Academy", html, replyTo: SCHOOL_EMAIL });
+        } catch (e) { console.error(e); }
+
+        return json({ ok: true, created: true, email });
+      }
+
+      if (p.action === "set_admin_active") {
+        const userId = clean(p.user_id, 80);
+        if (!userId) return json({ error: "Missing admin id." }, 400);
+        if (userId === admin.id) return json({ error: "You cannot deactivate your own account." }, 400);
+        const active = p.active === true || p.active === "true";
+        const up = await db.from("school_admins").update({ active }).eq("user_id", userId);
+        if (up.error) throw up.error;
+        return json({ ok: true, user_id: userId, active });
       }
     }
 
