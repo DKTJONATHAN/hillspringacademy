@@ -153,7 +153,8 @@ Deno.serve(async req => {
             const up = await db.from("school_admins").update({ name, role, active: true }).eq("user_id", existing.id);
             if (up.error) throw up.error;
             await db.from("school_profiles").upsert({ user_id: existing.id, full_name: name });
-            return json({ ok: true, reactivated: true, email });
+            await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_reactivated", target: email, details: { name, role }, ip: clientIp(req) });
+            return json({ ok: true, reactivated: true, email, role });
           }
           userId = existing.id;
           await db.auth.admin.updateUserById(userId, { password, email_confirm: true });
