@@ -246,7 +246,7 @@ export function Home() {
             <span className="eyebrow">Primary School</span>
             <h3>Primary School Uniform</h3>
             <p className="uniform-intro">
-              These are the official Primary School uniform designs used by Hill Springs Academy. Primary School does not have a jumper; the approved sweater option is shown separately below.
+              These are the official Primary School uniform designs used by Hill Springs Academy, including the school shirt, sweater and primary school jumper options.
             </p>
             <div className="uniform-grid">
               <figure className="uniform-card reveal" style={{ "--d": "0ms" }}>
@@ -273,7 +273,16 @@ export function Home() {
                 </div>
                 <figcaption>
                   <strong>Primary School Boy — Sweater</strong>
-                  <span>The Primary School boy's sweater option for cooler days. Primary School does not use a jumper.</span>
+                  <span>The Primary School boy's sweater option for cooler days.</span>
+                </figcaption>
+              </figure>
+              <figure className="uniform-card reveal" style={{ "--d": "240ms" }}>
+                <div className="uniform-image">
+                  <img src="/primary%20school%20jumper.jfif" alt="Official Hill Springs Academy Primary School jumper" loading="lazy" width="900" height="1200" />
+                </div>
+                <figcaption>
+                  <strong>Primary School Jumper</strong>
+                  <span>The approved Primary School jumper for cooler days.</span>
                 </figcaption>
               </figure>
             </div>
@@ -318,7 +327,7 @@ export function Home() {
 
           <div className="uniform-note reveal">
             <span aria-hidden="true">✓</span>
-            <p><strong>Official uniform reference:</strong> Primary School has no jumper. Please use the photographs above to distinguish the standard shirt uniform from the approved sweater option. JSS uniform requirements are shown separately. For current supplier, sizing, pricing or term-specific requirements, contact the school.</p>
+            <p><strong>Official uniform reference:</strong> Primary School includes the shirt, sweater and primary school jumper options shown above. JSS uniform requirements are shown separately. For current supplier, sizing, pricing or term-specific requirements, contact the school.</p>
           </div>
         </div>
       </section>
