@@ -45,8 +45,8 @@ export async function adminSignIn(email, password) {
 export const adminCall = (token, body) =>
   callFunction("school-email-center", body, token);
 
-export const adminDeleteCall = (token, body) =>
-  callFunction("school-delete", { action: "delete_enquiry", ...body }, token);
+export const adminDeleteCall = (token, body = {}) =>
+  callFunction("school-delete", { ...body, action: "delete_enquiry" }, token);
 
 export const requestAdminPasswordReset = (email) =>
   callFunction("school-account", { action: "request_reset", email, portal: "admin" });
