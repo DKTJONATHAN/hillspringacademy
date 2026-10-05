@@ -153,7 +153,7 @@ Deno.serve(async req => {
             const up = await db.from("school_admins").update({ name, role, active: true }).eq("user_id", existing.id);
             if (up.error) throw up.error;
             await db.from("school_profiles").upsert({ user_id: existing.id, full_name: name });
-            await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_reactivated", target: email, details: { name, role }, ip: clientIp(req) });
+            await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_reactivated", target: email, ip: clientIp(req) });
             return json({ ok: true, reactivated: true, email, role });
           }
           userId = existing.id;
@@ -177,7 +177,7 @@ Deno.serve(async req => {
         });
         if (ins.error) throw ins.error;
         await db.from("school_profiles").upsert({ user_id: userId, full_name: name });
-        await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_created", target: email, details: { name, role }, ip: clientIp(req) });
+        await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_created", target: email, ip: clientIp(req) });
 
         try {
           const html = layout({
@@ -206,7 +206,7 @@ Deno.serve(async req => {
           const up = await db.from("school_admins").update({ active }).eq("user_id", userId);
           if (up.error) throw up.error;
           if (!active) await db.auth.admin.signOut(userId, "global").catch(() => {});
-          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: active ? "admin_reactivated" : "admin_deactivated", target: userId, details: { active }, ip: clientIp(req) });
+          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: active ? "admin_reactivated" : "admin_deactivated", target: userId, ip: clientIp(req) });
           return json({ ok: true, user_id: userId, active });
         }
 
@@ -223,7 +223,7 @@ Deno.serve(async req => {
           }
           const up = await db.from("school_admins").update({ role }).eq("user_id", userId);
           if (up.error) throw up.error;
-          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_role_changed", target: userId, details: { from: target.role, to: role }, ip: clientIp(req) });
+          await db.from("school_audit_log").insert({ actor_id: manager.user.id, action: "admin_role_changed", target: userId, ip: clientIp(req) });
           return json({ ok: true, user_id: userId, role });
         }
       }
