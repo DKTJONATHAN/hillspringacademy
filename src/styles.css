@@ -820,3 +820,11 @@ textarea { min-height: 140px; resize: vertical; }
   .admin-table td:last-child { text-align: right; }
   .danger-btn { white-space: normal; }
 }
+
+
+.admin-record-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(0,0,0,.08);font-size:.82rem;color:#6b7280}
+.admin-record-actions .danger-btn{margin-left:auto}
+@media (max-width:720px){
+  .admin-record-actions{align-items:flex-start;flex-direction:column}
+  .admin-record-actions .danger-btn{margin-left:0;width:100%}
+}
