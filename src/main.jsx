@@ -18,3 +18,11 @@ createRoot(rootEl).render(
 
 // Styles are already applied via the imports above; mark the document ready
 document.documentElement.classList.add("app-ready");
+
+
+// Register the service worker so the site behaves as a real installable PWA.
+if ("serviceWorker" in navigator && import.meta.env.PROD) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {});
+  });
+}
