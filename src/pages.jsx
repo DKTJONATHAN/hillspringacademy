@@ -1,143 +1,132 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { SCHOOL, GALLERY } from "./data.js";
-import { Photo } from "./components.jsx";
+import { SCHOOL, GALLERY, HERO } from "./data.js";
+import { Photo, Icon } from "./components.jsx";
 
-const campusPhoto = GALLERY.find((g) => g.cat === "Campus") || { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua" };
-const transportPhoto = GALLERY.find((g) => g.cat === "Transport") || { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua" };
+function Carousel() {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (paused || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setI((n) => (n + 1) % HERO.length), 5000);
+    return () => clearInterval(t);
+  }, [paused]);
+  const go = (d) => setI((n) => (n + d + HERO.length) % HERO.length);
+  return (
+    <div className="carousel" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)} aria-roledescription="carousel" aria-label="School highlights">
+      <div className="track" style={{ transform: `translateX(-${i * 100}%)` }}>
+        {HERO.map((s, n) => (
+          <div className="slide" key={s.title} aria-hidden={n !== i}>
+            <Photo src={s.src} alt={s.alt} ratio="4/5" />
+            <div className="cap"><b>{s.title}</b><span>{s.text}</span></div>
+          </div>
+        ))}
+      </div>
+      <button className="nav prev" onClick={() => go(-1)} aria-label="Previous slide"><Icon n="left" /></button>
+      <button className="nav next" onClick={() => go(1)} aria-label="Next slide"><Icon n="right" /></button>
+      <div className="dots">
+        {HERO.map((s, n) => <button key={s.title} className={n === i ? "on" : ""} onClick={() => setI(n)} aria-label={`Go to slide ${n + 1}`} />)}
+      </div>
+    </div>
+  );
+}
 
 export function Home() {
-  const levels = SCHOOL.levels || SCHOOL.stages || [];
-  const galleryPhotos = [
-    { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua" },
-    { src: "/Gallery/WhatsApp Image 2026-10-05 at 05.07.23.jpeg", alt: "Hill Springs Academy school life" },
-    { src: "/Gallery/WhatsApp Image 2026-10-05 at 05.07.26.jpeg", alt: "Hill Springs Academy school life" },
-  ];
-  const uniformPhotos = [
-    { src: "/junior-primary-boy.jfif", title: "Primary School", text: "Primary uniform" },
-    { src: "/senior-primary-boy.jfif", title: "Junior Secondary", text: "JSS uniform" },
-    { src: "/senior-primary-girl-with-jumper.jfif", title: "JSS sweater", text: "JSS cold-weather option" },
-  ];
-
   return (
     <>
-      <section className="school-hero">
-        <div className="school-hero-media">
-          <img src="/Gallery/school-gate.webp" alt="Hill Springs Academy school gate in Maua" />
-        </div>
-        <div className="school-hero-shade" />
-        <div className="wrap school-hero-content">
-          <span className="eyebrow">Maua · Meru County · Kenya</span>
-          <h1>Hill Springs Academy</h1>
-          <p>Building an excellent foundation for a brighter future.</p>
-          <div className="btns">
-            <Link className="btn hero-primary" to="/apply">Apply to the school</Link>
-            <Link className="btn hero-secondary" to="/enquire?subject=School%20visit&topic=contact">Make an enquiry</Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-quicklinks">
-        <div className="wrap quicklink-grid">
-          <Link to="/admissions"><strong>Admissions</strong><span>How to join Hill Springs</span><b>→</b></Link>
-          <Link to="/academics"><strong>Academics</strong><span>Explore our CBE journey</span><b>→</b></Link>
-          <Link to="/fees"><strong>Fees</strong><span>View fee information</span><b>→</b></Link>
-          <Link to="/contact"><strong>Contact</strong><span>Talk to the school</span><b>→</b></Link>
-        </div>
-      </section>
-
-      <section className="section home-welcome">
-        <div className="wrap welcome-grid">
-          <div className="welcome-copy">
-            <span className="eyebrow">Welcome to Hill Springs</span>
-            <h2>A school where children can learn, grow and find their confidence.</h2>
+      <section className="hero">
+        <div className="wrap hero-grid">
+          <div className="hero-copy">
+            <span className="eyebrow">Private CBE school · Maua, Meru County</span>
+            <h1>{SCHOOL.name}</h1>
+            <p className="lede">{SCHOOL.motto}</p>
             <p>{SCHOOL.intro}</p>
-            <p>We serve learners from Kindergarten and Pre-Primary through Junior School, with learning guided by Kenya's Competency-Based Education framework.</p>
-            <Link className="textlink" to="/about">Learn about Hill Springs</Link>
+            <div className="btns">
+              <Link className="btn" to="/apply">Apply online</Link>
+              <Link className="btn ghost" to="/about">About the school</Link>
+            </div>
           </div>
-          <div className="welcome-facts">
-            <div><span>01</span><strong>Kindergarten</strong><p>Early learning and discovery.</p></div>
-            <div><span>02</span><strong>Pre-Primary</strong><p>Strong foundations for learning.</p></div>
-            <div><span>03</span><strong>Junior School</strong><p>Growing skills, knowledge and independence.</p></div>
-          </div>
+          <Carousel />
         </div>
       </section>
 
-      <section className="section home-academics">
+      <section className="section">
         <div className="wrap">
-          <div className="home-section-head">
-            <div><span className="eyebrow">Academics</span><h2>Learning at every stage.</h2></div>
-            <Link className="textlink" to="/academics">Explore academics</Link>
+          <div className="row-head">
+            <div>
+              <span className="eyebrow">Learning stages</span>
+              <h2>From early years to Junior School</h2>
+            </div>
+            <Link to="/academics" className="textlink">Academics</Link>
           </div>
-          <div className="level-grid">
-            {levels.map((level, i) => (
-              <Link to="/academics" className="level-card" key={level.title}>
-                <span>0{i + 1}</span>
-                <h3>{level.title}</h3>
-                <p>{level.text}</p>
-                <b>Explore level →</b>
-              </Link>
+          <div className="cols">
+            {(SCHOOL.stages || []).map((s, n) => (
+              <article className="card reveal" key={s.title} style={{ "--d": `${n * 80}ms` }}>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section home-life">
-        <div className="wrap">
-          <div className="home-section-head">
-            <div><span className="eyebrow">School life</span><h2>See something of the place.</h2></div>
-            <Link className="textlink" to="/gallery">View gallery</Link>
-          </div>
-          <div className="life-photo-grid">
-            {galleryPhotos.map((photo, i) => (
-              <div className={`life-photo life-photo-${i + 1}`} key={photo.src}><img src={photo.src} alt={photo.alt} /></div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section home-uniforms">
-        <div className="wrap">
-          <div className="home-section-head">
-            <div><span className="eyebrow">Uniform guide</span><h2>Primary and JSS, clearly separated.</h2></div>
-            <Link className="textlink" to="/uniforms">View full uniform guide</Link>
-          </div>
-          <div className="home-uniform-grid">
-            {uniformPhotos.map((photo) => (
-              <Link className="home-uniform-card" to="/uniforms" key={photo.src}>
-                <div><img src={photo.src} alt={photo.title} /></div>
-                <strong>{photo.title}</strong><span>{photo.text}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section home-admissions">
-        <div className="wrap admissions-home-grid">
+      <section className="section alt">
+        <div className="wrap split">
           <div>
-            <span className="eyebrow">Admissions</span>
-            <h2>Thinking about Hill Springs for your child?</h2>
-            <p>Start with an enquiry, arrange a visit and then submit an application when you are ready.</p>
+            <span className="eyebrow">School transport</span>
+            <h2>School transport</h2>
+            <p>School transport is available for learners. Contact the admissions office to confirm current routes, availability and charges.</p>
+            <Link to="/enquire?subject=School%20transport&topic=contact" className="textlink">Enquire about school transport</Link>
           </div>
-          <div className="admissions-home-steps">
-            {(SCHOOL.steps || []).slice(0, 3).map((step, i) => (
-              <div key={step.title}><span>0{i + 1}</span><strong>{step.title}</strong><p>{step.text}</p></div>
-            ))}
-          </div>
-          <div className="btns">
-            <Link className="btn" to="/apply">Start an application</Link>
-            <Link className="btn ghost" to="/enquire?subject=Admissions&topic=contact">Talk to admissions</Link>
+          <div>
+            <span className="eyebrow">Resources</span>
+            <h2>Learning resources</h2>
+            <p>Download notes and assessment materials by grade for home study support.</p>
+            <Link to="/reading-materials" className="textlink">Open resources</Link>
           </div>
         </div>
       </section>
 
-      <section className="home-contact-band">
-        <div className="wrap contact-band-grid">
-          <div><span className="eyebrow">Visit Hill Springs</span><h2>Come and see the school.</h2><p>{SCHOOL.address}</p></div>
-          <div className="contact-band-actions">
-            <a href={`tel:${SCHOOL.phoneTel}`}>{SCHOOL.phone}</a>
-            <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
-            <Link className="btn white" to="/contact">Directions & contact</Link>
+      <section className="section uniform-section">
+        <div className="wrap">
+          <div className="row-head">
+            <div>
+              <span className="eyebrow">School uniform</span>
+              <h2>Official Primary & Junior Secondary School (JSS) uniforms</h2>
+            </div>
+            <Link to="/enquire?subject=School%20uniforms&topic=contact" className="textlink">Enquire about school uniforms</Link>
+          </div>
+          <p className="lede">Preview of official uniforms. See the full uniforms page for every option by level.</p>
+          <div className="btns" style={{ marginBottom: 20 }}>
+            <Link className="btn" to="/uniforms">View all uniforms</Link>
+            <Link className="btn ghost" to="/fees">School fees 2026</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="wrap">
+          <div className="row-head reveal">
+            <h2>Moments of school life</h2>
+            <Link to="/gallery" className="textlink">See all photos</Link>
+          </div>
+          <div className="gallery-grid">
+            {GALLERY.slice(0, 6).map((g, n) => (
+              <div className="reveal" style={{ "--d": n * 70 + "ms" }} key={g.alt + n}>
+                <Photo {...g} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="cta">
+        <div className="wrap reveal">
+          <h2>Admissions are open at Hill Springs Academy</h2>
+          <p>Create a free parent account, then apply online. We will guide you through every step.</p>
+          <div className="btns" style={{ justifyContent: "center" }}>
+            <Link className="btn white" to="/signup">Sign up</Link>
+            <Link className="btn ghost" style={{ borderColor: "#fff", color: "#fff" }} to="/apply">Apply online</Link>
           </div>
         </div>
       </section>
