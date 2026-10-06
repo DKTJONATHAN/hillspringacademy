@@ -144,35 +144,40 @@ export function Header({ theme = "light", toggle, scrolled = false }) {
         <div className="actions">
           <Link className="btn small header-btn" to="/apply">Apply</Link>
           <Link className="btn small ghost header-btn" to="/enquire">Enquire</Link>
-          <button
-            type="button"
-            className="icon-btn"
-            onClick={toggle}
-            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          >
+          <button type="button" className="icon-btn" onClick={toggle}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
             <Icon n={theme === "dark" ? "sun" : "moon"} size={18} />
           </button>
-          <button
-            type="button"
-            className="menu-toggle"
-            aria-expanded={open}
-            aria-controls="mobile-menu"
+          <button type="button" className={"menu-toggle" + (open ? " open" : "")}
+            aria-expanded={open} aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? "×" : "☰"}
+            onClick={() => setOpen((v) => !v)}>
+            <span className="menu-bars" aria-hidden="true"><i></i><i></i><i></i></span>
           </button>
         </div>
       </div>
       {open && (
         <nav id="mobile-menu" className="mobile-menu" aria-label="Mobile">
-          {NAV.map(([to, label]) => (
-            <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}>{label}</NavLink>
-          ))}
-          <Link to="/apply" onClick={() => setOpen(false)}>Apply online</Link>
-          <Link to="/enquire" onClick={() => setOpen(false)}>Make an enquiry</Link>
-          <Link to="/fees" onClick={() => setOpen(false)}>Fees</Link>
-          <Link to="/reading-materials" onClick={() => setOpen(false)}>Reading materials</Link>
+          <div className="mobile-menu-head">
+            <div>
+              <span className="mobile-menu-kicker">Hill Springs Academy</span>
+              <strong>Menu</strong>
+            </div>
+            <button type="button" className="mobile-close" onClick={() => setOpen(false)} aria-label="Close menu">×</button>
+          </div>
+          <div className="mobile-menu-links">
+            {NAV.map(([to, label, icon]) => (
+              <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}>
+                <Icon n={icon} size={19} /><span>{label}</span>
+              </NavLink>
+            ))}
+            <Link to="/fees" onClick={() => setOpen(false)}><Icon n="book" size={19} /><span>Fees</span></Link>
+            <Link to="/reading-materials" onClick={() => setOpen(false)}><Icon n="book" size={19} /><span>Reading materials</span></Link>
+          </div>
+          <div className="mobile-menu-cta">
+            <Link className="btn" to="/apply" onClick={() => setOpen(false)}>Apply online</Link>
+            <Link className="btn ghost" to="/enquire" onClick={() => setOpen(false)}>Make an enquiry</Link>
+          </div>
         </nav>
       )}
     </header>
@@ -200,6 +205,14 @@ export function Footer() {
   const social = Object.entries(SCHOOL.social || {}).filter(([, v]) => v);
   return (
     <footer className="site-footer" itemScope itemType="https://schema.org/EducationalOrganization">
+      <div className="wrap foot-intro">
+        <div>
+          <span className="foot-kicker">Hill Springs Academy</span>
+          <h2>Building an excellent foundation for a brighter future.</h2>
+        </div>
+        <Link className="btn small foot-cta" to="/apply">Start an application <span aria-hidden="true">↗</span></Link>
+      </div>
+
       <div className="wrap foot-grid">
         <div className="foot-col brand-col">
           <div className="foot-brand">
@@ -211,20 +224,20 @@ export function Footer() {
           </div>
           <p className="foot-blurb">Kindergarten, Pre-Primary and Junior School under Kenya’s Competency-Based Education.</p>
           {social.length > 0 && (
-            <p className="social">
+            <div className="social" aria-label="School social media">
               {social.map(([k, v]) => (
-                <a key={k} href={v} target="_blank" rel="noopener noreferrer">{k[0].toUpperCase() + k.slice(1)}</a>
+                <a key={k} href={v} target="_blank" rel="noopener noreferrer" aria-label={k}>
+                  {k[0].toUpperCase() + k.slice(1)}
+                </a>
               ))}
-            </p>
+            </div>
           )}
         </div>
 
         <div className="foot-col">
           <h3>Explore</h3>
           <nav className="foot-links" aria-label="Footer explore">
-            {NAV.slice(1).map(([to, l]) => (
-              <Link key={to} to={to}>{l}</Link>
-            ))}
+            {NAV.slice(1).map(([to, l]) => <Link key={to} to={to}>{l}</Link>)}
             <Link to="/reading-materials">Resources</Link>
             <Link to="/fees">Fees</Link>
             <Link to="/uniforms">Uniforms</Link>
@@ -239,30 +252,25 @@ export function Footer() {
             {SCHOOL.phone && (
               <li>
                 <span className="fc-label">Phone</span>
-                <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone.replace(/\s/g, "")}`} itemProp="telephone">{SCHOOL.phone}</a>
-                {SCHOOL.phone2 && (
-                  <>
-                    {" · "}
-                    <a href={`tel:${SCHOOL.phone2Tel || SCHOOL.phone2.replace(/\s/g, "")}`}>{SCHOOL.phone2}</a>
-                  </>
-                )}
+                <span className="fc-values">
+                  <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone.replace(/\\s/g, "")}`} itemProp="telephone">{SCHOOL.phone}</a>
+                  {SCHOOL.phone2 && <a href={`tel:${SCHOOL.phone2Tel || SCHOOL.phone2.replace(/\\s/g, "")}`}>{SCHOOL.phone2}</a>}
+                </span>
               </li>
             )}
             {SCHOOL.poBox && (
               <li itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
                 <span className="fc-label">Postal</span>
                 <span itemProp="streetAddress">{SCHOOL.poBox}</span>
-                <span className="fc-sub">
-                  <span itemProp="addressLocality">Maua</span>,{" "}
-                  <span itemProp="addressRegion">Meru County</span>,{" "}
-                  <span itemProp="addressCountry">Kenya</span>
-                </span>
+                <span className="fc-sub"><span itemProp="addressLocality">Maua</span>, <span itemProp="addressRegion">Meru County</span>, <span itemProp="addressCountry">Kenya</span></span>
               </li>
             )}
             <li>
               <span className="fc-label">Email</span>
-              <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a>
-              <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
+              <span className="fc-values">
+                <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a>
+                <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
+              </span>
             </li>
             <li className="foot-actions">
               <Link to="/contact">Contact form</Link>
@@ -275,12 +283,13 @@ export function Footer() {
 
       <div className="wrap legal">
         <span>© {new Date().getFullYear()} {SCHOOL.name}. All rights reserved.</span>
-        <span className="legal-right">
-          Website developed by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a>
-          {" · "}
-          <Link to="/privacy">Privacy</Link>
-        </span>
+        <div className="legal-right">
+          <span>Website developed by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a></span>
+          <Link to="/privacy">Privacy & data protection</Link>
+          <Link to="/sitemap">Sitemap</Link>
+        </div>
       </div>
     </footer>
   );
 }
+
