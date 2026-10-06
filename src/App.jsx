@@ -21,6 +21,7 @@ import {
 import { AdminEmailCentre } from "./AdminEmailCentre.jsx";
 import { AccountPortal } from "./AccountPortal.jsx";
 import { useTheme, useScroll } from "./hooks.js";
+import { PrivacyConsent } from "./PrivacyConsent.jsx";
 
 const NotFound = () => (
   <>
@@ -70,6 +71,7 @@ export default function App() {
       </main>
       <Footer />
       <BottomNav />
+      <PrivacyConsent />
     </>
   );
 }
