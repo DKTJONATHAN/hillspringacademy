@@ -109,6 +109,7 @@ const NAV = [
   ["/about", "About", "about"],
   ["/academics", "Academics", "book"],
   ["/admissions", "Admissions", "apply"],
+  ["/school-life", "School life", "book"],
   ["/gallery", "Gallery", "image"],
   ["/contact", "Contact", "mail"],
 ];
