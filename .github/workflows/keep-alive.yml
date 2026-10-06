@@ -1,4 +1,4 @@
-name: Hill Springs Academy Keep Alive
+name: Hill Springs Academy Supabase Keep Alive
 
 on:
   schedule:
@@ -12,10 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Ping live website
+      - name: Ping Supabase database
         env:
-          SITE_URL: https://hillspringsacademy.sc.ke/
+          SUPABASE_URL: https://clpmfblwrpnqwbxgbtkd.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          set -e
-          echo "Pinging $SITE_URL"
-          curl --fail --silent --show-error --location             --max-time 30             --connect-timeout 10             --retry 3             --retry-delay 5             --user-agent "Hill-Springs-Academy-KeepAlive/1.0"             -o /dev/null             -w "HTTP %{http_code} in %{time_total}s\n"             "$SITE_URL"
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
+            echo "SUPABASE_SERVICE_ROLE_KEY GitHub secret is not configured."
+            exit 1
+          fi
+
+          echo "Generating Supabase database activity..."
+          curl --fail --silent --show-error --location             --max-time 30             --connect-timeout 10             --retry 3             --retry-delay 5             --user-agent "Hill-Springs-Academy-Supabase-KeepAlive/1.0"             -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}"             -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}"             "${SUPABASE_URL}/rest/v1/school_subscribers?select=id&limit=1"             -o /dev/null
+
+          echo "Supabase database activity request completed successfully."
