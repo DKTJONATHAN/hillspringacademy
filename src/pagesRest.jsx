@@ -654,7 +654,328 @@ export function Directors() {
 }
 
 export function Privacy() {
-  return <><PageHead title="Privacy" text="How we handle information on this website." path="/privacy" /><section className="section"><div className="wrap card"><p>This website collects information you submit through forms (such as name, email, phone and messages) so the school can respond to enquiries and applications.</p><p>Account and application data is stored securely with our service providers. Contact the school if you need a correction or have a privacy question.</p><p>Email: <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a></p></div></section></>;
+  return (
+    <>
+      <PageHead
+        title="Privacy & Data Protection"
+        text="How Hill Springs Academy collects, uses, protects and retains personal data."
+        path="/privacy"
+      />
+
+      <section className="section privacy-page">
+        <div className="wrap">
+          <div className="privacy-intro">
+            <div>
+              <span className="eyebrow">Data protection</span>
+              <h2>Your information, handled with care.</h2>
+            </div>
+            <p>
+              <strong>Last updated: 6 October 2026.</strong> This notice explains how
+              Hill Springs Academy handles personal data when you visit our website,
+              create a parent account, make an enquiry, apply for admission, subscribe
+              to school updates or otherwise communicate with us online.
+            </p>
+          </div>
+
+          <div className="privacy-notice">
+            <strong>Important:</strong> This notice is written for Hill Springs Academy's
+            current website and online parent services. It is designed around the Kenya
+            Data Protection Act, 2019 and applicable regulations, and reflects widely
+            recognised privacy principles including the GDPR and UK GDPR where those laws
+            apply to a particular person or processing activity. It is not a statement
+            that every international privacy law applies to Hill Springs Academy.
+          </div>
+
+          <div className="privacy-grid">
+            <article className="privacy-card">
+              <span className="privacy-number">01</span>
+              <h3>Who is responsible for your data?</h3>
+              <p>
+                Hill Springs Academy is responsible for personal data processed through
+                this website and its online school services. For privacy questions,
+                requests or complaints, contact the school using the details below.
+              </p>
+              <p>
+                <strong>Hill Springs Academy</strong><br />
+                {SCHOOL.address}<br />
+                <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a><br />
+                <a href={`tel:${SCHOOL.phoneTel}`}>{SCHOOL.phone}</a>
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">02</span>
+              <h3>What information do we collect?</h3>
+              <ul>
+                <li><strong>Parent/account information:</strong> name, email address, phone number and account/security information.</li>
+                <li><strong>Admission information:</strong> parent or guardian details and learner information such as name, date of birth, gender, current/requested level, previous school, entry term and notes you provide.</li>
+                <li><strong>Enquiry information:</strong> subject, message, phone number and learner-related details supplied in an enquiry.</li>
+                <li><strong>School updates:</strong> name and email address when you subscribe.</li>
+                <li><strong>Security information:</strong> limited technical information such as IP address may be processed for fraud prevention, rate limiting, security and audit purposes.</li>
+                <li><strong>Website preferences:</strong> essential browser storage such as your theme preference and session information.</li>
+              </ul>
+              <p>We ask you not to submit sensitive information unless the school specifically requests it and there is a lawful reason to process it.</p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">03</span>
+              <h3>Why do we use personal data?</h3>
+              <p>We process information only for clear and legitimate purposes, including:</p>
+              <ul>
+                <li>creating and managing parent accounts;</li>
+                <li>verifying email addresses and securing accounts;</li>
+                <li>receiving, assessing and communicating about admission applications;</li>
+                <li>receiving and responding to enquiries and school communications;</li>
+                <li>sending requested confirmations, verification codes, decisions and service messages;</li>
+                <li>sending school updates where you have subscribed and can unsubscribe;</li>
+                <li>protecting the website and services from abuse, fraud and unauthorised access;</li>
+                <li>meeting legal, regulatory, safeguarding and record-keeping obligations; and</li>
+                <li>improving the website only where the relevant processing is lawful and appropriately consented to where consent is required.</li>
+              </ul>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">04</span>
+              <h3>Lawful basis and consent</h3>
+              <p>
+                Depending on the activity, processing may be necessary to provide a service
+                you request, take steps relating to an application, comply with a legal
+                obligation, protect legitimate interests such as website security, or rely
+                on your consent for an optional activity such as certain marketing or
+                non-essential measurement.
+              </p>
+              <p>
+                Consent is voluntary, specific, informed and capable of being withdrawn.
+                Withdrawal does not invalidate processing that was lawful before withdrawal.
+                We do not make a service conditional on consent to processing that is not
+                necessary for that service.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">05</span>
+              <h3>Children's data</h3>
+              <p>
+                Hill Springs Academy is a school and therefore processes information about
+                children for education and admissions purposes. Children's information is
+                treated with additional care and is processed in a manner that protects
+                the child's rights and best interests.
+              </p>
+              <p>
+                Where required by Kenyan law, a parent or lawful guardian must provide
+                consent or otherwise authorise the processing of a child's personal data.
+                We may take reasonable steps to verify parental or guardian authority.
+                We do not use children's admission information for unrelated advertising.
+              </p>
+              <p>
+                If a photograph, achievement, name or other information about a learner is
+                to be published for a purpose that requires consent, the school will seek
+                the appropriate parent/guardian permission before publication.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">06</span>
+              <h3>Who may receive the information?</h3>
+              <p>
+                Access is limited to people and service providers who need the information
+                for the stated purpose. Depending on the service, this can include authorised
+                Hill Springs Academy staff and contracted technology providers used for
+                hosting, database services, authentication, security, email delivery and
+                website infrastructure.
+              </p>
+              <p>
+                The website may also contain embedded or linked services such as Google Maps
+                or YouTube. When you interact with those services, the relevant provider may
+                process technical information under its own privacy terms.
+              </p>
+              <p>
+                We do not sell your personal data.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">07</span>
+              <h3>International data transfers</h3>
+              <p>
+                Some technology providers used to operate the website may process or store
+                information outside Kenya. Where personal data is transferred across borders,
+                Hill Springs Academy will use the safeguards required by applicable law,
+                which may include adequate protection requirements, contractual safeguards,
+                security measures or valid consent where appropriate.
+              </p>
+              <p>
+                For people protected by the GDPR or UK GDPR, we will apply the relevant
+                international-transfer safeguards required by those laws.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">08</span>
+              <h3>How long do we keep information?</h3>
+              <p>
+                We keep personal data only for as long as it is reasonably necessary for the
+                purpose for which it was collected, for legitimate school records, or where
+                retention is required by law. Retention periods depend on the type of record
+                and the reason it was collected.
+              </p>
+              <ul>
+                <li>Parent account information is retained while the account is active and for any period required for legitimate records or legal obligations.</li>
+                <li>Admission records are retained according to the school's record-keeping needs and applicable legal requirements.</li>
+                <li>Enquiries and communications are retained while needed to resolve the matter and for reasonable accountability.</li>
+                <li>Newsletter subscriptions remain active until you unsubscribe or the subscription is otherwise closed.</li>
+                <li>Security and audit records are retained for as long as reasonably necessary for security, investigation and accountability.</li>
+              </ul>
+              <p>When information is no longer required, it should be securely deleted, anonymised or otherwise disposed of in accordance with the school's retention procedures.</p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">09</span>
+              <h3>Cookies, local storage and consent</h3>
+              <p>
+                The website uses essential browser storage for functions such as keeping
+                your sign-in session, remembering your light/dark theme and remembering
+                your privacy choice. These functions are necessary for the website or a
+                service you have requested.
+              </p>
+              <p>
+                <strong>Google Analytics and Google personalised advertising are not currently
+                installed on this website.</strong> Optional analytics or advertising should
+                not be enabled without the appropriate consent and configuration. If Google
+                advertising products are introduced, users in the EEA, UK or Switzerland
+                will be handled according to Google's then-current consent requirements,
+                including use of an appropriate Google-certified consent solution where
+                required for personalised advertising.
+              </p>
+              <p>
+                You can change your privacy preference by clearing the site's privacy choice
+                and making a new selection, or by contacting the school.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">10</span>
+              <h3>Security</h3>
+              <p>
+                We use reasonable technical and organisational measures appropriate to the
+                nature of the information we process. These include HTTPS, controlled access
+                to administrative functions, restricted database privileges, authentication,
+                rate limiting, security checks, audit records and server-side processing for
+                sensitive operations.
+              </p>
+              <p>
+                No internet service can guarantee absolute security. Please keep your
+                account credentials confidential and notify the school promptly if you
+                believe your account has been compromised.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">11</span>
+              <h3>Your data protection rights</h3>
+              <p>Subject to applicable legal limits, you may have the right to:</p>
+              <ul>
+                <li>be informed about how your personal data is used;</li>
+                <li>request access to personal data held about you;</li>
+                <li>request correction of inaccurate or misleading information;</li>
+                <li>object to certain processing;</li>
+                <li>request deletion/erasure where the law permits;</li>
+                <li>request restriction of processing in applicable circumstances;</li>
+                <li>request portability where applicable; and</li>
+                <li>withdraw consent where processing relies on consent.</li>
+              </ul>
+              <p>
+                A parent or lawful guardian may exercise applicable rights relating to a
+                child's data, subject to verification and the child's best interests.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">12</span>
+              <h3>How to make a privacy request</h3>
+              <p>
+                Email <a href={`mailto:${SCHOOL.infoEmail}`}>{SCHOOL.infoEmail}</a> with
+                the subject line <strong>Data Protection Request</strong>. Tell us what you
+                are requesting and provide enough information for us to verify your identity
+                or authority. We may request additional information where reasonably necessary
+                to protect personal data from unauthorised disclosure.
+              </p>
+              <p>
+                We will handle requests in accordance with the applicable law and will explain
+                if a request cannot be fully completed because a legal exception applies.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">13</span>
+              <h3>Data breaches</h3>
+              <p>
+                We maintain procedures for detecting, investigating and responding to personal
+                data incidents. Where Kenyan law requires notification of a notifiable breach,
+                the school will follow the applicable notification and communication requirements,
+                including the statutory timelines.
+              </p>
+              <p>
+                If a breach creates a real risk of harm, the Kenya Data Protection Act requires
+                notification to the Data Commissioner without delay and within 72 hours of
+                becoming aware of the breach, subject to the Act's requirements and exceptions.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">14</span>
+              <h3>Google and other third-party services</h3>
+              <p>
+                Some pages may link to or embed third-party services, including Google Maps
+                and YouTube. Those providers may receive technical information when their
+                content is requested or interacted with. Their own privacy policies and
+                terms apply to their processing.
+              </p>
+              <p>
+                We do not represent third-party providers as being controlled by Hill Springs
+                Academy. Where a third-party service requires optional consent under applicable
+                law, it should only be activated after the required consent has been obtained.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">15</span>
+              <h3>Complaints</h3>
+              <p>
+                If you believe your data protection rights have not been respected, please
+                contact Hill Springs Academy first so we can investigate and respond.
+              </p>
+              <p>
+                You may also contact the <a href="https://www.odpc.go.ke/" target="_blank" rel="noopener noreferrer">Office of the Data Protection Commissioner (ODPC)</a>
+                {' '}in Kenya. Individuals who are protected by the GDPR or UK GDPR may also
+                have the right to complain to their relevant supervisory authority.
+              </p>
+            </article>
+
+            <article className="privacy-card">
+              <span className="privacy-number">16</span>
+              <h3>Changes to this notice</h3>
+              <p>
+                We may update this notice when our services, technology, legal obligations or
+                data-processing practices change. The current version will be published on
+                this page with its updated date.
+              </p>
+            </article>
+          </div>
+
+          <div className="privacy-footer-note">
+            <strong>Privacy contact</strong>
+            <p>
+              For access, correction, deletion, consent withdrawal, child-data questions,
+              security concerns or any other data-protection request, contact
+              <a href={`mailto:${SCHOOL.infoEmail}`}> {SCHOOL.infoEmail}</a>.
+            </p>
+            <Link className="btn small" to="/contact">Contact the school</Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
 
 export { Sitemap } from "./SitemapPage.jsx";
