@@ -253,8 +253,8 @@ export function Footer() {
               <li>
                 <span className="fc-label">Phone</span>
                 <span className="fc-values">
-                  <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone.replace(/\\s/g, "")}`} itemProp="telephone">{SCHOOL.phone}</a>
-                  {SCHOOL.phone2 && <a href={`tel:${SCHOOL.phone2Tel || SCHOOL.phone2.replace(/\\s/g, "")}`}>{SCHOOL.phone2}</a>}
+                  <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone.replace(/\s/g, "")}`} itemProp="telephone">{SCHOOL.phone}</a>
+                  {SCHOOL.phone2 && <a href={`tel:${SCHOOL.phone2Tel || SCHOOL.phone2.replace(/\s/g, "")}`}>{SCHOOL.phone2}</a>}
                 </span>
               </li>
             )}
