@@ -398,6 +398,35 @@ export function Gallery() {
   );
 }
 
+export function ReadingMaterials() {
+  const materials = SCHOOL.readingMaterials || [];
+  const grades = [...new Set(materials.map((m) => m.grade))];
+  return (
+    <>
+      <PageHead title="Learning resources" text="Notes and assessment materials by grade." path="/reading-materials" />
+      <section className="section">
+        <div className="wrap">
+          {grades.map((grade) => (
+            <div key={grade} style={{ marginBottom: 28 }}>
+              <h2>{grade}</h2>
+              <div className="cols">
+                {materials.filter((m) => m.grade === grade).map((m) => (
+                  <article className="card" key={m.title}>
+                    <h3>{m.title}</h3>
+                    <p>{m.description}</p>
+                    <a className="btn small" href={m.file} target="_blank" rel="noopener noreferrer">Download PDF</a>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))}
+          {!materials.length && <p>Resources will appear here as they are published.</p>}
+        </div>
+      </section>
+    </>
+  );
+}
+
 export function SchoolLife() {
   return (
     <>
