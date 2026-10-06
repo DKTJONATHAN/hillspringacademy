@@ -6,160 +6,139 @@ const campusPhoto = GALLERY.find((g) => g.cat === "Campus") || { src: "/Gallery/
 const transportPhoto = GALLERY.find((g) => g.cat === "Transport") || { src: "/Gallery/school-bus.webp", alt: "Hill Springs Academy school bus in Maua" };
 
 export function Home() {
-  const stages = SCHOOL.stages || [];
-  const values = SCHOOL.values || [];
+  const levels = SCHOOL.levels || SCHOOL.stages || [];
+  const galleryPhotos = [
+    { src: "/Gallery/school-gate.webp", alt: "Hill Springs Academy school gate in Maua" },
+    { src: "/Gallery/WhatsApp Image 2026-10-05 at 05.07.23.jpeg", alt: "Hill Springs Academy school life" },
+    { src: "/Gallery/WhatsApp Image 2026-10-05 at 05.07.26.jpeg", alt: "Hill Springs Academy school life" },
+  ];
+  const uniformPhotos = [
+    { src: "/junior-primary-boy.jfif", title: "Primary School", text: "Primary uniform" },
+    { src: "/senior-primary-boy.jfif", title: "Junior Secondary", text: "JSS uniform" },
+    { src: "/senior-primary-girl-with-jumper.jfif", title: "JSS sweater", text: "JSS cold-weather option" },
+  ];
+
   return (
     <>
-      <section className="home-hero">
-        <div className="home-hero-image">
-          <Photo {...campusPhoto} />
-          <span className="image-note">Hill Springs Academy · Maua</span>
+      <section className="school-hero">
+        <div className="school-hero-media">
+          <img src="/Gallery/school-gate.webp" alt="Hill Springs Academy school gate in Maua" />
         </div>
-        <div className="wrap home-hero-content">
-          <div className="home-hero-copy">
-            <span className="eyebrow">Maua · Meru County · Kenya</span>
-            <h1>A school where a strong beginning becomes a brighter future.</h1>
-            <p className="hero-motto">{SCHOOL.motto}</p>
+        <div className="school-hero-shade" />
+        <div className="wrap school-hero-content">
+          <span className="eyebrow">Maua · Meru County · Kenya</span>
+          <h1>Hill Springs Academy</h1>
+          <p>Building an excellent foundation for a brighter future.</p>
+          <div className="btns">
+            <Link className="btn hero-primary" to="/apply">Apply to the school</Link>
+            <Link className="btn hero-secondary" to="/enquire?subject=School%20visit&topic=contact">Make an enquiry</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-quicklinks">
+        <div className="wrap quicklink-grid">
+          <Link to="/admissions"><strong>Admissions</strong><span>How to join Hill Springs</span><b>→</b></Link>
+          <Link to="/academics"><strong>Academics</strong><span>Explore our CBE journey</span><b>→</b></Link>
+          <Link to="/fees"><strong>Fees</strong><span>View fee information</span><b>→</b></Link>
+          <Link to="/contact"><strong>Contact</strong><span>Talk to the school</span><b>→</b></Link>
+        </div>
+      </section>
+
+      <section className="section home-welcome">
+        <div className="wrap welcome-grid">
+          <div className="welcome-copy">
+            <span className="eyebrow">Welcome to Hill Springs</span>
+            <h2>A school where children can learn, grow and find their confidence.</h2>
             <p>{SCHOOL.intro}</p>
-            <div className="btns">
-              <Link className="btn" to="/apply">Start an application</Link>
-              <Link className="btn ghost" to="/enquire?subject=School%20visit&topic=contact">Plan a school visit</Link>
-            </div>
-            <div className="hero-contact">
-              <span>Admissions</span>
-              <a href={`tel:${SCHOOL.phoneTel}`}>{SCHOOL.phone}</a>
-              <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
-            </div>
+            <p>We serve learners from Kindergarten and Pre-Primary through Junior School, with learning guided by Kenya's Competency-Based Education framework.</p>
+            <Link className="textlink" to="/about">Learn about Hill Springs</Link>
+          </div>
+          <div className="welcome-facts">
+            <div><span>01</span><strong>Kindergarten</strong><p>Early learning and discovery.</p></div>
+            <div><span>02</span><strong>Pre-Primary</strong><p>Strong foundations for learning.</p></div>
+            <div><span>03</span><strong>Junior School</strong><p>Growing skills, knowledge and independence.</p></div>
           </div>
         </div>
       </section>
 
-      <section className="home-intro section">
-        <div className="wrap intro-grid">
-          <div>
-            <span className="eyebrow">Why Hill Springs</span>
-            <h2>Good schooling should feel personal.</h2>
-          </div>
-          <div>
-            <p className="large-copy">Families need more than a list of subjects. They need to understand how a child will learn, grow, build confidence and move through school.</p>
-            <Link className="textlink" to="/about">Get to know our school</Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-stages section">
+      <section className="section home-academics">
         <div className="wrap">
-          <div className="section-kicker">
-            <span className="eyebrow">The learner journey</span>
-            <Link to="/academics" className="textlink">Explore academics</Link>
+          <div className="home-section-head">
+            <div><span className="eyebrow">Academics</span><h2>Learning at every stage.</h2></div>
+            <Link className="textlink" to="/academics">Explore academics</Link>
           </div>
-          <h2>From the early years to Junior School</h2>
-          <div className="stage-list">
-            {stages.map((stage, n) => (
-              <Link className="stage-row" to="/academics" key={stage.title}>
-                <span className="stage-number">0{n + 1}</span>
-                <span className="stage-name">{stage.title}</span>
-                <span className="stage-text">{stage.text}</span>
-                <span className="stage-arrow" aria-hidden="true">↗</span>
+          <div className="level-grid">
+            {levels.map((level, i) => (
+              <Link to="/academics" className="level-card" key={level.title}>
+                <span>0{i + 1}</span>
+                <h3>{level.title}</h3>
+                <p>{level.text}</p>
+                <b>Explore level →</b>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="home-values section">
-        <div className="wrap value-grid">
-          <div className="value-lead">
-            <span className="eyebrow">What we build</span>
-            <h2>Learning, character and community belong together.</h2>
-            <p>Our public information is simple by design: understand the school, find the right level, ask your questions and take the next step.</p>
+      <section className="section home-life">
+        <div className="wrap">
+          <div className="home-section-head">
+            <div><span className="eyebrow">School life</span><h2>See something of the place.</h2></div>
+            <Link className="textlink" to="/gallery">View gallery</Link>
           </div>
-          <div className="value-list">
-            {values.map((value, n) => (
-              <article key={value.title} className="value-item">
-                <span>0{n + 1}</span>
-                <div><h3>{value.title}</h3><p>{value.text}</p></div>
-              </article>
+          <div className="life-photo-grid">
+            {galleryPhotos.map((photo, i) => (
+              <div className={`life-photo life-photo-${i + 1}`} key={photo.src}><img src={photo.src} alt={photo.alt} /></div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="home-life section">
-        <div className="wrap life-grid">
-          <div className="life-photo"><Photo {...transportPhoto} /></div>
-          <div className="life-copy">
-            <span className="eyebrow">Life beyond the classroom</span>
-            <h2>School is also the journey to and from learning.</h2>
-            <p>Hill Springs Academy provides school transport for learners. Current routes, availability and charges should be confirmed with admissions.</p>
-            <Link className="textlink" to="/enquire?subject=School%20transport&topic=contact">Ask about transport</Link>
-            <div className="life-links">
-              <Link to="/gallery">See school life</Link>
-              <Link to="/reading-materials">Learning resources</Link>
-              <Link to="/uniforms">Uniform guide</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-uniform section">
-        <div className="wrap uniform-grid">
-          <div>
-            <span className="eyebrow">Uniform guide</span>
-            <h2>Primary and JSS, clearly separated.</h2>
-            <p>See the official uniform options by level, with Primary and Junior Secondary School (JSS) presented separately so families can identify the correct uniform.</p>
-            <Link className="btn" to="/uniforms">View uniforms</Link>
-          </div>
-          <div className="uniform-rule">
-            <div><strong>Primary</strong><span>Primary School uniform</span></div>
-            <div><strong>JSS</strong><span>Junior Secondary School uniform</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-admissions section">
+      <section className="section home-uniforms">
         <div className="wrap">
-          <div className="section-kicker"><span className="eyebrow">Admissions</span><Link to="/faq" className="textlink">Questions? Read the FAQ</Link></div>
-          <h2>A straightforward route into Hill Springs.</h2>
-          <div className="admission-steps">
-            {(SCHOOL.steps || []).map((step, n) => (
-              <div className="admission-step" key={step.title}>
-                <span>0{n + 1}</span><h3>{step.title}</h3><p>{step.text}</p>
-              </div>
+          <div className="home-section-head">
+            <div><span className="eyebrow">Uniform guide</span><h2>Primary and JSS, clearly separated.</h2></div>
+            <Link className="textlink" to="/uniforms">View full uniform guide</Link>
+          </div>
+          <div className="home-uniform-grid">
+            {uniformPhotos.map((photo) => (
+              <Link className="home-uniform-card" to="/uniforms" key={photo.src}>
+                <div><img src={photo.src} alt={photo.title} /></div>
+                <strong>{photo.title}</strong><span>{photo.text}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section home-admissions">
+        <div className="wrap admissions-home-grid">
+          <div>
+            <span className="eyebrow">Admissions</span>
+            <h2>Thinking about Hill Springs for your child?</h2>
+            <p>Start with an enquiry, arrange a visit and then submit an application when you are ready.</p>
+          </div>
+          <div className="admissions-home-steps">
+            {(SCHOOL.steps || []).slice(0, 3).map((step, i) => (
+              <div key={step.title}><span>0{i + 1}</span><strong>{step.title}</strong><p>{step.text}</p></div>
             ))}
           </div>
           <div className="btns">
-            <Link className="btn" to="/apply">Apply online</Link>
+            <Link className="btn" to="/apply">Start an application</Link>
             <Link className="btn ghost" to="/enquire?subject=Admissions&topic=contact">Talk to admissions</Link>
           </div>
         </div>
       </section>
 
-      <section className="home-contact section">
-        <div className="wrap contact-grid">
-          <div>
-            <span className="eyebrow">Come and see us</span>
-            <h2>Hill Springs Academy</h2>
-            <p>{SCHOOL.address}</p>
-            <p><a href={`tel:${SCHOOL.phoneTel}`}>{SCHOOL.phone}</a><br /><a href={`tel:${SCHOOL.phone2Tel}`}>{SCHOOL.phone2}</a></p>
-            <div className="btns"><Link className="btn" to="/enquire?subject=School%20visit&topic=contact">Contact the school</Link><Link className="btn ghost" to="/contact">Directions & contact</Link></div>
+      <section className="home-contact-band">
+        <div className="wrap contact-band-grid">
+          <div><span className="eyebrow">Visit Hill Springs</span><h2>Come and see the school.</h2><p>{SCHOOL.address}</p></div>
+          <div className="contact-band-actions">
+            <a href={`tel:${SCHOOL.phoneTel}`}>{SCHOOL.phone}</a>
+            <a href={`mailto:${SCHOOL.admissionsEmail}`}>{SCHOOL.admissionsEmail}</a>
+            <Link className="btn white" to="/contact">Directions & contact</Link>
           </div>
-          <div className="contact-card">
-            <span className="eyebrow">For families</span>
-            <Link to="/fees">Fees</Link>
-            <Link to="/uniforms">Uniforms</Link>
-            <Link to="/reading-materials">Learning resources</Link>
-            <Link to="/parent">Parent portal</Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-final-cta">
-        <div className="wrap">
-          <span className="eyebrow">Your next step</span>
-          <h2>Ready to know more about Hill Springs?</h2>
-          <p>Ask a question, arrange a visit or begin an application.</p>
-          <div className="btns"><Link className="btn white" to="/apply">Start an application</Link><Link className="btn dark-outline" to="/enquire?subject=General%20enquiry&topic=contact">Make an enquiry</Link></div>
         </div>
       </section>
     </>
