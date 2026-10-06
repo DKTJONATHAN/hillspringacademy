@@ -970,7 +970,12 @@ export function Privacy() {
               security concerns or any other data-protection request, contact
               <a href={`mailto:${SCHOOL.infoEmail}`}> {SCHOOL.infoEmail}</a>.
             </p>
-            <Link className="btn small" to="/contact">Contact the school</Link>
+            <div className="btns">
+              <Link className="btn small" to="/contact">Contact the school</Link>
+              <button className="btn small ghost dark" type="button" onClick={() => { clearPrivacyConsent(); window.location.reload(); }}>
+                Change privacy choices
+              </button>
+            </div>
           </div>
         </div>
       </section>
