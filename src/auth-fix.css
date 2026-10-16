@@ -1,0 +1,151 @@
+/* ========== Auth / signup / login: mobile size + dark mode visibility ========== */
+
+/* Dark mode: portal used hard-coded blacks/whites that hid text */
+:root[data-theme="dark"] .portal-section {
+  --portal-black: var(--ink);
+  --portal-gray: var(--muted);
+  --portal-gray-light: var(--surface);
+  --portal-blue: #8fb4d0;
+}
+:root[data-theme="dark"] .portal-section .card,
+:root[data-theme="dark"] .portal-section form,
+:root[data-theme="dark"] .portal-section .portal-form,
+:root[data-theme="dark"] .portal-section .auth-card {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+:root[data-theme="dark"] .portal-section h2,
+:root[data-theme="dark"] .portal-section h3,
+:root[data-theme="dark"] .portal-section label,
+:root[data-theme="dark"] .portal-brandbar strong,
+:root[data-theme="dark"] .portal-toolbar strong,
+:root[data-theme="dark"] .portal-section .btn.ghost,
+:root[data-theme="dark"] .portal-section .btn.ghost.dark {
+  color: var(--ink);
+}
+:root[data-theme="dark"] .portal-brandbar {
+  background: var(--surface);
+  border-color: var(--line);
+}
+:root[data-theme="dark"] .portal-brandbar p,
+:root[data-theme="dark"] .portal-section .field-hint,
+:root[data-theme="dark"] .portal-section p {
+  color: var(--muted);
+}
+:root[data-theme="dark"] .portal-toolbar {
+  background: var(--surface);
+  border-color: var(--line);
+}
+:root[data-theme="dark"] .portal-section input,
+:root[data-theme="dark"] .portal-section select,
+:root[data-theme="dark"] .portal-section textarea {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:root[data-theme="dark"] .portal-section input::placeholder,
+:root[data-theme="dark"] .portal-section textarea::placeholder {
+  color: var(--muted);
+  opacity: .85;
+}
+:root[data-theme="dark"] .pw-toggle,
+:root[data-theme="dark"] .portal-section .textlink,
+:root[data-theme="dark"] .portal-section .linklike {
+  color: #ff6b81;
+}
+:root[data-theme="dark"] .form-error { color: #ff8a80; }
+:root[data-theme="dark"] .form-success { color: #7dcea0; }
+:root[data-theme="dark"] .badge {
+  background: var(--paper);
+  border-color: var(--line);
+  color: var(--ink);
+}
+:root[data-theme="dark"] .admin-login-page {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(200,16,46,.14), transparent 28%),
+    var(--paper);
+}
+:root[data-theme="dark"] .admin-login-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+:root[data-theme="dark"] .admin-login-card h1 { color: var(--ink); }
+:root[data-theme="dark"] .admin-login-card > p { color: var(--muted); }
+:root[data-theme="dark"] .admin-login-brand img {
+  background: var(--surface);
+}
+
+/* Auth card buttons: full width but not oversized on mobile */
+.auth-card .btn,
+.portal-section .auth-card .btn,
+.admin-login-card .btn,
+.admin-primary-btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 16px;
+  font-size: .9rem;
+  border-radius: 12px;
+}
+.auth-card .btn.small,
+.portal-section .auth-card .btn.small,
+.admin-link-btn {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: .84rem;
+  font-weight: 700;
+}
+.admin-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+@media (max-width: 720px) {
+  .auth-card,
+  .portal-section .auth-card,
+  .admin-login-card {
+    gap: 12px;
+  }
+  form.auth-card,
+  .portal-section form,
+  .admin-login-card {
+    padding: 18px 16px;
+  }
+  .auth-card .btn,
+  .portal-section .auth-card .btn,
+  .admin-login-card .btn,
+  .admin-primary-btn {
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: .88rem;
+    border-radius: 11px;
+  }
+  .auth-card .btn.small,
+  .portal-section .auth-card .btn.small {
+    min-height: 38px;
+    padding: 7px 12px;
+    font-size: .82rem;
+  }
+  .code-input {
+    font-size: 1.25rem;
+    letter-spacing: .35em;
+    padding: 10px 12px;
+  }
+  .pw-wrap input {
+    padding-right: 64px;
+  }
+  .admin-login-card h1 {
+    font-size: 1.45rem;
+  }
+  .portal-section h2 {
+    font-size: 1.35rem;
+  }
+  input, select, textarea {
+    padding: 11px 12px;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+}
