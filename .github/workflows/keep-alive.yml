@@ -1,0 +1,73 @@
+name: Hill Springs Academy Supabase Keep Alive
+
+on:
+  # Daily real database queries. GitHub can delay scheduled runs, so daily is safer than weekly.
+  schedule:
+    - cron: "17 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-keep-alive
+  cancel-in-progress: false
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify configuration
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
+            echo "::error::Missing SUPABASE_SERVICE_ROLE_KEY in GitHub → Settings → Secrets and variables → Actions."
+            echo "Add the service_role key from Supabase → Project Settings → API."
+            exit 1
+          fi
+
+      - name: Generate real database activity
+        env:
+          SUPABASE_URL: https://clpmfblwrpnqwbxgbtkd.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+
+          ping_table() {
+            local table="$1"
+            echo "Querying public.$table ..."
+            http_code=$(curl --silent --show-error --location \
+              --max-time 30 --connect-timeout 10 \
+              --retry 3 --retry-delay 5 \
+              --user-agent "Hill-Springs-Academy-Supabase-KeepAlive/2.1" \
+              -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+              -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+              -H "Accept: application/json" \
+              -o /tmp/ka-body.json -w "%{http_code}" \
+              "${SUPABASE_URL}/rest/v1/${table}?select=*&limit=1")
+            echo "  → HTTP ${http_code}"
+            if [ "$http_code" != "200" ]; then
+              echo "Response body:"
+              cat /tmp/ka-body.json || true
+              echo "::error::Keep-alive query to ${table} failed with HTTP ${http_code}"
+              exit 1
+            fi
+          }
+
+          # Read-only queries only — never write school records.
+          ping_table "school_applications"
+          ping_table "school_subscribers"
+
+          # Light Auth admin list also counts as project activity
+          echo "Pinging Auth admin users endpoint..."
+          auth_code=$(curl --silent --show-error --location \
+            --max-time 30 --connect-timeout 10 \
+            -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -o /tmp/ka-auth.json -w "%{http_code}" \
+            "${SUPABASE_URL}/auth/v1/admin/users?page=1&per_page=1" || echo "000")
+          echo "  → Auth HTTP ${auth_code}"
+
+          echo "Supabase keep-alive completed successfully."
