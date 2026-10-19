@@ -7,6 +7,7 @@ import {
   clean,
   norm,
   isAdminEmail,
+  isAdminUserId,
   sixDigitCode,
   hashCode,
   passwordProblem,
@@ -74,7 +75,7 @@ Deno.serve(async (req) => {
 
   try {
     const email = norm(p.email);
-    if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400, req);
+    if (p.action !== "delete_my_account" && !validEmail(email)) return json({ error: "Please enter a valid email address." }, 400, req);
 
     // Global IP budget
     if (!(await rateLimit(`acct:ip:${ip}`, 3600, 20))) {
@@ -206,6 +207,56 @@ Deno.serve(async (req) => {
         });
       } catch { /* audit table may not exist yet */ }
       return json({ ok: true }, 200, req);
+    }
+
+
+    if (p.action === "delete_my_account") {
+      const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+      if (!token) return json({ error: "Please sign in again before deleting your account.", code: "AUTH" }, 401, req);
+      const { data: authData, error: authError } = await db.auth.getUser(token);
+      const user = authData?.user;
+      if (authError || !user?.id || !user.email) {
+        return json({ error: "Your session has expired. Please sign in again.", code: "AUTH" }, 401, req);
+      }
+      if (await isAdminUserId(user.id)) {
+        return json({ error: "Administrator accounts cannot be deleted from the parent portal. Contact the school owner." }, 403, req);
+      }
+      let authTime = 0;
+      try {
+        const payload = token.split(".")[1];
+        const claims = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
+        authTime = Number(claims.auth_time || 0);
+      } catch { /* invalid or unreadable token claims */ }
+      if (!authTime || Date.now() / 1000 - authTime > 600 || Date.now() / 1000 < authTime) {
+        return json({ error: "For your security, enter your current password to sign in again before deleting your account.", code: "REAUTH_REQUIRED" }, 401, req);
+      }
+      if (p.confirmText !== "DELETE") {
+        return json({ error: "Please type DELETE to confirm account deletion." }, 400, req);
+      }
+      if (!(await rateLimit(`acct:delete:${user.id}`, 3600, 3)) || !(await rateLimit(`acct:delete-ip:${ip}`, 3600, 5))) {
+        return json({ error: "Too many deletion attempts. Please try again later." }, 429, req);
+      }
+
+      const emailToRemove = norm(user.email);
+      const { data: conversations, error: conversationsError } = await db
+        .from("school_conversations").select("id").eq("user_id", user.id);
+      if (conversationsError) throw conversationsError;
+      const conversationIds = (conversations || []).map((row: { id: string }) => row.id);
+      if (conversationIds.length) {
+        const { error: messagesError } = await db.from("school_messages").delete().in("conversation_id", conversationIds);
+        if (messagesError) throw messagesError;
+      }
+      const { error: conversationDeleteError } = await db.from("school_conversations").delete().eq("user_id", user.id);
+      if (conversationDeleteError) throw conversationDeleteError;
+      const { error: codesError } = await db.from("school_codes").delete().eq("email", emailToRemove);
+      if (codesError) throw codesError;
+      const { error: subscribersError } = await db.from("school_subscribers").delete().eq("email", emailToRemove);
+      if (subscribersError) throw subscribersError;
+
+      await db.auth.admin.signOut(user.id, "global").catch(() => {});
+      const deleted = await db.auth.admin.deleteUser(user.id);
+      if (deleted.error) throw deleted.error;
+      return json({ ok: true, message: "Your parent account and linked online submissions have been deleted." }, 200, req);
     }
 
     return json({ error: "Unknown action." }, 400, req);
