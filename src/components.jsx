@@ -286,6 +286,9 @@ export function Footer() {
         <div className="legal-right">
           <span>Website developed by <a href="https://zandani.co.ke" target="_blank" rel="noopener noreferrer">Jonathan Mwaniki</a></span>
           <Link to="/privacy">Privacy & data protection</Link>
+          <Link to="/terms">Terms of service</Link>
+          <Link to="/refund-policy">Refund policy</Link>
+          <Link to="/delete-account">Delete my account</Link>
           <Link to="/sitemap">Sitemap</Link>
         </div>
       </div>
