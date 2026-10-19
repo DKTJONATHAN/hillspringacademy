@@ -5,6 +5,7 @@ import { PageHead } from "./components.jsx";
 import { SCHOOL } from "./data.js";
 import { accountApi, appsApi, passwordSignIn, subscribeToSchoolUpdates } from "./supabase.js";
 import { getToken, useParentSession } from "./session.js";
+import { AccountDeletionPanel } from "./AccountDeletion.jsx";
 
 const COPY = {
   admissions: {
@@ -328,6 +329,7 @@ export function AccountPortal({ kind }) {
                 <SubmissionList title="Your enquiries" items={data.enquiries} titleOf={q => q.subject} />
               </>
             )}
+            <AccountDeletionPanel session={session} onDeleted={signOut} />
           </>
         )}
       </div></section>
