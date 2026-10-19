@@ -60,7 +60,7 @@ export const requestAdminPasswordReset = (email) =>
 export const verifyAdminPasswordReset = (email, code, new_password) =>
   callFunction("school-account", { action: "verify_reset", email, code, newPassword: new_password, portal: "admin" });
 
-export const accountApi = (body) => callFunction("school-account", body);
+export const accountApi = (body, token = "") => callFunction("school-account", body, token);
 export const appsApi = (body, token = "") => callFunction("school-applications", body, token);
 
 export async function passwordSignIn(email, password) {
