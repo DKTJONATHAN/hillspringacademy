@@ -22,6 +22,7 @@ import { AdminEmailCentre } from "./AdminEmailCentre.jsx";
 import { AccountPortal } from "./AccountPortal.jsx";
 import { useTheme, useScroll } from "./hooks.js";
 import { PrivacyConsent } from "./PrivacyConsent.jsx";
+import { Terms, RefundPolicy, DeleteAccountHelp } from "./LegalPages.jsx";
 
 const NotFound = () => (
   <>
@@ -49,6 +50,9 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/directors" element={<Directors />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/delete-account" element={<DeleteAccountHelp />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<Blog />} />
             <Route path="/sitemap" element={<Sitemap />} />
