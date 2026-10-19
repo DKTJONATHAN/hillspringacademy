@@ -211,7 +211,7 @@ Deno.serve(async (req) => {
 
 
     if (p.action === "delete_my_account") {
-      const token = (req.headers.get("authorization") || "").replace(/^Bearer\\s+/i, "");
+      const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
       if (!token) return json({ error: "Please sign in again before deleting your account.", code: "AUTH" }, 401, req);
       const { data: authData, error: authError } = await db.auth.getUser(token);
       const user = authData?.user;
