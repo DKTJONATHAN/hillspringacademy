@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
 
   try {
     const email = norm(p.email);
-    if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400, req);
+    if (p.action !== "delete_my_account" && !validEmail(email)) return json({ error: "Please enter a valid email address." }, 400, req);
 
     // Global IP budget
     if (!(await rateLimit(`acct:ip:${ip}`, 3600, 20))) {
