@@ -55,3 +55,8 @@
 - Decide whether Turnstile should be active, then wire its public site key/widget to the forms and keep the secret only in Supabase Edge Function secrets.
 - Approve a specific school refund schedule before publishing the refund policy as final.
 - Review retention periods for learner and admissions records and document the school's lawful basis and parental/guardian authorisation process.
+
+
+## Deployment note for the account-deletion flow
+
+The frontend pages are delivered by Cloudflare Pages after the branch is merged and the normal site build deploys. The updated `supabase/functions/school-account/index.ts` must also be deployed to the connected Supabase project after merge; the repository does not currently contain an automatic Edge Function deployment workflow. Use the project's established Supabase CLI workflow and the documented command `supabase functions deploy school-account --no-verify-jwt`. Keep function verification settings consistent with the existing backend design and confirm the handler's own authentication checks before enabling the flow in production.
