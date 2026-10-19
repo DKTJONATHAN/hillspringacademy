@@ -924,18 +924,19 @@ export function Privacy() {
 
             <article className="privacy-card">
               <span className="privacy-number">14</span>
-              <h3>Google and other third-party services</h3>
-              <p>
-                Some pages may link to or embed third-party services, including Google Maps
-                and YouTube. Those providers may receive technical information when their
-                content is requested or interacted with. Their own privacy policies and
-                terms apply to their processing.
-              </p>
-              <p>
-                We do not represent third-party providers as being controlled by Hill Springs
-                Academy. Where a third-party service requires optional consent under applicable
-                law, it should only be activated after the required consent has been obtained.
-              </p>
+              <h3>Third-party services and data sharing</h3>
+              <p>The website uses providers for specific purposes. They may process technical information when their services are requested, and their own privacy terms also apply.</p>
+              <ul>
+                <li><strong>Supabase:</strong> parent authentication, database hosting and backend functions. Processes account/profile details, authentication data, learner/application records, enquiries, messages, session identifiers and security request information.</li>
+                <li><strong>Resend:</strong> delivery of verification/reset codes, application and enquiry emails, school updates and newsletters. Processes recipient addresses, email content and delivery metadata.</li>
+                <li><strong>Cloudflare:</strong> website hosting/delivery and Turnstile bot verification where configured. May process IP address, browser/request metadata and security logs; Turnstile processes verification tokens and may receive request IP information.</li>
+                <li><strong>Google Fonts:</strong> loads the website typeface; the browser requests font files and may disclose standard network/request metadata.</li>
+                <li><strong>Google Maps:</strong> provides the embedded map and directions link. Loading or opening a map can send technical request information to Google.</li>
+                <li><strong>YouTube:</strong> provides educational videos. Loading or interacting with embedded videos can send technical information to YouTube and may involve cookies or similar technologies.</li>
+                <li><strong>GitHub:</strong> hosts the website source repository and deployment workflow. The inspected frontend does not send parent form submissions to GitHub.</li>
+              </ul>
+              <p><strong>Analytics and advertising:</strong> no Google Analytics or advertising tag was identified in the source files reviewed for this notice. This should be updated if the school adds analytics, advertising or another tracking provider.</p>
+              <p>Some providers may process information outside Kenya. The school should verify provider terms, processing locations and appropriate transfer safeguards. We do not sell personal data.</p>
             </article>
 
             <article className="privacy-card">
