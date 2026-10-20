@@ -98,4 +98,7 @@ scanGallery();
 
 export default defineConfig({
   plugins: [react(), galleryAutoPlugin()],
+  ssr: {
+    noExternal: true,
+  },
 });
