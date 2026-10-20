@@ -1,5 +1,5 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./auth-fix.css";
@@ -14,13 +14,20 @@ document.head.appendChild(link);
 
 const rootEl = document.getElementById("root");
 
-createRoot(rootEl).render(
+const app = (
   <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
   </React.StrictMode>
 );
+
+// Hydrate when the Worker already injected SSR HTML; otherwise client-render
+if (rootEl && rootEl.hasChildNodes() && rootEl.querySelector(".skip, header, main, .page")) {
+  hydrateRoot(rootEl, app);
+} else {
+  createRoot(rootEl).render(app);
+}
 
 document.documentElement.classList.add("app-ready");
 

@@ -99,6 +99,11 @@ scanGallery();
 export default defineConfig({
   plugins: [react(), galleryAutoPlugin()],
   ssr: {
+    // Bundle all deps into the SSR output so Cloudflare Workers never need CJS require/createRequire
     noExternal: true,
+  },
+  build: {
+    // Keep SSR chunks readable for Worker imports
+    ssrEmitAssets: false,
   },
 });
