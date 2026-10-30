@@ -28,3 +28,7 @@ jobs:
         run: npm ci
       - name: Build client and SSR bundles
         run: npm run build
+      - name: Validate Worker syntax and Wrangler config
+        run: |
+          node --check worker.js
+          node -e "JSON.parse(require('node:fs').readFileSync('wrangler.jsonc', 'utf8'))"
