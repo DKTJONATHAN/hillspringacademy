@@ -573,7 +573,7 @@ export function Contact() {
             <a className="textlink" href="https://www.google.com/maps/search/?api=1&query=Hill+Springs+Academy+Maua+Kenya" target="_blank" rel="noopener noreferrer">Get directions on Google Maps ↗</a>
           </div>
           <form className="card enquiry-form" onSubmit={submit}>
-            <span className="eyebrow">Send a message</span><h3>We'll receive your enquiry directly.</h3>
+            <h3>Send a message</h3>
             <input type="text" name="website" value={form.website} onChange={set("website")} tabIndex={-1} autoComplete="off" style={{ position: "absolute", left: "-9999px" }} aria-hidden="true" />
             <label>Name<input value={form.name} onChange={set("name")} required /></label>
             <label>Email<input type="email" value={form.email} onChange={set("email")} required /></label>
