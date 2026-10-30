@@ -1,0 +1,606 @@
+/* Hillspring Academy form system
+   Direction: calm school-office stationery — clear labels, honest spacing,
+   paper-white surfaces and the school's red reserved for primary actions.
+   Applied using the unslop-ui skill: restrained color, no decorative gradients,
+   no nested form cards, no glowing buttons, and purposeful hierarchy. */
+
+:root {
+  --form-paper: #f5f4f1;
+  --form-surface: #ffffff;
+  --form-ink: #222321;
+  --form-muted: #62645f;
+  --form-line: #d9d8d2;
+  --form-focus: rgba(200, 16, 46, .16);
+  --form-radius: 10px;
+}
+
+:root[data-theme="dark"] {
+  --form-paper: #15191d;
+  --form-surface: #1e242a;
+  --form-ink: #f2f1ed;
+  --form-muted: #b4b7b8;
+  --form-line: #3a4248;
+  --form-focus: rgba(255, 105, 125, .2);
+}
+
+/* Shared form foundation */
+form,
+form.card,
+form.admin-panel-card,
+form.admin-login-card {
+  min-width: 0;
+  padding: clamp(22px, 3vw, 32px);
+  gap: 18px;
+  border: 1px solid var(--form-line);
+  border-radius: var(--form-radius);
+  background: var(--form-surface);
+  box-shadow: none;
+}
+
+form label,
+.admin-section label,
+.admin-panel-card > label {
+  display: grid;
+  gap: 7px;
+  color: var(--form-ink);
+  font-size: .875rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+form input:not([type="checkbox"]):not([type="radio"]),
+form select,
+form textarea,
+.admin-section input,
+.admin-section select,
+.admin-section textarea,
+.admin-panel-card > label input,
+.admin-panel-card > label select,
+.admin-panel-card > label textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 11px 13px;
+  border: 1px solid var(--form-line);
+  border-radius: 7px;
+  background: var(--form-surface);
+  color: var(--form-ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.45;
+  box-shadow: none;
+  transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+
+form textarea,
+.admin-section textarea,
+.admin-panel-card > label textarea {
+  min-height: 132px;
+  resize: vertical;
+}
+
+form input::placeholder,
+form textarea::placeholder,
+.admin-section input::placeholder,
+.admin-section textarea::placeholder {
+  color: var(--form-muted);
+  opacity: .78;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus,
+.admin-section input:focus,
+.admin-section select:focus,
+.admin-section textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--form-focus);
+}
+
+form input:disabled,
+form select:disabled,
+form textarea:disabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+
+form .btn,
+.admin-section .btn,
+.account-delete-form .btn {
+  min-height: 46px;
+  border: 1px solid var(--accent);
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  box-shadow: none;
+  transform: none;
+  transition: background-color .16s ease, border-color .16s ease;
+}
+
+form .btn:hover,
+.admin-section .btn:hover,
+.account-delete-form .btn:hover {
+  border-color: #a90e27;
+  background: #a90e27;
+  transform: none;
+}
+
+form .btn:disabled,
+.admin-section .btn:disabled {
+  cursor: wait;
+  opacity: .62;
+}
+
+form .btn.ghost,
+.auth-card .btn.ghost,
+.admin-login-card .admin-link-btn {
+  border-color: transparent;
+  background: transparent;
+  color: var(--accent);
+  box-shadow: none;
+}
+
+form .btn.ghost:hover,
+.auth-card .btn.ghost:hover {
+  border-color: transparent;
+  background: rgba(200, 16, 46, .06);
+  color: var(--accent);
+}
+
+form .eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: .72rem;
+  font-weight: 750;
+  letter-spacing: .09em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+form h2,
+form h3,
+.admin-login-card h1 {
+  margin: 0;
+  color: var(--form-ink);
+  font-size: clamp(1.35rem, 2.3vw, 1.8rem);
+  font-weight: 750;
+  letter-spacing: -.025em;
+  line-height: 1.2;
+}
+
+form p {
+  margin: 0;
+  color: var(--form-muted);
+}
+
+.form-grid,
+.compose-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+.turnstile-field {
+  display: flex;
+  align-items: center;
+  min-height: 66px;
+  margin-top: 2px;
+  padding-top: 14px;
+  border-top: 1px solid var(--form-line);
+}
+
+.turnstile-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.form-error,
+.form-success {
+  margin: 0;
+  font-size: .875rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.form-error { color: #a52620; }
+.form-success { color: #286844; }
+
+:root[data-theme="dark"] form,
+:root[data-theme="dark"] form.card,
+:root[data-theme="dark"] form.admin-panel-card,
+:root[data-theme="dark"] form.admin-login-card {
+  border-color: var(--form-line);
+  background: var(--form-surface);
+  color: var(--form-ink);
+  box-shadow: none;
+}
+
+:root[data-theme="dark"] form label,
+:root[data-theme="dark"] .admin-section label,
+:root[data-theme="dark"] .admin-panel-card > label {
+  color: var(--form-ink);
+}
+
+:root[data-theme="dark"] form input:not([type="checkbox"]):not([type="radio"]),
+:root[data-theme="dark"] form select,
+:root[data-theme="dark"] form textarea,
+:root[data-theme="dark"] .admin-section input,
+:root[data-theme="dark"] .admin-section select,
+:root[data-theme="dark"] .admin-section textarea {
+  border-color: var(--form-line);
+  background: #171d22;
+  color: var(--form-ink);
+}
+
+:root[data-theme="dark"] form input::placeholder,
+:root[data-theme="dark"] form textarea::placeholder {
+  color: var(--form-muted);
+}
+
+:root[data-theme="dark"] .form-error { color: #ff9c96; }
+:root[data-theme="dark"] .form-success { color: #8bd2a5; }
+
+/* Parent portal: remove the old decorative gradients, thick red bars and card-within-card look. */
+.portal-section {
+  background: var(--form-paper) !important;
+}
+
+.portal-section::before {
+  display: none !important;
+}
+
+.portal-brandbar {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 28px;
+  padding: 0 0 22px;
+  border: 0;
+  border-bottom: 1px solid var(--form-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.portal-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.portal-brand-mark img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+}
+
+.portal-brand-kicker {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--form-muted);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.portal-brandbar strong {
+  display: block;
+  color: var(--form-ink);
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.portal-brandbar p {
+  margin: 5px 0 0;
+  color: var(--form-muted);
+  font-size: .9rem;
+}
+
+.portal-entry-grid {
+  grid-template-columns: minmax(0, 520px) minmax(220px, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.portal-section .card,
+.portal-section form,
+.portal-section .portal-form,
+.portal-section .auth-card {
+  border: 1px solid var(--form-line);
+  border-radius: var(--form-radius);
+  background: var(--form-surface);
+  box-shadow: none;
+}
+
+.portal-section .auth-card,
+.portal-section .portal-form {
+  border-top: 1px solid var(--form-line);
+}
+
+.portal-section .auth-card h2,
+.portal-section .portal-form h2 {
+  color: var(--form-ink);
+}
+
+.portal-section .auth-card .eyebrow,
+.portal-section .portal-form .eyebrow {
+  color: var(--accent);
+}
+
+.portal-section .portal-info-card {
+  padding: 8px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.portal-info-card::after {
+  display: none;
+}
+
+.portal-info-card h3 {
+  color: var(--form-ink);
+  font-size: 1.05rem;
+}
+
+.portal-info-card .checks {
+  margin: 12px 0 18px;
+  padding-left: 19px;
+}
+
+.portal-info-card .checks li {
+  margin: 0 0 10px;
+  color: var(--form-muted);
+}
+
+.portal-section .portal-toolbar {
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--form-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.portal-section .portal-toolbar strong {
+  color: var(--form-ink);
+}
+
+.portal-section .portal-form {
+  width: min(100%, 820px);
+  margin-inline: auto;
+}
+
+.portal-section .portal-form .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.auth-card {
+  gap: 15px;
+}
+
+.auth-card h2 {
+  font-size: 1.7rem;
+}
+
+.auth-card > p {
+  font-size: .92rem;
+}
+
+.auth-card .btn {
+  width: 100%;
+}
+
+.auth-card .btn.small.ghost {
+  width: auto;
+  min-height: 34px;
+  justify-self: start;
+  padding: 5px 8px;
+  text-align: left;
+}
+
+.auth-card .linklike,
+.portal-section .textlink,
+.portal-section .pw-toggle {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.pw-wrap input {
+  padding-right: 74px;
+}
+
+.pw-toggle {
+  min-height: 34px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.code-input {
+  max-width: 260px;
+  min-height: 54px;
+  font-size: 1.35rem !important;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-align: left;
+}
+
+/* Public contact and parent enquiry */
+.enquiry-form {
+  align-self: start;
+  gap: 17px;
+}
+
+.enquiry-form .btn {
+  width: 100%;
+}
+
+.contact-layout .enquiry-form {
+  width: 100%;
+}
+
+.account-delete-panel {
+  border: 1px solid var(--form-line);
+  border-radius: var(--form-radius);
+  background: var(--form-surface);
+  box-shadow: none;
+}
+
+.account-delete-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 18px 0 0;
+  border: 0;
+  border-top: 1px solid var(--form-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Admin access and admin-created forms */
+.admin-login-page {
+  background: var(--form-paper) !important;
+}
+
+.admin-login-card {
+  width: min(440px, 100%);
+  border: 1px solid var(--form-line);
+  border-radius: var(--form-radius);
+  box-shadow: none;
+}
+
+.admin-login-card h1 {
+  font-size: 1.7rem;
+}
+
+.admin-login-card > p {
+  color: var(--form-muted);
+}
+
+.admin-login-card .admin-primary-btn {
+  width: 100%;
+}
+
+.admin-login-card .admin-link-btn {
+  width: auto;
+  min-height: 34px;
+  justify-self: start;
+  padding: 4px 8px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.admin-section form.admin-panel-card,
+.admin-two-column form.admin-panel-card,
+form.compose-card {
+  align-self: start;
+  border: 1px solid var(--form-line);
+  border-radius: var(--form-radius);
+  background: var(--form-surface);
+  box-shadow: none;
+}
+
+.admin-card-heading {
+  align-items: flex-start;
+}
+
+.admin-card-heading .admin-icon {
+  display: none;
+}
+
+.admin-info-box,
+.admin-danger-note {
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.admin-section .admin-panel-card > label {
+  margin: 0;
+}
+
+.admin-section .compose-card {
+  width: min(100%, 780px);
+}
+
+.admin-section .compose-card .compose-body {
+  min-height: 220px;
+}
+
+/* Mobile form layout */
+@media (max-width: 720px) {
+  form,
+  form.card,
+  form.admin-panel-card,
+  form.admin-login-card {
+    padding: 20px 17px;
+    gap: 15px;
+  }
+
+  .form-grid,
+  .compose-grid,
+  .portal-section .portal-form .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .portal-brandbar {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 12px;
+    padding-bottom: 17px;
+  }
+
+  .portal-brand-mark,
+  .portal-brand-mark img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .portal-entry-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .portal-section .portal-info-card {
+    padding: 0;
+  }
+
+  .auth-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .code-input {
+    max-width: 100%;
+  }
+
+  .turnstile-field {
+    overflow-x: auto;
+  }
+
+  .admin-login-card {
+    padding: 22px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  form input,
+  form select,
+  form textarea,
+  form .btn {
+    transition: none;
+  }
+}
