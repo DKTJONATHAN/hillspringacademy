@@ -1,0 +1,206 @@
+/* Hillspring Academy — whole-site visual refinement
+   School character: confident, welcoming, grounded and practical.
+   Use real school imagery, clear typography, calm surfaces and a restrained red accent. */
+
+:root {
+  --radius: 9px;
+  --shadow: 0 8px 24px rgba(24, 28, 32, .055);
+}
+
+html { scroll-behavior: smooth; }
+body { background: #f5f4f1; color: #242522; }
+::selection { background: rgba(200, 16, 46, .18); color: #242522; }
+
+h1, h2, h3 { letter-spacing: -.035em; }
+h1 { line-height: 1.02; }
+h2 { line-height: 1.12; }
+p { line-height: 1.72; }
+
+.wrap { width: min(1160px, calc(100% - 48px)); }
+.section { padding-block: clamp(54px, 7vw, 84px); }
+.section.alt { background: #eeede9; }
+
+/* Navigation: quiet, legible, anchored. */
+.site-header {
+  background: rgba(255,255,255,.96);
+  border-bottom: 1px solid #deddd7;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.site-header.scrolled { box-shadow: 0 5px 16px rgba(20,25,30,.045); }
+.brand { gap: 10px; }
+.brand img { width: 48px; height: 48px; object-fit: contain; }
+.brand-text strong { letter-spacing: -.035em; }
+.top-nav { gap: clamp(10px, 1.5vw, 22px); }
+.top-nav a {
+  border-radius: 4px;
+  padding: 9px 2px;
+  font-size: .84rem;
+  transition: color .15s ease;
+}
+.top-nav a:hover, .top-nav a.active {
+  background: transparent;
+  color: var(--accent);
+}
+.actions .btn, .actions .header-btn { border-radius: 5px; }
+.icon-btn, .mobile-close { border-radius: 5px; }
+.mobile-menu {
+  border-top: 1px solid var(--line);
+  box-shadow: 0 14px 26px rgba(0,0,0,.08);
+}
+
+/* Buttons and links: strong actions, not floating pills. */
+.btn {
+  min-height: 46px;
+  padding: 11px 18px;
+  border-radius: 5px;
+  box-shadow: none;
+  font-weight: 750;
+  letter-spacing: 0;
+  transition: background-color .16s ease, border-color .16s ease, color .16s ease;
+}
+.btn:hover { transform: none; box-shadow: none; }
+.btn.small { min-height: 38px; padding: 8px 13px; border-radius: 5px; }
+.btn.ghost { border-width: 1px; }
+.textlink { border-bottom-width: 1px; text-decoration: none; }
+a:focus-visible, button:focus-visible {
+  outline: 3px solid rgba(200,16,46,.32);
+  outline-offset: 3px;
+}
+
+/* Page headings and hero: editorial composition, no generic gradient wash. */
+.pagehead {
+  padding: clamp(42px, 6vw, 68px) 0;
+  background: #292b2d;
+  border-bottom: 4px solid var(--accent);
+}
+.pagehead h1 {
+  max-width: 850px;
+  font-size: clamp(2.35rem, 5vw, 4rem);
+  letter-spacing: -.055em;
+}
+.pagehead p { max-width: 680px; line-height: 1.65; }
+.home-hero { min-height: 620px; background: #252729; }
+.home-hero-image::after {
+  background: linear-gradient(90deg, rgba(18,20,22,.82) 0%, rgba(18,20,22,.52) 48%, rgba(18,20,22,.12) 100%);
+}
+.home-hero-content { padding-top: clamp(86px, 10vw, 136px); padding-bottom: 66px; }
+.home-hero h1 { max-width: 780px; font-size: clamp(2.8rem, 6.5vw, 5.8rem); line-height: .98; }
+.home-hero .eyebrow { letter-spacing: .13em; }
+.home-hero p { line-height: 1.7; }
+.home-hero .btn { min-width: 164px; }
+.image-note { border-radius: 3px; }
+
+/* Content blocks: use alignment, rules and whitespace instead of stacked floating cards. */
+.card {
+  padding: clamp(20px, 2.5vw, 28px);
+  border: 1px solid #deddd7;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+}
+.cols { gap: 14px; }
+.blog-grid { gap: 1px; background: #d9d8d2; border-color: #d9d8d2; }
+.blog-grid .card { border-radius: 0; }
+.tile, .gallery-grid .photo { border-radius: 4px; }
+.gallery-grid { gap: 12px; }
+.photo { background: #e7e5df; }
+.photo img { transition: transform .35s ease; }
+.tile:hover .photo img { transform: scale(1.025); }
+.carousel { border-radius: 5px; box-shadow: none; }
+.carousel .nav { border-radius: 4px; box-shadow: none; }
+.tiles { gap: 8px; }
+.tile-link { border-radius: 5px; background: #fff; }
+.tabs { gap: 6px; }
+.tabs button, .chips button {
+  border-radius: 4px;
+  padding: 9px 13px;
+  font-size: .86rem;
+}
+.panel { border-radius: 6px; box-shadow: none; }
+.notice { padding-block: 18px; }
+
+/* Distinct school-stage and values sections. */
+.stage-row { transition: background-color .16s ease; }
+.stage-row:hover { padding-left: 10px; padding-right: 10px; }
+.home-life { background: #eeede9; }
+.home-values { background: #242628; }
+.home-values .value-item { padding-block: 22px; }
+.home-uniform { background: #fff; }
+.cta { background: #292b2d; border-top: 4px solid var(--accent); }
+.cta .btn { background: #fff; border-color: #fff; color: #242522; }
+
+/* Tables and downloadable resources should read like school information, not widgets. */
+table { border-collapse: collapse; }
+th { text-align: left; }
+td, th { border-color: #deddd7; }
+.map-card { border-color: #deddd7; }
+.resource-group h2 { letter-spacing: -.03em; }
+
+/* Footer: structured and useful. */
+.site-footer {
+  padding-top: 48px;
+  background: #222426;
+  border-top: 4px solid var(--accent);
+}
+.site-footer a { transition: color .15s ease; }
+.site-footer a:hover { color: #fff; }
+.foot-grid { gap: 28px; }
+.legal { line-height: 1.6; }
+
+/* Admin workspace: practical utility UI, not a dashboard of glowing tiles. */
+.admin-portal { background: #f3f2ee; }
+.admin-sidebar { background: #242628; box-shadow: none; }
+.admin-nav-link { border-radius: 5px; }
+.admin-nav-link.active { box-shadow: inset 3px 0 0 var(--accent); }
+.admin-topbar { background: #fff; border-bottom: 1px solid #deddd7; box-shadow: none; }
+.admin-metric-card, .admin-panel-card, .admin-dashboard-grid > *,
+.admin-section .card {
+  border: 1px solid #deddd7;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: none;
+}
+.admin-metric-card::before, .admin-metric-card::after { display: none; }
+.admin-icon { border-radius: 5px; box-shadow: none; }
+.admin-nav-link:hover, .admin-nav-link.active { transform: none; }
+.admin-top-actions .btn { border-radius: 5px; }
+
+/* Reduce motion without hiding content or interaction. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Responsive rhythm and navigation. */
+@media (max-width: 800px) {
+  .wrap { width: min(100% - 34px, 680px); }
+  .section { padding-block: 48px; }
+  .home-hero { min-height: 590px; }
+  .home-hero-image::after {
+    background: linear-gradient(0deg, rgba(18,20,22,.88) 0%, rgba(18,20,22,.55) 58%, rgba(18,20,22,.18) 100%);
+  }
+  .home-hero-content { padding-top: 104px; padding-bottom: 48px; }
+  .home-hero h1 { font-size: clamp(2.6rem, 10vw, 4.2rem); }
+  .pagehead { padding-block: 48px; }
+  .pagehead h1 { font-size: clamp(2.35rem, 9vw, 3.5rem); }
+  .cols, .gallery-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .foot-grid { gap: 22px; }
+}
+@media (max-width: 520px) {
+  .wrap { width: calc(100% - 32px); }
+  .home-hero { min-height: 630px; }
+  .home-hero-content { padding-top: 92px; }
+  .home-hero h1 { font-size: clamp(2.45rem, 12vw, 3.6rem); }
+  .hero-contact { display: grid; gap: 8px; }
+  .cols, .gallery-grid { grid-template-columns: 1fr; }
+  .row-head { align-items: start; flex-direction: column; gap: 12px; }
+  .btns .btn { width: 100%; }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .foot-grid .brand-col { grid-column: 1 / -1; }
+  .admin-content { padding: 16px; }
+}
