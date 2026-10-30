@@ -4,7 +4,7 @@ import { FEES_META, FEE_BANDS, FEE_CLASSES, downloadFeePdf } from "./feesData.js
 import { SCHOOL, GALLERY } from "./data.js";
 import { BLOG_POSTS } from "./blogData.js";
 import { PageHead, Photo } from "./components.jsx";
-import { submitSchoolEnquiry } from "./supabase.js";
+import { submitSchoolEnquiry } from "./supabase.js";\nimport { TurnstileWidget } from "./TurnstileWidget.jsx";
 
 export function About() {
   return (
@@ -576,7 +576,7 @@ export function Contact() {
             <label>Phone<input value={form.phone} onChange={set("phone")} /></label>
             <label>Subject<input value={form.subject} onChange={set("subject")} /></label>
             <label>Message<textarea value={form.message} onChange={set("message")} required /></label>
-            {state.error && <p className="form-error" role="alert">{state.error}</p>}
+            <div className="turnstile-field"><TurnstileWidget action="contact_submit" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>\n            {state.error && <p className="form-error" role="alert">{state.error}</p>
             {state.done && <p className="form-success" role="status">Thank you. Your message has been received.</p>}
             <button className="btn" type="submit" disabled={state.busy}>{state.busy ? "Sending…" : "Send enquiry"}</button>
           </form>
