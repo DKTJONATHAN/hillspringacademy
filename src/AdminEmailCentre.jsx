@@ -139,7 +139,8 @@ export function AdminEmailCentre() {
     setResetStatus("");
     try {
       const { requestAdminPasswordReset } = await import("./supabase.js");
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await requestAdminPasswordReset(email, turnstileToken);
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await requestAdminPasswordReset(email, turnstileToken);
       setResetStep("verify");
       setResetCooldown(60);
       setResetStatus("If this email is an administrator, a code was sent.");
