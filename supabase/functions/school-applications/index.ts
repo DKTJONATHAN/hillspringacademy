@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { db, json, cors, validEmail, clean, norm, userFromRequest, requireAdmin, requireAdminManager, findUserByEmail, isAdminUserId, passwordProblem, clientIp } from "../_shared/util.ts";
+import { db, json, cors, validEmail, clean, norm, userFromRequest, requireAdmin, requireAdminManager, findUserByEmail, isAdminUserId, passwordProblem, clientIp, verifyTurnstile } from "../_shared/util.ts";
 import { sendEmail, acceptanceEmail, rejectionEmail, applicationReceivedEmail, enquiryReceivedEmail, esc,
   FROM_ADMISSIONS, ADMISSIONS_EMAIL, SCHOOL_EMAIL, layout } from "../_shared/email.ts";
 
@@ -25,7 +25,7 @@ Deno.serve(async req => {
         return json({ ok: true, profile: prof, applications: apps.data || [], enquiries: enq.data || [] });
       }
 
-      if (p.action === "submit_application") {
+      if (p.action === "submit_application") {\n        if (!(await verifyTurnstile(p.turnstileToken, clientIp(req), "application_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
         const learner = clean(p.learnerName, 120), level = clean(p.requestedLevel, 80);
         if (!learner || !level) return json({ error: "Please enter the learner's name and the level requested." }, 400);
         const parent = clean(p.parentName, 120) || prof?.full_name || email;
@@ -50,7 +50,7 @@ Deno.serve(async req => {
         return json(out);
       }
 
-      if (p.action === "submit_enquiry") {
+      if (p.action === "submit_enquiry") {\n        if (!(await verifyTurnstile(p.turnstileToken, clientIp(req), "enquiry_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
         const subject = clean(p.subject, 160) || "General enquiry", message = clean(p.message, 4000);
         if (message.length < 5) return json({ error: "Please write your enquiry." }, 400);
         const name = prof?.full_name || email;
