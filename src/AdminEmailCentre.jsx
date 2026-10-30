@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { PageHead } from "./components.jsx";
 import { adminCall, adminDeleteCall, adminSignIn, appsApi } from "./supabase.js";
 import { AdminAdminsTab } from "./AdminAdminsTab.jsx";
-import { getAdminToken, setAdminToken, clearAdminToken } from "./session.js";
+import { getAdminToken, setAdminToken, clearAdminToken } from "./session.js";\nimport { TurnstileWidget, verifyTurnstileToken } from "./TurnstileWidget.jsx";
 
 const NAV = [
   ["overview", "Overview", "⌂"],
@@ -17,7 +17,7 @@ export function AdminEmailCentre() {
   const [token, setToken] = useState(() => getAdminToken());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
+  const [loginError, setLoginError] = useState("");\n  const [turnstileToken, setTurnstileToken] = useState("");\n  const [widgetResetKey, setWidgetResetKey] = useState(0);
   const [resetMode, setResetMode] = useState(false);
   const [resetStep, setResetStep] = useState("request");
   const [resetCode, setResetCode] = useState("");
@@ -136,7 +136,7 @@ export function AdminEmailCentre() {
     setResetStatus("");
     try {
       const { requestAdminPasswordReset } = await import("./supabase.js");
-      await requestAdminPasswordReset(email);
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await requestAdminPasswordReset(email, turnstileToken);
       setResetStep("verify");
       setResetCooldown(60);
       setResetStatus("If this email is an administrator, a code was sent.");
@@ -150,7 +150,7 @@ export function AdminEmailCentre() {
     setResetStatus("");
     try {
       const { verifyAdminPasswordReset } = await import("./supabase.js");
-      await verifyAdminPasswordReset(email, resetCode, newPassword);
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await verifyAdminPasswordReset(email, resetCode, newPassword, turnstileToken);
       setResetStatus("Password updated. You can sign in now.");
       setResetMode(false);
       setResetStep("request");
@@ -165,7 +165,7 @@ export function AdminEmailCentre() {
     e.preventDefault();
     setLoginError("");
     try {
-      const data = await adminSignIn(email, password);
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await verifyTurnstileToken(turnstileToken, "admin_login");\n      const data = await adminSignIn(email, password);
       const me = await appsApi({ action: "whoami" }, data.access_token);
       setAdminToken(data.access_token);
       setToken(data.access_token);
@@ -312,7 +312,7 @@ export function AdminEmailCentre() {
               <p>Sign in to manage admissions, enquiries, communications and administrators.</p>
               <label>Email address<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" /></label>
               <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" /></label>
-              {loginError && <p className="form-error" role="alert">{loginError}</p>}
+              <div className="turnstile-field"><TurnstileWidget action="admin_login" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>\n              {loginError && <p className="form-error" role="alert">{loginError}</p>}
               <button className="btn admin-primary-btn" type="submit">Sign in to portal</button>
               <button type="button" className="admin-link-btn" onClick={() => setResetMode(true)}>Forgot password?</button>
             </form>
