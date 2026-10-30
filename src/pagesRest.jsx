@@ -6,7 +6,6 @@ import { BLOG_POSTS } from "./blogData.js";
 import { PageHead, Photo } from "./components.jsx";
 import { submitSchoolEnquiry } from "./supabase.js";
 import { TurnstileWidget } from "./TurnstileWidget.jsx";
-import { TurnstileWidget } from "./TurnstileWidget.jsx";
 
 export function About() {
   return (
@@ -582,7 +581,7 @@ export function Contact() {
             <label>Subject<input value={form.subject} onChange={set("subject")} /></label>
             <label>Message<textarea value={form.message} onChange={set("message")} required /></label>
             <div className="turnstile-field"><TurnstileWidget action="contact_submit" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>
-            {state.error && <p className="form-error" role="alert">{state.error}</p>
+            {state.error && <p className="form-error" role="alert">{state.error}</p>}
             {state.done && <p className="form-success" role="status">Thank you. Your message has been received.</p>}
             <button className="btn" type="submit" disabled={state.busy}>{state.busy ? "Sending…" : "Send enquiry"}</button>
           </form>
