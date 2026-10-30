@@ -106,6 +106,7 @@ form textarea:disabled {
 }
 
 form .btn,
+.portal-section form .btn:not(.ghost),
 .admin-section .btn,
 .account-delete-form .btn {
   min-height: 46px;
@@ -122,6 +123,7 @@ form .btn,
 }
 
 form .btn:hover,
+.portal-section form .btn:not(.ghost):hover,
 .admin-section .btn:hover,
 .account-delete-form .btn:hover {
   border-color: #a90e27;
