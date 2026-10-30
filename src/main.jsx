@@ -2,15 +2,11 @@ import React from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
+import "./styles.css";
 import "./auth-fix.css";
 import "./seo.css";
 import "./nav-fix.css";
 
-// Load full site stylesheet from last good commit (temporary until full file is restored in-repo)
-const link = document.createElement("link");
-link.rel = "stylesheet";
-link.href = "https://cdn.jsdelivr.net/gh/DKTJONATHAN/hillspringacademy@06b107b/src/styles.css";
-document.head.appendChild(link);
 
 const rootEl = document.getElementById("root");
 
