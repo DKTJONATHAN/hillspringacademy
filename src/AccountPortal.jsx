@@ -5,7 +5,7 @@ import { PageHead } from "./components.jsx";
 import { SCHOOL } from "./data.js";
 import { accountApi, appsApi, passwordSignIn, subscribeToSchoolUpdates } from "./supabase.js";
 import { getToken, useParentSession } from "./session.js";
-import { AccountDeletionPanel } from "./AccountDeletion.jsx";
+import { AccountDeletionPanel } from "./AccountDeletion.jsx";\nimport { TurnstileWidget, verifyTurnstileToken } from "./TurnstileWidget.jsx";
 
 const COPY = {
   admissions: {
@@ -59,7 +59,7 @@ function AuthCard({ kind, onSignedIn }) {
   const [newPassword, setNewPassword] = useState("");
   const [msg, setMsg] = useState({ type: "", text: "" });
   const [busy, setBusy] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
+  const [cooldown, setCooldown] = useState(0);\n  const [turnstileToken, setTurnstileToken] = useState("");\n  const [widgetResetKey, setWidgetResetKey] = useState(0);\n  const turnstileAction = { login: "parent_login", register: "parent_register", verify: "parent_verify", forgot: "parent_password_reset", reset: "parent_verify" }[view];
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -70,7 +70,7 @@ function AuthCard({ kind, onSignedIn }) {
   const go = (v, m = { type: "", text: "" }) => { setView(v); setMsg(m); setCode(""); };
   const err = (text) => setMsg({ type: "error", text });
   const ok = (text) => setMsg({ type: "success", text });
-  const run = (fn) => async (e) => { e.preventDefault(); setBusy(true); setMsg({ type: "", text: "" }); try { await fn(); } finally { setBusy(false); } };
+  const run = (fn) => async (e) => { e.preventDefault(); setBusy(true); setMsg({ type: "", text: "" }); try { await fn(); } finally { setBusy(false); setTurnstileToken(""); setWidgetResetKey((value) => value + 1); } };
 
   const sendWelcome = async (name) => {
     try {
@@ -82,7 +82,7 @@ function AuthCard({ kind, onSignedIn }) {
 
   const login = run(async () => {
     try {
-      onSignedIn(await passwordSignIn(email.trim(), password));
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await verifyTurnstileToken(turnstileToken, "parent_login");\n      onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
       const text = e1.message || "Unable to sign in.";
       if (/not confirmed|email not confirmed/i.test(text)) {
@@ -96,7 +96,7 @@ function AuthCard({ kind, onSignedIn }) {
 
   const register = run(async () => {
     try {
-      await accountApi({ action: "register", email, fullName, phone });
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "register", email, fullName, phone, turnstileToken });
       setCooldown(60);
       go("verify", { type: "success", text: `We sent a 6-digit code to ${email}. Enter it (and keep your password) to finish setup.` });
     } catch (e1) {
@@ -107,7 +107,7 @@ function AuthCard({ kind, onSignedIn }) {
 
   const verify = run(async () => {
     try {
-      await accountApi({ action: "verify_signup", email, code, password });
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "verify_signup", email, code, password, turnstileToken });
       await sendWelcome(fullName);
       onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
@@ -125,19 +125,19 @@ function AuthCard({ kind, onSignedIn }) {
 
   const forgot = run(async () => {
     try {
-      await accountApi({ action: "request_reset", email, portal: "parent" });
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "request_reset", email, portal: "parent", turnstileToken });
       setCooldown(60);
       go("reset", { type: "success", text: `If this email is registered, a 6-digit code has been sent to ${email}.` });
     } catch (e1) {
       if (e1.message.includes("do not have an account")) go("register", { type: "error", text: "You do not have an account yet. Please register." });
-      else if (e1.message.includes("not been verified")) { await accountApi({ action: "resend_signup", email }).catch(() => {}); setCooldown(60); go("verify", { type: "error", text: e1.message + " We sent you a verification code." }); }
+      else if (e1.message.includes("not been verified")) { go("verify", { type: "error", text: e1.message + " Complete the security check and use Resend code." }); }
       else err(e1.message);
     }
   });
 
   const reset = run(async () => {
     try {
-      await accountApi({ action: "verify_reset", email, code, newPassword, portal: "parent" });
+      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "verify_reset", email, code, newPassword, portal: "parent", turnstileToken });
       setPassword("");
       go("login", { type: "success", text: "Password updated. Please sign in with your new password." });
     } catch (e1) { err(e1.message); }
@@ -167,7 +167,7 @@ function AuthCard({ kind, onSignedIn }) {
       {(view === "register" || view === "verify") && <p className="field-hint">{PW_HINT}</p>}
       {(view === "verify" || view === "reset") && <CodeInput value={code} onChange={setCode} />}
       {view === "reset" && <><PasswordInput label="New password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" minLength={8} /><p className="field-hint">{PW_HINT}</p></>}
-      {msg.text && <p className={msg.type === "error" ? "form-error" : "form-success"} role={msg.type === "error" ? "alert" : "status"}>{msg.text}</p>}
+      <div className="turnstile-field"><TurnstileWidget action={turnstileAction} onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>\n      {msg.text && <p className={msg.type === "error" ? "form-error" : "form-success"} role={msg.type === "error" ? "alert" : "status"}>{msg.text}</p>}
       <button className="btn" type="submit" disabled={busy}>
         {busy ? "Please wait…" : { login: "Sign in", register: "Create account", verify: "Verify email", forgot: "Send code", reset: "Update password" }[view]}
       </button>
@@ -206,7 +206,7 @@ function AdmissionForm({ profile, onDone }) {
   const submit = async (e) => {
     e.preventDefault(); setState({ busy: true, error: "", done: false });
     try {
-      await appsApi({ action: "submit_application", ...f }, await getToken());
+      await appsApi({ action: "submit_application", ...f, turnstileToken }, await getToken());
       setState({ busy: false, error: "", done: true }); onDone();
     } catch (err) { setState({ busy: false, error: err.message, done: false }); }
   };
