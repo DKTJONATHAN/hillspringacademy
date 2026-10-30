@@ -25,7 +25,8 @@ Deno.serve(async req => {
         return json({ ok: true, profile: prof, applications: apps.data || [], enquiries: enq.data || [] });
       }
 
-      if (p.action === "submit_application") {\n        if (!(await verifyTurnstile(p.turnstileToken, clientIp(req), "application_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
+      if (p.action === "submit_application") {
+        if (!(await verifyTurnstile(p.turnstileToken, clientIp(req), "application_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
         const learner = clean(p.learnerName, 120), level = clean(p.requestedLevel, 80);
         if (!learner || !level) return json({ error: "Please enter the learner's name and the level requested." }, 400);
         const parent = clean(p.parentName, 120) || prof?.full_name || email;
@@ -50,7 +51,8 @@ Deno.serve(async req => {
         return json(out);
       }
 
-      if (p.action === "submit_enquiry") {\n        if (!(await verifyTurnstile(p.turnstileToken, clientIp(req), "enquiry_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
+      if (p.action === "submit_enquiry") {
+        if (!(await verifyTurnstile(p.turnstileToken, clientIp(req), "enquiry_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
         const subject = clean(p.subject, 160) || "General enquiry", message = clean(p.message, 4000);
         if (message.length < 5) return json({ error: "Please write your enquiry." }, 400);
         const name = prof?.full_name || email;
