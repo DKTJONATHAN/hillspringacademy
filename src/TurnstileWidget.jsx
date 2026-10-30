@@ -66,3 +66,17 @@ export function TurnstileWidget({ action, onToken, resetKey = 0 }) {
 
   return <div ref={containerRef} className="turnstile-wrap" aria-label="Security verification" />;
 }
+
+export async function verifyTurnstileToken(token, action) {
+  const response = await fetch("/api/turnstile/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-store",
+    body: JSON.stringify({ token, action }),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || result.ok !== true) {
+    throw new Error(result.error || "Security verification failed. Please try again.");
+  }
+  return true;
+}
