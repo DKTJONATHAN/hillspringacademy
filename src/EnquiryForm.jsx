@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { appsApi } from "./supabase.js";
-import { getToken } from "./session.js";
+import { getToken } from "./session.js";\nimport { TurnstileWidget } from "./TurnstileWidget.jsx";
 
 function topicFromParams(subject, topicParam) {
   if (topicParam === "contact" || topicParam === "admissions") return topicParam;
@@ -25,7 +25,7 @@ export function EnquiryForm({ profile, onDone }) {
   const subjectFromUrl = (params.get("subject") || "").trim().slice(0, 160);
   const topicFromUrl = topicFromParams(subjectFromUrl, params.get("topic"));
   const [f, setF] = useState({ subject: subjectFromUrl, topic: topicFromUrl, message: "" });
-  const [state, setState] = useState({ busy: false, error: "", done: false });
+  const [state, setState] = useState({ busy: false, error: "", done: false });\n  const [turnstileToken, setTurnstileToken] = useState("");\n  const [widgetResetKey, setWidgetResetKey] = useState(0);
 
   useEffect(() => {
     const subject = (params.get("subject") || "").trim().slice(0, 160);
@@ -39,7 +39,7 @@ export function EnquiryForm({ profile, onDone }) {
     e.preventDefault();
     setState({ busy: true, error: "", done: false });
     try {
-      await appsApi({ action: "submit_enquiry", ...f }, await getToken());
+      await appsApi({ action: "submit_enquiry", ...f, turnstileToken }, await getToken());
       setF({ subject: "", topic: "admissions", message: "" });
       setState({ busy: false, error: "", done: true });
       onDone();
@@ -79,7 +79,7 @@ export function EnquiryForm({ profile, onDone }) {
         Message
         <textarea value={f.message} onChange={set("message")} required />
       </label>
-      {state.error && (
+      <div className="turnstile-field"><TurnstileWidget action="enquiry_submit" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>\n      {state.error && (
         <p className="form-error" role="alert">
           {state.error}
         </p>
