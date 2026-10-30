@@ -52,7 +52,6 @@ Deno.serve(async req => {
 
   try {
     if (p.action === "subscribe") {
-      if (!(await verifySchoolTurnstile(p.turnstileToken, "newsletter_subscribe"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
       const email = String(p.email ?? "").trim().toLowerCase();
       const name = String(p.name ?? "").trim() || null;
       if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400);
