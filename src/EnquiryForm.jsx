@@ -54,7 +54,6 @@ export function EnquiryForm({ profile, onDone }) {
 
   return (
     <form className="card enquiry-form" onSubmit={submit}>
-      <span className="eyebrow">Send an enquiry</span>
       <h2>How can we help{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}?</h2>
       {subjectFromUrl && (
         <p className="lede" style={{ marginTop: 0 }}>
