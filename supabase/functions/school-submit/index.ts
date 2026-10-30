@@ -51,7 +51,8 @@ Deno.serve(async req => {
   if (p.website) return json({ ok: true });
 
   try {
-    if (p.action === "subscribe") {\n      if (!(await verifySchoolTurnstile(p.turnstileToken, "newsletter_subscribe"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
+    if (p.action === "subscribe") {
+      if (!(await verifySchoolTurnstile(p.turnstileToken, "newsletter_subscribe"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
       const email = String(p.email ?? "").trim().toLowerCase();
       const name = String(p.name ?? "").trim() || null;
       if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400);
@@ -85,7 +86,8 @@ Deno.serve(async req => {
       return json({ ok: true });
     }
 
-    if (p.action === "enquiry") {\n      if (!(await verifySchoolTurnstile(p.turnstileToken, "contact_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
+    if (p.action === "enquiry") {
+      if (!(await verifySchoolTurnstile(p.turnstileToken, "contact_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
       const email = String(p.email ?? "").trim().toLowerCase();
       const name = String(p.name ?? "").trim();
       const subject = String(p.subject ?? "").trim() || (p.type === "admissions" ? "Student enrolment enquiry" : "General enquiry");
