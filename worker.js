@@ -91,9 +91,10 @@ const TURNSTILE_ACTIONS = new Set([
 
 async function handleTurnstileVerify(request, env) {
   const origin = request.headers.get("Origin") || "";
-  const allowedHosts = String(env.TURNSTILE_HOSTNAMES || "hillspringsacademy.sc.ke")
+  const configuredHosts = String(env.TURNSTILE_HOSTNAMES || "hillspringsacademy.sc.ke")
     .split(",").map((value) => value.trim().toLowerCase()).filter(Boolean);
-  const allowedOrigins = allowedHosts.flatMap((host) => [`https://${host}`, `https://www.${host}`]);
+  const allowedHosts = new Set(configuredHosts.flatMap((host) => host.startsWith("www.") ? [host] : [host, `www.${host}`]));
+  const allowedOrigins = [...allowedHosts].map((host) => `https://${host}`);
   const headers = {
     "Content-Type": "application/json",
     "Cache-Control": "no-store",
@@ -129,7 +130,7 @@ async function handleTurnstileVerify(request, env) {
     if (!response.ok) return respond({ ok: false, error: "Security verification is temporarily unavailable." }, 502);
     const result = await response.json();
     const hostname = String(result?.hostname || "").toLowerCase();
-    const expectedHostname = allowedHosts.includes(hostname);
+    const expectedHostname = allowedHosts.has(hostname);
     const ok = result?.success === true && result?.action === action && expectedHostname;
     if (!ok) return respond({ ok: false, error: "Security check failed. Please try again." }, 400);
     return respond({ ok: true });
@@ -143,7 +144,9 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (url.pathname === "/api/turnstile/verify") return handleTurnstileVerify(request, env);\n\n    if (!env.ASSETS) {
+    if (url.pathname === "/api/turnstile/verify") return handleTurnstileVerify(request, env);
+
+    if (!env.ASSETS) {
       return new Response("ASSETS binding missing", { status: 500 });
     }
 
