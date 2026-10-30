@@ -6,6 +6,7 @@ import "./styles.css";
 import "./auth-fix.css";
 import "./seo.css";
 import "./nav-fix.css";
+import "./forms-unslop.css";
 
 
 const rootEl = document.getElementById("root");
