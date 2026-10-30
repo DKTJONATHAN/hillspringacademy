@@ -71,7 +71,7 @@ function AuthCard({ kind, onSignedIn }) {
     return () => clearTimeout(t);
   }, [cooldown]);
 
-  const go = (v, m = { type: "", text: "" }) => { setView(v); setMsg(m); setCode(""); };
+  const go = (v, m = { type: "", text: "" }) => { setView(v); setMsg(m); setCode(""); setTurnstileToken(""); setWidgetResetKey((value) => value + 1); };
   const err = (text) => setMsg({ type: "error", text });
   const ok = (text) => setMsg({ type: "success", text });
   const run = (fn) => async (e) => { e.preventDefault(); setBusy(true); setMsg({ type: "", text: "" }); try { await fn(); } finally { setBusy(false); setTurnstileToken(""); setWidgetResetKey((value) => value + 1); } };
@@ -92,9 +92,7 @@ function AuthCard({ kind, onSignedIn }) {
     } catch (e1) {
       const text = e1.message || "Unable to sign in.";
       if (/not confirmed|email not confirmed/i.test(text)) {
-        await accountApi({ action: "resend_signup", email }).catch(() => {});
-        setCooldown(60);
-        return go("verify", { type: "success", text: "Your email is not verified yet. We sent you a new 6-digit code." });
+        return go("verify", { type: "success", text: "Your email is not verified yet. Complete the security check, then use Resend code if needed." });
       }
       err("That email or password is not correct. If you are new, create an account. If you forgot your password, use “Forgot password”.");
     }
@@ -127,8 +125,10 @@ function AuthCard({ kind, onSignedIn }) {
   });
 
   const resend = async () => {
-    try { await accountApi({ action: "resend_signup", email }); setCooldown(60); ok("A new code is on its way."); }
+    if (!turnstileToken) { err("Please complete the security check."); return; }
+    try { await accountApi({ action: "resend_signup", email, turnstileToken }); setCooldown(60); ok("A new code is on its way."); }
     catch (e1) { err(e1.message); }
+    finally { setTurnstileToken(""); setWidgetResetKey((value) => value + 1); }
   };
 
   const forgot = run(async () => {
@@ -213,13 +213,18 @@ function SubmissionList({ items, title, titleOf }) {
 function AdmissionForm({ profile, onDone }) {
   const [f, setF] = useState({ learnerName: "", learnerDob: "", gender: "", currentLevel: "", requestedLevel: "", previousSchool: "", entryTerm: "", notes: "", parentName: profile?.full_name || "", phone: profile?.phone || "" });
   const [state, setState] = useState({ busy: false, error: "", done: false });
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [widgetResetKey, setWidgetResetKey] = useState(0);
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const submit = async (e) => {
-    e.preventDefault(); setState({ busy: true, error: "", done: false });
+    e.preventDefault();
+    if (!turnstileToken) { setState({ busy: false, error: "Please complete the security check.", done: false }); return; }
+    setState({ busy: true, error: "", done: false });
     try {
       await appsApi({ action: "submit_application", ...f, turnstileToken }, await getToken());
       setState({ busy: false, error: "", done: true }); onDone();
     } catch (err) { setState({ busy: false, error: err.message, done: false }); }
+    finally { setTurnstileToken(""); setWidgetResetKey((value) => value + 1); }
   };
   if (state.done) return (
     <div className="card portal-success-card"><span className="eyebrow">Application sent</span><h2>Thank you!</h2>
@@ -241,6 +246,7 @@ function AdmissionForm({ profile, onDone }) {
         <label>Preferred entry term<input value={f.entryTerm} onChange={set("entryTerm")} placeholder="e.g. Term 1, 2027" /></label>
       </div>
       <label>Anything we should know?<textarea value={f.notes} onChange={set("notes")} placeholder="Learning needs, transport, questions…" /></label>
+      <div className="turnstile-field"><TurnstileWidget action="application_submit" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>
       {state.error && <p className="form-error" role="alert">{state.error}</p>}
       <button className="btn" type="submit" disabled={state.busy}>{state.busy ? "Sending…" : "Submit application"}</button>
     </form>
