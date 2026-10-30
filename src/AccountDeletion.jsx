@@ -35,7 +35,6 @@ export function AccountDeletionPanel({ session, onDeleted }) {
 
   return (
     <section className="card account-delete-panel" aria-labelledby="delete-account-title">
-      <span className="eyebrow">Account controls</span>
       <h2 id="delete-account-title">Delete my parent account</h2>
       <p>
         This permanently deletes your parent login, profile, linked online admission
