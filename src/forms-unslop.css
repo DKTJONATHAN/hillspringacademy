@@ -519,8 +519,19 @@ form.compose-card {
   align-items: flex-start;
 }
 
-.admin-card-heading .admin-icon {
+.admin-section form .admin-card-heading .admin-icon {
   display: none;
+}
+
+.admin-section form .admin-info-box,
+.admin-section form .admin-danger-note {
+  margin: 0;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid var(--form-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--form-muted);
 }
 
 .admin-info-box,
