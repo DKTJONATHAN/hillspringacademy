@@ -120,7 +120,7 @@ Deno.serve(async (req) => {
     }
 
     if (p.action === "verify_signup") {
-      if (!(await verifyTurnstile(p.turnstileToken, ip, p.portal === "admin" ? "admin_reset_verify" : "parent_password_reset"))) return json({ error: "Security check failed. Please try again." }, 400, req);
+      if (!(await verifyTurnstile(p.turnstileToken, ip, "parent_verify")) return json({ error: "Security check failed. Please try again." }, 400, req);
       if (!(await rateLimit(`acct:verify:${ip}:${email}`, 3600, 10))) {
         return json({ error: "Too many requests. Please try again later." }, 429, req);
       }
@@ -183,7 +183,7 @@ Deno.serve(async (req) => {
     }
 
     if (p.action === "verify_reset") {
-      if (!(await verifyTurnstile(p.turnstileToken, ip, p.portal === "admin" ? "admin_reset_verify" : "parent_verify"))) return json({ error: "Security check failed. Please try again." }, 400, req);
+      if (!(await verifyTurnstile(p.turnstileToken, ip, p.portal === "admin" ? "admin_reset_verify" : "parent_password_reset")) return json({ error: "Security check failed. Please try again." }, 400, req);
       if (!(await rateLimit(`acct:verify:${ip}:${email}`, 3600, 10))) {
         return json({ error: "Too many requests. Please try again later." }, 429, req);
       }
