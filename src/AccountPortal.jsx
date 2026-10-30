@@ -5,7 +5,8 @@ import { PageHead } from "./components.jsx";
 import { SCHOOL } from "./data.js";
 import { accountApi, appsApi, passwordSignIn, subscribeToSchoolUpdates } from "./supabase.js";
 import { getToken, useParentSession } from "./session.js";
-import { AccountDeletionPanel } from "./AccountDeletion.jsx";\nimport { TurnstileWidget, verifyTurnstileToken } from "./TurnstileWidget.jsx";
+import { AccountDeletionPanel } from "./AccountDeletion.jsx";
+import { TurnstileWidget, verifyTurnstileToken } from "./TurnstileWidget.jsx";
 
 const COPY = {
   admissions: {
@@ -59,7 +60,10 @@ function AuthCard({ kind, onSignedIn }) {
   const [newPassword, setNewPassword] = useState("");
   const [msg, setMsg] = useState({ type: "", text: "" });
   const [busy, setBusy] = useState(false);
-  const [cooldown, setCooldown] = useState(0);\n  const [turnstileToken, setTurnstileToken] = useState("");\n  const [widgetResetKey, setWidgetResetKey] = useState(0);\n  const turnstileAction = { login: "parent_login", register: "parent_register", verify: "parent_verify", forgot: "parent_password_reset", reset: "parent_verify" }[view];
+  const [cooldown, setCooldown] = useState(0);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [widgetResetKey, setWidgetResetKey] = useState(0);
+  const turnstileAction = { login: "parent_login", register: "parent_register", verify: "parent_verify", forgot: "parent_password_reset", reset: "parent_verify" }[view];
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -82,7 +86,9 @@ function AuthCard({ kind, onSignedIn }) {
 
   const login = run(async () => {
     try {
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await verifyTurnstileToken(turnstileToken, "parent_login");\n      onSignedIn(await passwordSignIn(email.trim(), password));
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await verifyTurnstileToken(turnstileToken, "parent_login");
+      onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
       const text = e1.message || "Unable to sign in.";
       if (/not confirmed|email not confirmed/i.test(text)) {
@@ -96,7 +102,8 @@ function AuthCard({ kind, onSignedIn }) {
 
   const register = run(async () => {
     try {
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "register", email, fullName, phone, turnstileToken });
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await accountApi({ action: "register", email, fullName, phone, turnstileToken });
       setCooldown(60);
       go("verify", { type: "success", text: `We sent a 6-digit code to ${email}. Enter it (and keep your password) to finish setup.` });
     } catch (e1) {
@@ -107,7 +114,8 @@ function AuthCard({ kind, onSignedIn }) {
 
   const verify = run(async () => {
     try {
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "verify_signup", email, code, password, turnstileToken });
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await accountApi({ action: "verify_signup", email, code, password, turnstileToken });
       await sendWelcome(fullName);
       onSignedIn(await passwordSignIn(email.trim(), password));
     } catch (e1) {
@@ -125,7 +133,8 @@ function AuthCard({ kind, onSignedIn }) {
 
   const forgot = run(async () => {
     try {
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "request_reset", email, portal: "parent", turnstileToken });
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await accountApi({ action: "request_reset", email, portal: "parent", turnstileToken });
       setCooldown(60);
       go("reset", { type: "success", text: `If this email is registered, a 6-digit code has been sent to ${email}.` });
     } catch (e1) {
@@ -137,7 +146,8 @@ function AuthCard({ kind, onSignedIn }) {
 
   const reset = run(async () => {
     try {
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await accountApi({ action: "verify_reset", email, code, newPassword, portal: "parent", turnstileToken });
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await accountApi({ action: "verify_reset", email, code, newPassword, portal: "parent", turnstileToken });
       setPassword("");
       go("login", { type: "success", text: "Password updated. Please sign in with your new password." });
     } catch (e1) { err(e1.message); }
@@ -167,7 +177,8 @@ function AuthCard({ kind, onSignedIn }) {
       {(view === "register" || view === "verify") && <p className="field-hint">{PW_HINT}</p>}
       {(view === "verify" || view === "reset") && <CodeInput value={code} onChange={setCode} />}
       {view === "reset" && <><PasswordInput label="New password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" minLength={8} /><p className="field-hint">{PW_HINT}</p></>}
-      <div className="turnstile-field"><TurnstileWidget action={turnstileAction} onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>\n      {msg.text && <p className={msg.type === "error" ? "form-error" : "form-success"} role={msg.type === "error" ? "alert" : "status"}>{msg.text}</p>}
+      <div className="turnstile-field"><TurnstileWidget action={turnstileAction} onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>
+      {msg.text && <p className={msg.type === "error" ? "form-error" : "form-success"} role={msg.type === "error" ? "alert" : "status"}>{msg.text}</p>}
       <button className="btn" type="submit" disabled={busy}>
         {busy ? "Please wait…" : { login: "Sign in", register: "Create account", verify: "Verify email", forgot: "Send code", reset: "Update password" }[view]}
       </button>
