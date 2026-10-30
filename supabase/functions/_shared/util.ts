@@ -73,30 +73,25 @@ export async function rateLimit(key: string, windowSec: number, max: number): Pr
   }
 }
 
-/** Turnstile is enforced whenever TURNSTILE_SECRET is configured; production should configure it. */
-export async function verifyTurnstile(token: unknown, ip: string): Promise<boolean> {
-  const secret = Deno.env.get("TURNSTILE_SECRET") || "";
-  if (!secret) {
-    console.warn("TURNSTILE_SECRET not set — captcha not enforced yet");
-    return true;
-  }
+/** Verify a one-time Turnstile token through the site's Cloudflare Worker.
+ * The Worker holds TURNSTILE_SECRET and enforces both action and hostname.
+ * Fail closed: a missing Worker secret or failed Siteverify request blocks the operation.
+ */
+export async function verifyTurnstile(token: unknown, _ip: string, expectedAction: string): Promise<boolean> {
   const t = String(token ?? "").trim();
-  if (!t) return false;
+  if (!t || t.length > 2048 || !expectedAction) return false;
   try {
-    const body = new URLSearchParams();
-    body.set("secret", secret);
-    body.set("response", t);
-    if (ip && ip !== "unknown") body.set("remoteip", ip);
-    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    const res = await fetch("https://hillspringsacademy.sc.ke/api/turnstile/verify", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: t, action: expectedAction }),
+      signal: AbortSignal.timeout(12000),
     });
     if (!res.ok) return false;
     const data = await res.json();
-    return Boolean(data?.success);
+    return data?.ok === true;
   } catch (e) {
-    console.error("turnstile", e);
+    console.error("turnstile verification", e);
     return false;
   }
 }
