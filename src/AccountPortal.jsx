@@ -158,7 +158,6 @@ function AuthCard({ kind, onSignedIn }) {
 
   return (
     <form className="card enquiry-form auth-card" onSubmit={onSubmit} noValidate={false}>
-      <span className="eyebrow">{COPY[kind]?.eyebrow || "Account"}</span>
       <h2>{titles[view]}</h2>
       {view === "login" && <p>Sign in to continue. New here? <button type="button" className="linklike" onClick={() => go("register")}>Create an account</button></p>}
       {view === "register" && <p>Already registered? <button type="button" className="linklike" onClick={() => go("login")}>Sign in</button></p>}
@@ -233,7 +232,7 @@ function AdmissionForm({ profile, onDone }) {
   );
   return (
     <form className="card enquiry-form portal-form" onSubmit={submit}>
-      <span className="eyebrow">Online admission form</span><h2>Learner application</h2>
+      <h2>Learner application</h2>
       <div className="form-grid">
         <label>Parent/guardian name<input value={f.parentName} onChange={set("parentName")} required /></label>
         <label>Phone<input value={f.phone} onChange={set("phone")} autoComplete="tel" /></label>
