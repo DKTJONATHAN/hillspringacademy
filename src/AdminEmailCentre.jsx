@@ -314,7 +314,6 @@ export function AdminEmailCentre() {
           </div>
           {!resetMode ? (
             <form className="admin-login-card" onSubmit={login}>
-              <span className="eyebrow">Secure access</span>
               <h1>Welcome back</h1>
               <p>Sign in to manage admissions, enquiries, communications and administrators.</p>
               <label>Email address<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" /></label>
@@ -326,7 +325,6 @@ export function AdminEmailCentre() {
             </form>
           ) : (
             <form className="admin-login-card" onSubmit={resetStep === "request" ? requestReset : verifyReset}>
-              <span className="eyebrow">Account recovery</span>
               <h1>Reset admin password</h1>
               {resetStep === "request" ? (
                 <>
