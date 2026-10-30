@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { PageHead } from "./components.jsx";
 import { adminCall, adminDeleteCall, adminSignIn, appsApi } from "./supabase.js";
 import { AdminAdminsTab } from "./AdminAdminsTab.jsx";
-import { getAdminToken, setAdminToken, clearAdminToken } from "./session.js";\nimport { TurnstileWidget, verifyTurnstileToken } from "./TurnstileWidget.jsx";
+import { getAdminToken, setAdminToken, clearAdminToken } from "./session.js";
+import { TurnstileWidget, verifyTurnstileToken } from "./TurnstileWidget.jsx";
 
 const NAV = [
   ["overview", "Overview", "⌂"],
@@ -17,7 +18,9 @@ export function AdminEmailCentre() {
   const [token, setToken] = useState(() => getAdminToken());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");\n  const [turnstileToken, setTurnstileToken] = useState("");\n  const [widgetResetKey, setWidgetResetKey] = useState(0);
+  const [loginError, setLoginError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [widgetResetKey, setWidgetResetKey] = useState(0);
   const [resetMode, setResetMode] = useState(false);
   const [resetStep, setResetStep] = useState("request");
   const [resetCode, setResetCode] = useState("");
@@ -142,7 +145,7 @@ export function AdminEmailCentre() {
       setResetStatus("If this email is an administrator, a code was sent.");
     } catch (err) {
       setResetStatus(err.message || "Unable to send reset code.");
-    }
+    } finally { setTurnstileToken(""); setWidgetResetKey((value) => value + 1); }
   };
 
   const verifyReset = async (e) => {
@@ -150,7 +153,8 @@ export function AdminEmailCentre() {
     setResetStatus("");
     try {
       const { verifyAdminPasswordReset } = await import("./supabase.js");
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await verifyAdminPasswordReset(email, resetCode, newPassword, turnstileToken);
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await verifyAdminPasswordReset(email, resetCode, newPassword, turnstileToken);
       setResetStatus("Password updated. You can sign in now.");
       setResetMode(false);
       setResetStep("request");
@@ -158,14 +162,16 @@ export function AdminEmailCentre() {
       setNewPassword("");
     } catch (err) {
       setResetStatus(err.message || "Unable to reset password.");
-    }
+    } finally { setTurnstileToken(""); setWidgetResetKey((value) => value + 1); }
   };
 
   const login = async (e) => {
     e.preventDefault();
     setLoginError("");
     try {
-      if (!turnstileToken) throw new Error("Please complete the security check.");\n      await verifyTurnstileToken(turnstileToken, "admin_login");\n      const data = await adminSignIn(email, password);
+      if (!turnstileToken) throw new Error("Please complete the security check.");
+      await verifyTurnstileToken(turnstileToken, "admin_login");
+      const data = await adminSignIn(email, password);
       const me = await appsApi({ action: "whoami" }, data.access_token);
       setAdminToken(data.access_token);
       setToken(data.access_token);
@@ -174,7 +180,7 @@ export function AdminEmailCentre() {
       await loadPortal(data.access_token);
     } catch (err) {
       setLoginError(err.message || "Unable to sign in.");
-    }
+    } finally { setTurnstileToken(""); setWidgetResetKey((value) => value + 1); }
   };
 
   const openConversation = async (id) => {
@@ -312,7 +318,8 @@ export function AdminEmailCentre() {
               <p>Sign in to manage admissions, enquiries, communications and administrators.</p>
               <label>Email address<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" /></label>
               <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" /></label>
-              <div className="turnstile-field"><TurnstileWidget action="admin_login" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>\n              {loginError && <p className="form-error" role="alert">{loginError}</p>}
+              <div className="turnstile-field"><TurnstileWidget action="admin_login" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>
+              {loginError && <p className="form-error" role="alert">{loginError}</p>}
               <button className="btn admin-primary-btn" type="submit">Sign in to portal</button>
               <button type="button" className="admin-link-btn" onClick={() => setResetMode(true)}>Forgot password?</button>
             </form>
@@ -324,12 +331,14 @@ export function AdminEmailCentre() {
                 <>
                   <p>Enter your administrator email and we will send a verification code.</p>
                   <label>Email address<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></label>
+                  <div className="turnstile-field"><TurnstileWidget action="admin_password_reset" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>
                   <button className="btn admin-primary-btn" type="submit" disabled={resetCooldown > 0}>{resetCooldown > 0 ? `Wait ${resetCooldown}s` : "Send verification code"}</button>
                 </>
               ) : (
                 <>
                   <label>Verification code<input value={resetCode} onChange={(e) => setResetCode(e.target.value)} required /></label>
                   <label>New password<input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={8} /></label>
+                  <div className="turnstile-field"><TurnstileWidget action="admin_reset_verify" onToken={setTurnstileToken} resetKey={widgetResetKey} /></div>
                   <button className="btn admin-primary-btn" type="submit">Update password</button>
                 </>
               )}
