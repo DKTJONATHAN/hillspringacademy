@@ -16,6 +16,25 @@ const json = (body: unknown, status = 200) => new Response(JSON.stringify(body),
 const esc = (v: unknown) => String(v ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]!));
 const validEmail = (e: unknown) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e ?? "").trim());
 
+async function verifySchoolTurnstile(token: unknown, action: string) {
+  const value = String(token ?? "").trim();
+  if (!value || value.length > 2048) return false;
+  try {
+    const response = await fetch("https://hillspringsacademy.sc.ke/api/turnstile/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: value, action }),
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!response.ok) return false;
+    const result = await response.json();
+    return result?.ok === true;
+  } catch (error) {
+    console.error("Turnstile verification failed", error);
+    return false;
+  }
+}
+
 async function sendEmail(to: string, subject: string, html: string) {
   if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY is not configured.");
   const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` }, body: JSON.stringify({ from: FROM, to: [to], subject, html }) });
@@ -32,7 +51,7 @@ Deno.serve(async req => {
   if (p.website) return json({ ok: true });
 
   try {
-    if (p.action === "subscribe") {
+    if (p.action === "subscribe") {\n      if (!(await verifySchoolTurnstile(p.turnstileToken, "newsletter_subscribe"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
       const email = String(p.email ?? "").trim().toLowerCase();
       const name = String(p.name ?? "").trim() || null;
       if (!validEmail(email)) return json({ error: "Please enter a valid email address." }, 400);
@@ -66,7 +85,7 @@ Deno.serve(async req => {
       return json({ ok: true });
     }
 
-    if (p.action === "enquiry") {
+    if (p.action === "enquiry") {\n      if (!(await verifySchoolTurnstile(p.turnstileToken, "contact_submit"))) return json({ error: "Security check failed. Please complete the security check and try again." }, 400);
       const email = String(p.email ?? "").trim().toLowerCase();
       const name = String(p.name ?? "").trim();
       const subject = String(p.subject ?? "").trim() || (p.type === "admissions" ? "Student enrolment enquiry" : "General enquiry");
