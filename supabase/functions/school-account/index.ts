@@ -140,7 +140,7 @@ Deno.serve(async (req) => {
 
     if (p.action === "resend_signup") {
       if (!(await rateLimit(`acct:resend:${email}`, 3600, 5))) return json({ error: "Too many requests. Please try again later." }, 429, req);
-      if (!(await verifyTurnstile(p.turnstileToken, ip, "parent_resend"))) return json({ error: "Security check failed. Please try again." }, 400, req);
+      if (!(await verifyTurnstile(p.turnstileToken, ip, "parent_verify"))) return json({ error: "Security check failed. Please try again." }, 400, req);
       const user = await findUserByEmail(email);
       if (!user || user.email_confirmed_at) return json({ ok: true }, 200, req);
       const { data: prof } = await db.from("school_profiles").select("full_name").eq("user_id", user.id).maybeSingle();
