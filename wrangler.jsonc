@@ -1,7 +1,10 @@
 {
   "name": "hillspringacademy",
   "compatibility_date": "2026-10-01",
-  "compatibility_flags": ["nodejs_compat"],\n  "vars": {\n    "TURNSTILE_HOSTNAMES": "hillspringsacademy.sc.ke"\n  },
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "TURNSTILE_HOSTNAMES": "hillspringsacademy.sc.ke"
+  },
   "main": "./worker.js",
   "assets": {
     "directory": "./dist",
