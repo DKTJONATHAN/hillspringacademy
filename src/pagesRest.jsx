@@ -6,6 +6,7 @@ import { BLOG_POSTS } from "./blogData.js";
 import { PageHead, Photo } from "./components.jsx";
 import { submitSchoolEnquiry } from "./supabase.js";
 import { TurnstileWidget } from "./TurnstileWidget.jsx";
+import { TurnstileWidget } from "./TurnstileWidget.jsx";
 
 export function About() {
   return (
@@ -540,17 +541,20 @@ export function FAQ() {
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
   const [state, setState] = useState({ busy: false, error: "", done: false });
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [widgetResetKey, setWidgetResetKey] = useState(0);
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
   const submit = async (e) => {
     e.preventDefault();
+    if (!turnstileToken) { setState({ busy: false, error: "Please complete the security check.", done: false }); return; }
     setState({ busy: true, error: "", done: false });
     try {
-      await submitSchoolEnquiry(form);
+      await submitSchoolEnquiry({ ...form, turnstileToken });
       setState({ busy: false, error: "", done: true });
       setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
     } catch (err) {
       setState({ busy: false, error: err.message || "Unable to send.", done: false });
-    }
+    } finally { setTurnstileToken(""); setWidgetResetKey((value) => value + 1); }
   };
   return (
     <>
