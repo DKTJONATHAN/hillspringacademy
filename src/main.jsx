@@ -7,6 +7,7 @@ import "./seo.css";
 import "./nav-fix.css";
 import "./styles.css";
 import "./forms-unslop.css";
+import "./site-unslop.css";
 
 
 const rootEl = document.getElementById("root");
