@@ -63,7 +63,7 @@ function AuthCard({ kind, onSignedIn }) {
   const [cooldown, setCooldown] = useState(0);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [widgetResetKey, setWidgetResetKey] = useState(0);
-  const turnstileAction = { login: "parent_login", register: "parent_register", verify: "parent_verify", forgot: "parent_password_reset", reset: "parent_verify" }[view];
+  const turnstileAction = { login: "parent_login", register: "parent_register", verify: "parent_verify", forgot: "parent_password_reset", reset: "parent_password_reset" }[view];
 
   useEffect(() => {
     if (cooldown <= 0) return;
