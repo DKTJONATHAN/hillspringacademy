@@ -2,10 +2,10 @@ import React from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
-import "./styles.css";
 import "./auth-fix.css";
 import "./seo.css";
 import "./nav-fix.css";
+import "./styles.css";
 import "./forms-unslop.css";
 
 
