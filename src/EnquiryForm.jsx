@@ -40,6 +40,7 @@ export function EnquiryForm({ profile, onDone }) {
 
   const submit = async (e) => {
     e.preventDefault();
+    if (!turnstileToken) { setState({ busy: false, error: "Please complete the security check.", done: false }); return; }
     setState({ busy: true, error: "", done: false });
     try {
       await appsApi({ action: "submit_enquiry", ...f, turnstileToken }, await getToken());
@@ -48,7 +49,7 @@ export function EnquiryForm({ profile, onDone }) {
       onDone();
     } catch (err) {
       setState({ busy: false, error: err.message, done: false });
-    }
+    } finally { setTurnstileToken(""); setWidgetResetKey((value) => value + 1); }
   };
 
   return (
