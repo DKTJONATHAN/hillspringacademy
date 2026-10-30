@@ -54,11 +54,11 @@ export const adminDeleteCall = (token, body = {}) =>
     token
   );
 
-export const requestAdminPasswordReset = (email) =>
-  callFunction("school-account", { action: "request_reset", email, portal: "admin" });
+export const requestAdminPasswordReset = (email, turnstileToken) =>
+  callFunction("school-account", { action: "request_reset", email, portal: "admin", turnstileToken });
 
-export const verifyAdminPasswordReset = (email, code, new_password) =>
-  callFunction("school-account", { action: "verify_reset", email, code, newPassword: new_password, portal: "admin" });
+export const verifyAdminPasswordReset = (email, code, new_password, turnstileToken) =>
+  callFunction("school-account", { action: "verify_reset", email, code, newPassword: new_password, portal: "admin", turnstileToken });
 
 export const accountApi = (body, token = "") => callFunction("school-account", body, token);
 export const appsApi = (body, token = "") => callFunction("school-applications", body, token);
