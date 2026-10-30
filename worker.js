@@ -82,11 +82,68 @@ function escapeAttr(s) {
     .replace(/</g, "&lt;");
 }
 
+
+const TURNSTILE_ACTIONS = new Set([
+  "parent_register", "parent_resend", "parent_password_reset", "parent_verify",
+  "parent_login", "application_submit", "enquiry_submit", "contact_submit",
+  "newsletter_subscribe", "admin_login", "admin_password_reset", "admin_reset_verify"
+]);
+
+async function handleTurnstileVerify(request, env) {
+  const origin = request.headers.get("Origin") || "";
+  const allowedHosts = String(env.TURNSTILE_HOSTNAMES || "hillspringsacademy.sc.ke")
+    .split(",").map((value) => value.trim().toLowerCase()).filter(Boolean);
+  const allowedOrigins = allowedHosts.flatMap((host) => [`https://${host}`, `https://www.${host}`]);
+  const headers = {
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    ...(origin && allowedOrigins.includes(origin) ? { "Access-Control-Allow-Origin": origin, Vary: "Origin" } : {}),
+  };
+  const respond = (body, status = 200) => new Response(JSON.stringify(body), { status, headers });
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
+  if (request.method !== "POST") return respond({ ok: false, error: "POST only" }, 405);
+  if (origin && !allowedOrigins.includes(origin)) return respond({ ok: false, error: "Origin not allowed" }, 403);
+
+  const secret = String(env.TURNSTILE_SECRET || "").trim();
+  if (!secret) return respond({ ok: false, error: "Turnstile verification is not configured on the server." }, 503);
+  let body;
+  try { body = await request.json(); } catch { return respond({ ok: false, error: "Invalid request." }, 400); }
+  const token = String(body?.token || "").trim();
+  const action = String(body?.action || "").trim();
+  if (!token || token.length > 2048 || !TURNSTILE_ACTIONS.has(action)) {
+    return respond({ ok: false, error: "Invalid security token or action." }, 400);
+  }
+
+  try {
+    const form = new URLSearchParams({ secret, response: token });
+    const ip = request.headers.get("CF-Connecting-IP");
+    if (ip) form.set("remoteip", ip);
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: form,
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) return respond({ ok: false, error: "Security verification is temporarily unavailable." }, 502);
+    const result = await response.json();
+    const hostname = String(result?.hostname || "").toLowerCase();
+    const expectedHostname = allowedHosts.includes(hostname);
+    const ok = result?.success === true && result?.action === action && expectedHostname;
+    if (!ok) return respond({ ok: false, error: "Security check failed. Please try again." }, 400);
+    return respond({ ok: true });
+  } catch (error) {
+    console.error("Turnstile Siteverify failed", error);
+    return respond({ ok: false, error: "Security verification is temporarily unavailable." }, 502);
+  }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (!env.ASSETS) {
+    if (url.pathname === "/api/turnstile/verify") return handleTurnstileVerify(request, env);\n\n    if (!env.ASSETS) {
       return new Response("ASSETS binding missing", { status: 500 });
     }
 
