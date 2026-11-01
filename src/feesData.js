@@ -190,22 +190,22 @@ export async function buildFeePdfBlob({ focusLabel, band }) {
   content.push("0.35 0.4 0.45 rg");
   content.push("BT /F1 8 Tf 40 40 Td (Confirm amounts with admissions. Generated for parents and staff reference.) Tj ET");
 
-  const stream = pdfBytes(content.join("\\n"));
+  const stream = pdfBytes(content.join("\n"));
   const logoObject = joinPdfBytes([
-    pdfBytes(`7 0 obj\\n<< /Type /XObject /Subtype /Image /Width 256 /Height 256 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${logoBytes.length} >>\\nstream\\n`),
+    pdfBytes(`7 0 obj\n<< /Type /XObject /Subtype /Image /Width 256 /Height 256 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${logoBytes.length} >>\nstream\n`),
     logoBytes,
-    pdfBytes("\\nendstream\\nendobj\\n"),
+    pdfBytes("\nendstream\nendobj\n"),
   ]);
   const objects = [
-    pdfBytes("1 0 obj\\n<< /Type /Catalog /Pages 2 0 R >>\\nendobj\\n"),
-    pdfBytes("2 0 obj\\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\\nendobj\\n"),
-    pdfBytes("3 0 obj\\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> /XObject << /Logo 7 0 R >> >> >>\\nendobj\\n"),
-    joinPdfBytes([pdfBytes(`4 0 obj\\n<< /Length ${stream.length} >>\\nstream\\n`), stream, pdfBytes("\\nendstream\\nendobj\\n")]),
-    pdfBytes("5 0 obj\\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\\nendobj\\n"),
-    pdfBytes("6 0 obj\\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\\nendobj\\n"),
+    pdfBytes("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n"),
+    pdfBytes("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n"),
+    pdfBytes("3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> /XObject << /Logo 7 0 R >> >> >>\nendobj\n"),
+    joinPdfBytes([pdfBytes(`4 0 obj\n<< /Length ${stream.length} >>\nstream\n`), stream, pdfBytes("\nendstream\nendobj\n")]),
+    pdfBytes("5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n"),
+    pdfBytes("6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n"),
     logoObject,
   ];
-  const chunks = [pdfBytes("%PDF-1.4\\n")];
+  const chunks = [pdfBytes("%PDF-1.4\n")];
   const offsets = [0];
   let offset = chunks[0].length;
   for (const object of objects) {
@@ -214,12 +214,12 @@ export async function buildFeePdfBlob({ focusLabel, band }) {
     offset += object.length;
   }
   const xrefStart = offset;
-  let xref = `xref\\n0 ${objects.length + 1}\\n0000000000 65535 f \\n`;
+  let xref = `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
   for (let i = 1; i < offsets.length; i++) {
-    xref += String(offsets[i]).padStart(10, "0") + " 00000 n \\n";
+    xref += String(offsets[i]).padStart(10, "0") + " 00000 n \n";
   }
   chunks.push(pdfBytes(xref));
-  chunks.push(pdfBytes(`trailer\\n<< /Size ${objects.length + 1} /Root 1 0 R >>\\nstartxref\\n${xrefStart}\\n%%EOF`));
+  chunks.push(pdfBytes(`trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`));
   return new Blob([joinPdfBytes(chunks)], { type: "application/pdf" });
 }
 
@@ -236,5 +236,5 @@ export async function downloadFeePdf(classOrBand) {
   document.body.appendChild(a);
   a.click();
   a.remove();
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
