@@ -223,7 +223,7 @@ export async function buildFeePdfBlob({ focusLabel, band }) {
   return new Blob([joinPdfBytes(chunks)], { type: "application/pdf" });
 }
 
-export function downloadFeePdf(classOrBand) {
+export async function downloadFeePdf(classOrBand) {
   const isBand = FEE_BANDS.some((b) => b.id === classOrBand.id);
   const band = isBand ? classOrBand : classOrBand.band;
   const focusLabel = isBand ? band.title : classOrBand.name;
