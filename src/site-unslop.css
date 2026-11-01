@@ -204,3 +204,235 @@ td, th { border-color: #deddd7; }
   .foot-grid .brand-col { grid-column: 1 / -1; }
   .admin-content { padding: 16px; }
 }
+
+
+/* -------------------------------------------------------------------------
+   Anti-Slop DURING — accessibility and small-screen finishing pass.
+   Keep the academy's warm neutral / charcoal / school-red identity.
+   Preserve both existing theme modes and all application behaviour.
+   ------------------------------------------------------------------------- */
+
+/* Use the existing theme tokens throughout instead of forcing light surfaces
+   over the dark theme. */
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.section.alt,
+.home-life {
+  background: color-mix(in srgb, var(--surface) 72%, var(--paper));
+}
+
+.card,
+.tile-link,
+.panel,
+.stepbody,
+.map-card,
+.contact-card,
+.uniform-rule {
+  color: var(--ink);
+}
+
+.card p,
+.panel p,
+.stepbody p,
+.contact-card p {
+  color: var(--muted);
+}
+
+/* Contrast: keep supporting copy readable without making it compete with
+   headings. Footer text is intentionally lighter on its dark background. */
+:root:not([data-theme="dark"]) {
+  --muted: #536174;
+}
+
+:root[data-theme="dark"] {
+  --muted: #c0cada;
+}
+
+.eyebrow,
+.section-kicker,
+.image-note,
+.stage-text,
+.admission-step p,
+.life-copy p,
+.uniform-grid p {
+  color: var(--muted);
+}
+
+.site-footer .foot-blurb,
+.site-footer .foot-grid a,
+.site-footer .foot-grid span,
+.site-footer .legal {
+  color: #d0d8e2;
+}
+
+.site-footer .foot-contact .fc-label {
+  color: #aeb9c7 !important;
+}
+
+/* Opaque mobile navigation: page content must not show through the controls
+   on Android browsers when the page scrolls behind the fixed bar. */
+@media (max-width: 720px) {
+  .bottom-nav {
+    background: var(--surface) !important;
+    background-color: var(--surface) !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: 0 -1px 0 var(--line);
+    isolation: isolate;
+  }
+
+  .bottom-nav::before,
+  .bottom-nav::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .bottom-nav a {
+    min-height: 44px;
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  .bottom-nav a.active {
+    color: var(--accent);
+  }
+}
+
+/* The dark theme must remain genuinely dark across all redesigned sections. */
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] .admin-portal {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:root[data-theme="dark"] .site-header,
+:root[data-theme="dark"] .admin-topbar {
+  background: #19212b;
+  border-color: var(--line);
+}
+
+:root[data-theme="dark"] .site-header.scrolled {
+  box-shadow: 0 5px 16px rgba(0,0,0,.22);
+}
+
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .tile-link,
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .stepbody,
+:root[data-theme="dark"] .admin-metric-card,
+:root[data-theme="dark"] .admin-panel-card,
+:root[data-theme="dark"] .admin-dashboard-grid > *,
+:root[data-theme="dark"] .admin-section .card {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+:root[data-theme="dark"] .section.alt,
+:root[data-theme="dark"] .home-life {
+  background: #151e29;
+}
+
+:root[data-theme="dark"] .home-uniform {
+  background: #19212b;
+}
+
+:root[data-theme="dark"] .home-values,
+:root[data-theme="dark"] .cta {
+  background: #0e141c;
+}
+
+:root[data-theme="dark"] .home-values h2,
+:root[data-theme="dark"] .home-values h3,
+:root[data-theme="dark"] .home-values p,
+:root[data-theme="dark"] .home-values .eyebrow {
+  color: #f1f4f8;
+}
+
+:root[data-theme="dark"] .home-values p {
+  color: #c0cada;
+}
+
+:root[data-theme="dark"] .pagehead {
+  background: #202832;
+}
+
+:root[data-theme="dark"] .site-footer {
+  background: #0e141c;
+}
+
+:root[data-theme="dark"] .site-footer .foot-grid a,
+:root[data-theme="dark"] .site-footer .foot-grid span,
+:root[data-theme="dark"] .site-footer .foot-blurb,
+:root[data-theme="dark"] .site-footer .legal {
+  color: #d0d8e2 !important;
+}
+
+:root[data-theme="dark"] .admin-sidebar {
+  background: #0e141c;
+}
+
+:root[data-theme="dark"] .admin-topbar {
+  color: var(--ink);
+}
+
+/* Touch targets and form text remain comfortable on phones. */
+@media (max-width: 720px) {
+  .mobile-menu-links a,
+  .mobile-menu-cta .btn,
+  .foot-links a,
+  .foot-actions a {
+    min-height: 44px;
+  }
+
+  .mobile-menu {
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .mobile-menu-links a {
+    color: var(--ink);
+  }
+
+  .mobile-menu-links a.active {
+    color: var(--accent);
+  }
+
+  .hero-contact {
+    overflow-wrap: anywhere;
+  }
+
+  .home-hero h1 {
+    max-width: 13ch;
+    text-wrap: balance;
+  }
+
+  .home-hero p,
+  .pagehead p {
+    max-width: 58ch;
+  }
+}
+
+/* Consistent, visible keyboard focus across navigation, forms and controls. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #d32645 !important;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo img,
+  .tile:hover .photo img,
+  .stage-row {
+    transition: none !important;
+    transform: none !important;
+  }
+}
