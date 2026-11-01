@@ -21,7 +21,7 @@ export const Icon = ({ n, size = 22 }) => (
 export function Logo({ size = 56 }) {
   const [failed, setFailed] = useState(false);
   if (failed) return <span className="logo-ph" style={{ width: size, height: size }} aria-hidden="true">HSA</span>;
-  return <img src="/logo.png" alt="Hill Springs Academy, Maua" width={size} height={size} onError={() => setFailed(true)} style={{ objectFit: "contain" }} />;
+  return <img src="/logo.png" alt="Hill Springs Academy, Maua" width={size} height={size} onError={() => setFailed(true)} style={{ objectFit: "contain", borderRadius: "var(--radius)" }} />;
 }
 
 export function Photo({ src, alt, ratio = "4/3" }) {
