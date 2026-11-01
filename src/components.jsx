@@ -25,9 +25,12 @@ export function Logo({ size = 56 }) {
 }
 
 export function Photo({ src, alt, ratio = "4/3" }) {
+  const imageAlt = typeof alt === "string" && alt.trim()
+    ? alt.trim()
+    : "Hill Springs Academy school photograph, Maua";
   return (
     <div className="photo" style={{ aspectRatio: ratio }}>
-      {src ? <img src={src} alt={alt} loading="lazy" /> : <span>{alt}</span>}
+      {src ? <img src={src} alt={imageAlt} loading="lazy" /> : <span>{imageAlt}</span>}
     </div>
   );
 }
