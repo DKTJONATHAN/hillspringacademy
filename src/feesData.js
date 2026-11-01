@@ -87,22 +87,56 @@ function pdfEscape(s) {
   return String(s).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 }
 
-/** Minimal single-page PDF (no external libraries). */
-export function buildFeePdfBlob({ focusLabel, band }) {
-  // Page size A4 in points
+/** Load the school's actual logo and encode it as JPEG for a compact PDF image. */
+async function loadPdfLogo() {
+  const response = await fetch("/logo.png");
+  if (!response.ok) throw new Error("Could not load the school logo for the PDF.");
+  const bitmap = await createImageBitmap(await response.blob());
+  const canvas = document.createElement("canvas");
+  canvas.width = 256;
+  canvas.height = 256;
+  const context = canvas.getContext("2d");
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, 256, 256);
+  context.drawImage(bitmap, 0, 0, 256, 256);
+  bitmap.close?.();
+  const encoded = canvas.toDataURL("image/jpeg", 0.94).split(",")[1];
+  const binary = atob(encoded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+function pdfBytes(text) {
+  return new TextEncoder().encode(text);
+}
+
+function joinPdfBytes(chunks) {
+  const length = chunks.reduce((total, chunk) => total + chunk.length, 0);
+  const result = new Uint8Array(length);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return result;
+}
+
+/** Single-page A4 PDF with the official school logo embedded in the header. */
+export async function buildFeePdfBlob({ focusLabel, band }) {
   const W = 595;
   const H = 842;
-  let y = H - 50;
-
+  const logoBytes = await loadPdfLogo();
+  let y = H - 100;
   const content = [];
   content.push("0.784 0.063 0.180 rg");
   content.push(`0 ${H - 70} ${W} 70 re f`);
+  content.push("q 48 0 0 48 505 781 cm /Logo Do Q");
   content.push("1 1 1 rg");
   content.push("BT /F2 16 Tf 40 805 Td (HILL SPRINGS ACADEMY) Tj ET");
   content.push("BT /F1 9 Tf 40 788 Td (P.O. Box 377-60600 Maua  |  Tel: +254 710 572419) Tj ET");
   content.push("BT /F1 9 Tf 40 775 Td (admissions@hillspringsacademy.sc.ke) Tj ET");
 
-  y = H - 100;
   content.push("0.1 0.11 0.125 rg");
   content.push(`BT /F2 14 Tf 40 ${y} Td (Fees Structure ${FEES_META.year}) Tj ET`);
   y -= 22;
@@ -153,44 +187,40 @@ export function buildFeePdfBlob({ focusLabel, band }) {
     content.push(`BT /F1 9 Tf 40 ${y} Td (${pdfEscape("A/C Name: " + b.name)}) Tj ET`);
     y -= 20;
   }
-
   content.push("0.35 0.4 0.45 rg");
-  content.push(`BT /F1 8 Tf 40 40 Td (Confirm amounts with admissions. Generated for parents and staff reference.) Tj ET`);
+  content.push("BT /F1 8 Tf 40 40 Td (Confirm amounts with admissions. Generated for parents and staff reference.) Tj ET");
 
-  const stream = content.join("\n");
-  const streamLen = new TextEncoder().encode(stream).length;
-
-  const parts = [];
-  parts.push("%PDF-1.4\n");
-
-  const objs = [];
-  const o1 = "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n";
-  const o2 = "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n";
-  const o3 = `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>\nendobj\n`;
-  const o4 = `4 0 obj\n<< /Length ${streamLen} >>\nstream\n${stream}\nendstream\nendobj\n`;
-  const o5 = "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n";
-  const o6 = "6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n";
-  objs.push(o1, o2, o3, o4, o5, o6);
-
-  let offset = parts[0].length;
-  const xref = [0];
-  for (const o of objs) {
-    xref.push(offset);
-    parts.push(o);
-    offset += o.length;
+  const stream = pdfBytes(content.join("\\n"));
+  const logoObject = joinPdfBytes([
+    pdfBytes(`7 0 obj\\n<< /Type /XObject /Subtype /Image /Width 256 /Height 256 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${logoBytes.length} >>\\nstream\\n`),
+    logoBytes,
+    pdfBytes("\\nendstream\\nendobj\\n"),
+  ]);
+  const objects = [
+    pdfBytes("1 0 obj\\n<< /Type /Catalog /Pages 2 0 R >>\\nendobj\\n"),
+    pdfBytes("2 0 obj\\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\\nendobj\\n"),
+    pdfBytes("3 0 obj\\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> /XObject << /Logo 7 0 R >> >> >>\\nendobj\\n"),
+    joinPdfBytes([pdfBytes(`4 0 obj\\n<< /Length ${stream.length} >>\\nstream\\n`), stream, pdfBytes("\\nendstream\\nendobj\\n")]),
+    pdfBytes("5 0 obj\\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\\nendobj\\n"),
+    pdfBytes("6 0 obj\\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\\nendobj\\n"),
+    logoObject,
+  ];
+  const chunks = [pdfBytes("%PDF-1.4\\n")];
+  const offsets = [0];
+  let offset = chunks[0].length;
+  for (const object of objects) {
+    offsets.push(offset);
+    chunks.push(object);
+    offset += object.length;
   }
-
   const xrefStart = offset;
-  let xrefTable = `xref\n0 ${objs.length + 1}\n`;
-  xrefTable += "0000000000 65535 f \n";
-  for (let i = 1; i < xref.length; i++) {
-    xrefTable += String(xref[i]).padStart(10, "0") + " 00000 n \n";
+  let xref = `xref\\n0 ${objects.length + 1}\\n0000000000 65535 f \\n`;
+  for (let i = 1; i < offsets.length; i++) {
+    xref += String(offsets[i]).padStart(10, "0") + " 00000 n \\n";
   }
-  parts.push(xrefTable);
-  parts.push(`trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`);
-
-  const pdfText = parts.join("");
-  return new Blob([pdfText], { type: "application/pdf" });
+  chunks.push(pdfBytes(xref));
+  chunks.push(pdfBytes(`trailer\\n<< /Size ${objects.length + 1} /Root 1 0 R >>\\nstartxref\\n${xrefStart}\\n%%EOF`));
+  return new Blob([joinPdfBytes(chunks)], { type: "application/pdf" });
 }
 
 export function downloadFeePdf(classOrBand) {
@@ -198,7 +228,7 @@ export function downloadFeePdf(classOrBand) {
   const band = isBand ? classOrBand : classOrBand.band;
   const focusLabel = isBand ? band.title : classOrBand.name;
   const slug = isBand ? band.id : classOrBand.slug;
-  const blob = buildFeePdfBlob({ focusLabel, band });
+  const blob = await buildFeePdfBlob({ focusLabel, band });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
