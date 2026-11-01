@@ -1,7 +1,20 @@
-/** Official Fees Structure 2026 - Hill Springs Academy */
+/** Official Hill Springs Academy fee schedule.
+ * The published academic year advances every 1 November in Kenya time.
+ * Fee amounts remain unchanged until the school edits FEE_BANDS.
+ */
+export function getFeesYear() {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Africa/Nairobi",
+    year: "numeric",
+    month: "numeric",
+  }).formatToParts(new Date());
+  const year = Number(parts.find((part) => part.type === "year")?.value);
+  const month = Number(parts.find((part) => part.type === "month")?.value);
+  return String(year + (month >= 11 ? 1 : 0));
+}
 
 export const FEES_META = {
-  year: "2026",
+  get year() { return getFeesYear(); },
   admissionNewPupil: "1,000",
   covers: [
     "Lunch",
@@ -189,7 +202,7 @@ export function downloadFeePdf(classOrBand) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `Hill-Springs-Academy-Fees-${slug}-2026.pdf`;
+  a.download = `Hill-Springs-Academy-Fees-${slug}-${getFeesYear()}.pdf`;
   document.body.appendChild(a);
   a.click();
   a.remove();
