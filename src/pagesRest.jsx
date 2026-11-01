@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FEES_META, FEE_BANDS, FEE_CLASSES, downloadFeePdf, getFeesYear } from "./feesData.js";
 import { SCHOOL, GALLERY } from "./data.js";
