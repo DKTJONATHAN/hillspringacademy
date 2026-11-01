@@ -356,7 +356,7 @@ export function AdminEmailCentre() {
       <div className="admin-portal">
         <aside className="admin-sidebar">
           <div className="admin-sidebar-brand">
-            <img src="/logo.png" alt="" />
+            <img src="/logo.png" alt="Hill Springs Academy logo" />
             <div><strong>Hill Springs</strong><span>Administration</span></div>
           </div>
 
