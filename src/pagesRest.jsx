@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FEES_META, FEE_BANDS, FEE_CLASSES, downloadFeePdf } from "./feesData.js";
+import { FEES_META, FEE_BANDS, FEE_CLASSES, downloadFeePdf, getFeesYear } from "./feesData.js";
 import { SCHOOL, GALLERY } from "./data.js";
 import { BLOG_POSTS } from "./blogData.js";
 import { PageHead, Photo } from "./components.jsx";
@@ -641,14 +641,20 @@ export function Blog() {
 
 
 export function Fees() {
+  const [feesYear, setFeesYear] = useState(getFeesYear);
+  useEffect(() => {
+    const refreshYear = () => setFeesYear(getFeesYear());
+    const interval = window.setInterval(refreshYear, 30000);
+    return () => window.clearInterval(interval);
+  }, []);
   return (
     <>
-      <PageHead title="School fees 2026" text="Official termly fees by class. Click a class to download that fee structure as a PDF." path="/fees" />
+      <PageHead title={`School fees ${feesYear}`} text="Official termly fees by class. Click a class to download that fee structure as a PDF." path="/fees" />
       <section className="section"><div className="wrap">
         <div className="row-head"><div><span className="eyebrow">Fees Structure {FEES_META.year}</span><h2>Choose a class to download</h2><p className="lede">Each download shows the fee band for that class, what the fees cover, admission charge and bank details.</p></div><Link className="btn ghost" to="/enquire">Ask about fees</Link></div>
         <div className="fee-class-grid">{FEE_CLASSES.map((item)=><button key={item.slug} type="button" className="fee-class-card" onClick={()=>downloadFeePdf(item)}><strong>{item.name}</strong><span className="fee-band-label">{item.band.title}</span><span className="fee-amounts">{item.band.terms.map(t=><span key={t.term}><small>{t.term}</small> Ksh {t.amount}</span>)}</span><span className="fee-dl">Download PDF ↓</span></button>)}</div>
         <div className="fee-bands"><h3>Or download by fee band</h3><div className="fee-band-row">{FEE_BANDS.map(b=><button key={b.id} type="button" className="btn small ghost dark" onClick={()=>downloadFeePdf(b)}>{b.title}</button>)}</div></div>
-        <div className="card fee-includes"><h3>What the fees cover</h3><ul className="checks">{FEES_META.covers.map(c=><li key={c}>{c}</li>)}</ul><p><strong>Admission (new pupils):</strong> Ksh {FEES_META.admissionNewPupil}</p><p>{FEES_META.transportNote}</p><h3>Bank details</h3><ul className="fee-banks">{FEES_META.banks.map(b=><li key={b.account}><strong>{b.bank}</strong><span>A/C {b.account} · {b.name}</span></li>)}</ul><p className="fee-note">Amounts are from the official {FEES_META.year} structure. Confirm with admissions before paying.</p></div>
+        <div className="card fee-includes"><h3>What the fees cover</h3><ul className="checks">{FEES_META.covers.map(c=><li key={c}>{c}</li>)}</ul><p><strong>Admission (new pupils):</strong> Ksh {FEES_META.admissionNewPupil}</p><p>{FEES_META.transportNote}</p><h3>Bank details</h3><ul className="fee-banks">{FEES_META.banks.map(b=><li key={b.account}><strong>{b.bank}</strong><span>A/C {b.account} · {b.name}</span></li>)}</ul><p className="fee-note">Amounts are from the official {feesYear} structure. Confirm with admissions before paying.</p></div>
       </div></section>
     </>
   );
