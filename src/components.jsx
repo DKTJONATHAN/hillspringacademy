@@ -52,6 +52,15 @@ export function PageHead({ title, text, description, path, image }) {
     let canonicalEl = document.querySelector('link[rel="canonical"]');
     if (!canonicalEl) { canonicalEl = document.createElement("link"); canonicalEl.rel = "canonical"; document.head.appendChild(canonicalEl); }
     canonicalEl.href = canonical;
+    let robotsEl = document.querySelector('meta[name="robots"]');
+    if (!robotsEl) {
+      robotsEl = document.createElement("meta");
+      robotsEl.name = "robots";
+      document.head.appendChild(robotsEl);
+    }
+    robotsEl.content = ["/signup", "/apply", "/enquire", "/admin"].includes(window.location.pathname.replace(/\/$/, "") || "/")
+      ? "noindex,follow"
+      : "index,follow,max-image-preview:large";
     const setMeta = (property, content) => {
       let el = document.querySelector(`meta[property="${property}"]`);
       if (!el) { el = document.createElement("meta"); el.setAttribute("property", property); document.head.appendChild(el); }
