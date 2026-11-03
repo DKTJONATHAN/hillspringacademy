@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
@@ -10,12 +10,12 @@ import "./forms-unslop.css";
 import "./site-unslop.css";
 
 
-const rootEl = document.getElementById("root");
+function AppReady() {\n  useEffect(() => {\n    document.documentElement.classList.add("app-ready");\n  }, []);\n  return null;\n}\n\nconst rootEl = document.getElementById("root");
 
 const app = (
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <>\n        <App />\n        <AppReady />\n      </>
     </BrowserRouter>
   </React.StrictMode>
 );
