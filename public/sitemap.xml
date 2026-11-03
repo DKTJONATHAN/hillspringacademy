@@ -5,9 +5,6 @@
   <url><loc>https://hillspringsacademy.sc.ke/about</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://hillspringsacademy.sc.ke/academics</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://hillspringsacademy.sc.ke/admissions</loc><lastmod>2026-10-05</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/apply</loc><lastmod>2026-10-05</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/signup</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://hillspringsacademy.sc.ke/enquire</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hillspringsacademy.sc.ke/fees</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://hillspringsacademy.sc.ke/uniforms</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hillspringsacademy.sc.ke/school-life</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -23,4 +20,8 @@
   <url><loc>https://hillspringsacademy.sc.ke/contact</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://hillspringsacademy.sc.ke/privacy</loc><lastmod>2026-10-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://hillspringsacademy.sc.ke/sitemap</loc><lastmod>2026-10-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/uniforms</loc><lastmod>2026-10-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/terms</loc><lastmod>2026-10-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/refund-policy</loc><lastmod>2026-10-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://hillspringsacademy.sc.ke/delete-account</loc><lastmod>2026-10-05</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>
