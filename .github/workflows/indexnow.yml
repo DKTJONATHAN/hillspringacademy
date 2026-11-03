@@ -1,0 +1,34 @@
+name: IndexNow URL Notifications
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/sitemap.xml"
+      - "public/robots.txt"
+      - "index.html"
+      - "worker.js"
+      - "scripts/submit-indexnow.mjs"
+      - ".github/workflows/indexnow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hillspring-indexnow
+  cancel-in-progress: true
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Notify IndexNow about canonical website URLs
+        run: node scripts/submit-indexnow.mjs
