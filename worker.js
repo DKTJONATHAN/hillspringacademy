@@ -33,6 +33,20 @@ async function ssrResponse(request, env) {
     `<div id="root">${rendered.appHtml}</div>`
   );
 
+  // Route-specific metadata is rendered on the server so crawlers and assistive tools
+  // receive the same page description and indexing directive as visitors.
+  html = html.replace(
+    /<meta\\s+name="description"[^>]*>/i,
+    `<meta name="description" content="${escapeAttr(rendered.description)}" />`
+  );
+  html = html.replace(
+    /<meta\\s+property="og:description"[^>]*>/i,
+    `<meta property="og:description" content="${escapeAttr(rendered.description)}" />`
+  );
+  html = html.replace(
+    /<meta\\s+name="robots"[^>]*>/i,
+    `<meta name="robots" content="${escapeAttr(rendered.robots)}" />`
+  );
   // Title + canonical for the route
   html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(rendered.title)}</title>`);
   html = html.replace(
