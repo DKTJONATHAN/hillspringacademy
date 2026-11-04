@@ -9,25 +9,32 @@ import "./styles.css";
 import "./forms-unslop.css";
 import "./site-unslop.css";
 
+function AppReady() {
+  useEffect(() => {
+    document.documentElement.classList.add("app-ready");
+  }, []);
+  return null;
+}
 
-function AppReady() {\n  useEffect(() => {\n    document.documentElement.classList.add("app-ready");\n  }, []);\n  return null;\n}\n\nconst rootEl = document.getElementById("root");
+const rootEl = document.getElementById("root");
 
 const app = (
   <React.StrictMode>
     <BrowserRouter>
-      <>\n        <App />\n        <AppReady />\n      </>
+      <>
+        <App />
+        <AppReady />
+      </>
     </BrowserRouter>
   </React.StrictMode>
 );
 
-// Hydrate when the Worker already injected SSR HTML; otherwise client-render
+// Hydrate when the Worker already injected SSR HTML; otherwise client-render.
 if (rootEl && rootEl.hasChildNodes() && rootEl.querySelector(".skip, header, main, .page")) {
   hydrateRoot(rootEl, app);
-} else {
+} else if (rootEl) {
   createRoot(rootEl).render(app);
 }
-
-document.documentElement.classList.add("app-ready");
 
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
