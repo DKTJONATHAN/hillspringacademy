@@ -158,6 +158,12 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // The admin hostname opens the existing /admin React route by default.
+    if (url.hostname === "admin.hillspringsacademy.sc.ke" && url.pathname === "/") {
+      url.pathname = "/admin";
+      return Response.redirect(url.toString(), 302);
+    }
+
     if (url.pathname === "/api/turnstile/verify") return handleTurnstileVerify(request, env);
 
     if (!env.ASSETS) {
