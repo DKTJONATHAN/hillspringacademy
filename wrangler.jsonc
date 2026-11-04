@@ -3,7 +3,7 @@
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    "TURNSTILE_HOSTNAMES": "hillspringsacademy.sc.ke"
+    "TURNSTILE_HOSTNAMES": "hillspringsacademy.sc.ke,admin.hillspringsacademy.sc.ke"
   },
   "main": "./worker.js",
   "assets": {
