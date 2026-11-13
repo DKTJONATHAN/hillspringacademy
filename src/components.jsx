@@ -98,7 +98,8 @@ export function PageHead({ title, text, description, path, image }) {
       logo: `${SCHOOL.siteUrl}/logo.png`,
       address: {
         "@type": "PostalAddress",
-        streetAddress: SCHOOL.poBox || undefined,
+        postOfficeBoxNumber: "377",
+        postalCode: "60600",
         addressLocality: "Maua",
         addressRegion: "Meru County",
         addressCountry: "KE",
