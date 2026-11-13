@@ -2,18 +2,22 @@ import assert from "node:assert/strict";
 import { render } from "../dist/server/entry-server.js";
 import worker from "../worker.js";
 
-const routes = ["/", "/fees", "/admissions", "/about", "/academics", "/blog"];
+const routes = ["/", "/fees", "/admissions", "/about", "/academics", "/blog",
+  "/blog/cbe-at-home-learning-beyond-the-classroom"];
 const renderedPages = routes.map((path) => ({ path, ...render(path) }));
 
 for (const page of renderedPages) {
-  assert.ok(page.appHtml.length > 1000, `SSR HTML is unexpectedly empty for ${page.path}`);
-  assert.ok(page.appHtml.includes('class="pagehead"'), `Page heading missing for ${page.path}`);
-  assert.equal(page.canonical, `https://hillspringsacademy.sc.ke${page.path === "/" ? "/" : page.path}`);
-  assert.equal(page.robots.includes("noindex"), false, `Public route unexpectedly noindexed: ${page.path}`);
+  assert.ok(page.appHtml.length > 1000, "SSR HTML is unexpectedly empty for " + page.path);
+  assert.ok(page.appHtml.includes('class="pagehead"'), "Page heading missing for " + page.path);
+  assert.equal(page.canonical, "https://hillspringsacademy.sc.ke" + (page.path === "/" ? "/" : page.path));
+  assert.equal(page.status, 200, "Public route returned an unexpected status: " + page.path);
+  assert.equal(page.robots.includes("noindex"), false, "Public route unexpectedly noindexed: " + page.path);
 }
 
 assert.equal(new Set(renderedPages.map((page) => page.title)).size, routes.length,
-  "Public routes must have distinct server-rendered titles");
+  "Public routes and individual articles must have distinct server-rendered titles");
+assert.ok(renderedPages.find((page) => page.path.includes("/blog/")).title.startsWith("How Parents Can Support"),
+  "Individual blog article must use its own title, not the generic blog title");
 assert.notEqual(renderedPages.find((page) => page.path === "/fees").appHtml,
   renderedPages.find((page) => page.path === "/").appHtml,
   "Fees route must not render the homepage shell");
@@ -30,7 +34,7 @@ const shell = `<!doctype html><html><head>
 </head><body><div id="root"></div></body></html>`;
 
 for (const page of renderedPages) {
-  const request = new Request(`https://hillspringsacademy.sc.ke${page.path}`, {
+  const request = new Request("https://hillspringsacademy.sc.ke" + page.path, {
     headers: { Accept: "text/html" },
   });
   const response = await worker.fetch(request, {
@@ -39,11 +43,25 @@ for (const page of renderedPages) {
     }) },
   });
   const html = await response.text();
-  assert.equal(response.status, 200, `Worker returned non-200 for ${page.path}`);
-  assert.equal(response.headers.get("X-SSR"), "1", `Worker did not mark SSR for ${page.path}`);
-  assert.ok(html.includes(`<title>${page.title}</title>`), `Route title missing from HTML for ${page.path}`);
-  assert.ok(html.includes(`href="${page.canonical}"`), `Route canonical missing from HTML for ${page.path}`);
-  assert.ok(html.includes(page.appHtml.slice(0, 80)), `SSR content was not injected for ${page.path}`);
+  assert.equal(response.status, 200, "Worker returned non-200 for " + page.path);
+  assert.equal(response.headers.get("X-SSR"), "1", "Worker did not mark SSR for " + page.path);
+  assert.ok(html.includes("<title>" + page.title + "</title>"), "Route title missing from HTML for " + page.path);
+  assert.ok(html.includes('href="' + page.canonical + '"'), "Route canonical missing from HTML for " + page.path);
+  assert.ok(html.includes(page.appHtml.slice(0, 80)), "SSR content was not injected for " + page.path);
 }
 
-console.log(`SSR SEO smoke test passed for ${routes.length} routes and Worker HTML responses.`);
+const missing = render("/blog/not-a-real-article");
+assert.equal(missing.status, 404, "Unknown article slugs must return HTTP 404");
+assert.ok(missing.robots.includes("noindex"), "Unknown article slugs must be noindexed");
+const missingResponse = await worker.fetch(new Request(
+  "https://hillspringsacademy.sc.ke/blog/not-a-real-article",
+  { headers: { Accept: "text/html" } },
+), {
+  ASSETS: { fetch: async () => new Response(shell, {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  }) },
+});
+assert.equal(missingResponse.status, 404, "Worker must preserve HTTP 404 for unknown routes");
+assert.ok((await missingResponse.text()).includes('<meta name="robots" content="noindex,follow" />'));
+
+console.log("SSR SEO smoke test passed for " + routes.length + " public routes plus 404 handling.");
