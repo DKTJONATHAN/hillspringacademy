@@ -2,6 +2,8 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import App from "./App.jsx";
+import { BLOG_POSTS } from "./blogData.js";
+import { getFeesYear } from "./feesData.js";
 
 const SITE = "https://hillspringsacademy.sc.ke";
 
@@ -37,7 +39,7 @@ const PAGE_TITLES = {
   "/school-life": "School Life | Hill Springs Academy, Maua",
   "/gallery": "Gallery | Hill Springs Academy, Maua",
   "/reading-materials": "Learning Resources | Hill Springs Academy, Maua",
-  "/fees": "School Fees | Hill Springs Academy, Maua",
+  "/fees": `School Fees ${getFeesYear()} | Hill Springs Academy, Maua`,
   "/uniforms": "Uniforms | Hill Springs Academy, Maua",
   "/faq": "FAQ | Hill Springs Academy, Maua",
   "/contact": "Contact Hill Springs Academy | Maua, Meru County",
@@ -69,18 +71,33 @@ export function render(url) {
     </React.StrictMode>
   );
 
-  const title =
-    PAGE_TITLES[pathname] ||
-    (pathname.startsWith("/blog/")
-      ? "Blog | Hill Springs Academy, Maua"
-      : "Hill Springs Academy | Private School in Maua, Meru County");
+  const blogSlug = pathname.startsWith("/blog/") ? pathname.slice("/blog/".length) : "";
+  const post = blogSlug ? BLOG_POSTS.find((item) => item.slug === blogSlug) : null;
+  const knownPath = Object.prototype.hasOwnProperty.call(PAGE_TITLES, pathname);
+  const notFound = !knownPath && !post;
+
+  const title = post
+    ? `${post.title} | Hill Springs Academy, Maua`
+    : notFound
+      ? "Page not found | Hill Springs Academy"
+      : PAGE_TITLES[pathname];
 
   const canonical = SITE + (pathname === "/" ? "/" : pathname);
 
-  const description = PAGE_DESCRIPTIONS[pathname] ||
-    (pathname.startsWith("/blog/")
-      ? "Read this learning and family education article from Hill Springs Academy in Maua, Meru County."
-      : "Official information about Hill Springs Academy in Maua, Igembe South, Meru County, Kenya.");
-  const noIndex = ["/signup", "/apply", "/enquire", "/admin"].includes(pathname);
-  return { appHtml, title, description, canonical, pathname, robots: noIndex ? "noindex,follow" : "index,follow,max-image-preview:large" };
+  const description = post
+    ? post.intro
+    : notFound
+      ? "The page you requested could not be found on the Hill Springs Academy website."
+      : PAGE_DESCRIPTIONS[pathname] ||
+        "Official information about Hill Springs Academy in Maua, Igembe South, Meru County, Kenya.";
+  const noIndex = notFound || ["/signup", "/apply", "/enquire", "/admin"].includes(pathname);
+  return {
+    appHtml,
+    title,
+    description,
+    canonical,
+    pathname,
+    status: notFound ? 404 : 200,
+    robots: noIndex ? "noindex,follow" : "index,follow,max-image-preview:large",
+  };
 }
