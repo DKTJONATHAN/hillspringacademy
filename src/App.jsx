@@ -60,6 +60,7 @@ export default function App() {
             <Route path="/admissions" element={<Admissions />} />
             <Route path="/apply" element={<AccountPortal kind="admissions" />} />
             <Route path="/signup" element={<AccountPortal kind="signup" />} />
+            <Route path="/parent" element={<AccountPortal kind="signup" />} />
             <Route path="/enquire" element={<AccountPortal kind="enquiry" />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/reading-materials" element={<ReadingMaterials />} />
