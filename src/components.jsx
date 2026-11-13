@@ -89,7 +89,7 @@ export function PageHead({ title, text, description, path, image }) {
       "@context": "https://schema.org",
       "@type": ["School", "EducationalOrganization"],
       name: SCHOOL.name,
-      alternateName: ["Hill Springs", "Hillsprings Academy", "Hill Springs Academy Maua", "Hill Sprungs Academy"],
+      alternateName: ["Hill Springs"],
       url: SCHOOL.siteUrl,
       description: SCHOOL.intro,
       slogan: SCHOOL.motto,
