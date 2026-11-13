@@ -90,9 +90,17 @@ jobs:
             html_file="$(mktemp)"
             local status
             status="$(curl --silent --show-error --location --dump-header "$headers_file" --output "$html_file" --write-out '%{http_code}' "https://hillspringsacademy.sc.ke${path}?__ssr_verify=${GITHUB_RUN_ID}")"
-            test "$status" = "$expected_status"
-            grep -Eiq '^x-ssr: 1' "$headers_file"
-            grep -Fq "$expected" "$html_file"
+            if [ "$status" != "$expected_status" ] || ! grep -Eiq '^x-ssr: 1' "$headers_file" || ! grep -Fq "$expected" "$html_file"; then
+              echo "::error::SSR verification failed for ${path}: expected HTTP ${expected_status}, received HTTP ${status}."
+              echo "Response headers:"
+              cat "$headers_file"
+              echo "Response title and robots directive:"
+              grep -Eio '<title>[^<]*</title>|<meta name="robots"[^>]*>' "$html_file" | head -5 || true
+              echo "First 500 response characters:"
+              head -c 500 "$html_file" || true
+              rm -f "$headers_file" "$html_file"
+              return 1
+            fi
             rm -f "$headers_file" "$html_file"
           }
           check_page "/fees" "<title>School Fees 2027 | Hill Springs Academy, Maua</title>" "200"
