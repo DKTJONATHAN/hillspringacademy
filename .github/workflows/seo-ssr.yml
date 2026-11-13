@@ -75,26 +75,34 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: "4"
           command: deploy --config wrangler.jsonc
+      - name: Remove only the three legacy Worker Routes and purge edge cache
+        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          api="https://api.cloudflare.com/client/v4"
+          auth="Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
+          zone_id="$(curl --silent --show-error --fail-with-body -H "$auth" "$api/zones?name=hillspringsacademy.sc.ke" | jq -r '.result[0].id // empty')"
+          if [ -z "$zone_id" ]; then
+            echo "::error::Could not resolve Cloudflare zone hillspringsacademy.sc.ke."
+            exit 1
+          fi
+          routes="$(curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/workers/routes")"
+          echo "$routes" | jq -e '.success == true' >/dev/null
+          while IFS= read -r route_id; do
+            [ -n "$route_id" ] || continue
+            echo "Removing legacy route $route_id for hillspringacademy."
+            response="$(curl --silent --show-error --fail-with-body -X DELETE -H "$auth" "$api/zones/$zone_id/workers/routes/$route_id")"
+            echo "$response" | jq -e '.success == true' >/dev/null
+          done < <(echo "$routes" | jq -r '.result[] | select(.script == "hillspringacademy" and (.pattern == "hillspringsacademy.sc.ke/*" or .pattern == "www.hillspringsacademy.sc.ke/*" or .pattern == "admin.hillspringsacademy.sc.ke/*")) | .id')
+          purge="$(curl --silent --show-error --fail-with-body -X POST -H "$auth" -H 'Content-Type: application/json' --data '{"purge_everything":true}' "$api/zones/$zone_id/purge_cache")"
+          echo "$purge" | jq -e '.success == true' >/dev/null
+          echo "Legacy route cleanup and full edge-cache purge completed."
       - name: Verify live SSR HTML after deployment
         if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
         shell: bash
         run: |
           set -euo pipefail
-          # Clear stale HTML previously cached by the Pages/static delivery path.
-          zone_id="$(curl --silent --show-error --fail-with-body \
-            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            "https://api.cloudflare.com/client/v4/zones?name=hillspringsacademy.sc.ke" \
-            | jq -r '.result[0].id // empty')"
-          if [ -z "$zone_id" ]; then
-            echo "::error::Could not resolve the Cloudflare zone ID. Check that the API token has Zone:Read and Cache Purge permissions."
-            exit 1
-          fi
-          purge_response="$(curl --silent --show-error --fail-with-body -X POST \
-            "https://api.cloudflare.com/client/v4/zones/$zone_id/purge_cache" \
-            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data '{"files":["https://hillspringsacademy.sc.ke/fees","https://hillspringsacademy.sc.ke/blog/cbe-at-home-learning-beyond-the-classroom","https://hillspringsacademy.sc.ke/parent","https://hillspringsacademy.sc.ke/blog/not-a-real-article"]}')"
-          echo "$purge_response" | jq -e '.success == true' >/dev/null
           check_page() {
             local path="$1"
             local expected="$2"
