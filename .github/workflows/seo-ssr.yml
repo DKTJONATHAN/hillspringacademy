@@ -98,6 +98,67 @@ jobs:
           purge="$(curl --silent --show-error --fail-with-body -X POST -H "$auth" -H 'Content-Type: application/json' --data '{"purge_everything":true}' "$api/zones/$zone_id/purge_cache")"
           echo "$purge" | jq -e '.success == true' >/dev/null
           echo "Legacy route cleanup and full edge-cache purge completed."
+      - name: Diagnose Cloudflare routing and cache configuration
+        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          api="https://api.cloudflare.com/client/v4"
+          auth="Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
+          zone_id="$(curl --silent --show-error --fail-with-body -H "$auth" "$api/zones?name=hillspringsacademy.sc.ke" | jq -r '.result[0].id // empty')"
+          [ -n "$zone_id" ] || { echo "::error::Cloudflare zone lookup failed."; exit 1; }
+          echo "=== Worker routes still attached to this zone ==="
+          curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/workers/routes" | jq -r '.result[]? | [.id, .pattern, (.script // "<custom-domain>")] | @tsv' || true
+          echo "=== Active zone rulesets and cache-affecting rules ==="
+          rulesets="$(curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/rulesets")"
+          echo "$rulesets" | jq -r '.result[]? | [.id, .name, .phase] | @tsv'
+          while IFS=        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          check_page() {
+            local path="$1"
+            local expected="$2"
+            local expected_status="$3"
+            local headers_file
+            local html_file
+            headers_file="$(mktemp)"
+            html_file="$(mktemp)"
+            local status
+            status="$(curl --silent --show-error --location -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' --dump-header "$headers_file" --output "$html_file" --write-out '%{http_code}' "https://hillspringsacademy.sc.ke${path}?__ssr_verify=${GITHUB_RUN_ID}-$(date +%s)")"
+            if [ "$status" != "$expected_status" ] || ! grep -Eiq '^x-ssr: 1' "$headers_file" || ! grep -Fq "$expected" "$html_file"; then
+              echo "::error::SSR verification failed for ${path}: expected HTTP ${expected_status}, received HTTP ${status}."
+              echo "Response headers:"
+              cat "$headers_file"
+              echo "Response title and robots directive:"
+              grep -Eio '<title>[^<]*</title>|<meta name="robots"[^>]*>' "$html_file" | head -5 || true
+              echo "First 500 response characters:"
+              head -c 500 "$html_file" || true
+              rm -f "$headers_file" "$html_file"
+              return 1
+            fi
+            rm -f "$headers_file" "$html_file"
+          }
+          check_page "/fees" "<title>School Fees 2027 | Hill Springs Academy, Maua</title>" "200"
+          check_page "/blog/cbe-at-home-learning-beyond-the-classroom" "<title>How Parents Can Support Competency-Based Education (CBE) at Home in Kenya | Hill Springs Academy, Maua</title>" "200"
+          check_page "/parent" '<meta name="robots" content="noindex,follow" />' "200"
+          check_page "/blog/not-a-real-article" '<meta name="robots" content="noindex,follow" />' "404"
+      - name: Report missing Cloudflare deployment secrets
+        if: env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == ''
+        run: echo "::warning::Worker deployment skipped. Configure CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets to enable automatic deployment."
+\\t' read -r ruleset_id ruleset_name phase; do
+            [ -n "$ruleset_id" ] || continue
+            case "$phase" in
+              http_request_cache_settings|http_request_transform|http_request_dynamic_redirect|http_request_late_transform)
+                echo "--- $ruleset_name ($phase) ---"
+                curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/rulesets/$ruleset_id" | jq -r '.result.rules[]? | {description, expression, action, enabled, action_parameters}'
+                ;;
+            esac
+          done < <(echo "$rulesets" | jq -r '.result[]? | [.id, .name, .phase] | @tsv')
+          echo "=== Relevant zone cache/HTTPS settings ==="
+          for setting in cache_level development_mode always_use_https; do
+            curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/settings/$setting" | jq -c '{setting: .result.id, value: .result.value, modified_on: .result.modified_on}'
+          done
       - name: Verify live SSR HTML after deployment
         if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
         shell: bash
