@@ -8,7 +8,7 @@ const renderedPages = routes.map((path) => ({ path, ...render(path) }));
 
 for (const page of renderedPages) {
   assert.ok(page.appHtml.length > 1000, "SSR HTML is unexpectedly empty for " + page.path);
-  assert.ok(page.appHtml.includes('class="pagehead"'), "Page heading missing for " + page.path);
+  assert.ok(page.appHtml.includes(page.path === "/" ? 'class="home-hero"' : 'class="pagehead"'), "Route heading/content missing for " + page.path);
   assert.equal(page.canonical, "https://hillspringsacademy.sc.ke" + (page.path === "/" ? "/" : page.path));
   assert.equal(page.status, 200, "Public route returned an unexpected status: " + page.path);
   assert.equal(page.robots.includes("noindex"), false, "Public route unexpectedly noindexed: " + page.path);
