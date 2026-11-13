@@ -59,7 +59,7 @@ export function PageHead({ title, text, description, path, image }) {
       robotsEl.name = "robots";
       document.head.appendChild(robotsEl);
     }
-    robotsEl.content = ["/signup", "/apply", "/enquire", "/admin"].includes(window.location.pathname.replace(/\/$/, "") || "/")
+    robotsEl.content = ["/signup", "/parent", "/apply", "/enquire", "/admin"].includes(window.location.pathname.replace(/\/$/, "") || "/")
       ? "noindex,follow"
       : "index,follow,max-image-preview:large";
     const setMeta = (property, content) => {
