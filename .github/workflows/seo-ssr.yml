@@ -89,7 +89,7 @@ jobs:
             headers_file="$(mktemp)"
             html_file="$(mktemp)"
             local status
-            status="$(curl --silent --show-error --location --dump-header "$headers_file" --output "$html_file" --write-out '%{http_code}' "https://hillspringsacademy.sc.ke${path}?__ssr_verify=${GITHUB_RUN_ID}")"
+            status="$(curl --silent --show-error --location -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' --dump-header "$headers_file" --output "$html_file" --write-out '%{http_code}' "https://hillspringsacademy.sc.ke${path}?__ssr_verify=${GITHUB_RUN_ID}-$(date +%s)")"
             if [ "$status" != "$expected_status" ] || ! grep -Eiq '^x-ssr: 1' "$headers_file" || ! grep -Fq "$expected" "$html_file"; then
               echo "::error::SSR verification failed for ${path}: expected HTTP ${expected_status}, received HTTP ${status}."
               echo "Response headers:"
