@@ -196,10 +196,14 @@ export const SCHOOL = {
     "Kenyan CBC school"
   ],
   faqs: [
-    { q: "How do I get an admission form?", a: "Email admissions@hillspringsacademy.sc.ke and we will send it to you." },
-    { q: "Can I visit the school before applying?", a: "Yes. Contact the admissions office to arrange a visit." },
+    { q: "Which learning levels does Hill Springs Academy offer?", a: "The school website lists Kindergarten, Pre-Primary and Junior School. Contact admissions to confirm the appropriate class and current availability." },
+    { q: "How do I get an admission form?", a: "Email admissions@hillspringsacademy.sc.ke and the admissions office will send you the form." },
+    { q: "Can I visit the school before applying?", a: "Yes. Contact the admissions office to arrange a school visit before submitting an application." },
+    { q: "What documents should I prepare for admission?", a: "The admissions page lists a completed admission form, a copy of the learner's birth certificate, recent passport photographs and a previous school report where the learner is transferring." },
     { q: "Does Hill Springs Academy offer school transport?", a: "Yes. Contact admissions to confirm current route coverage, availability, arrangements and charges." },
-    { q: "Where can I find fee information?", a: "Ask the admissions office for the current fee structure." },
+    { q: "Where can I find school fee information?", a: "Visit the School Fees page to view the published termly fee information by class. Contact admissions to confirm current charges and payment details." },
+    { q: "Where can I check the school uniform?", a: "Visit the Uniforms page for Primary School and Junior Secondary School uniform references. Contact admissions to confirm current sizes, suppliers and prices." },
+    { q: "How do I contact the admissions office?", a: "Email admissions@hillspringsacademy.sc.ke or use the Contact page for the school's phone number, email addresses and location." },
   ],
   news: [
     { date: "", title: "Admissions are open", text: "Create a free parent account and apply online to start an application." },
