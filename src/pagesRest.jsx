@@ -316,15 +316,15 @@ export function Admissions() {
   return (
     <>
       <PageHead
-        title="Admissions"
-        text="A straightforward route from your first enquiry to joining Hill Springs Academy."
+        title="School Admissions in Maua | Hill Springs Academy"
+        text="Find out how to enquire and apply to Hill Springs Academy, a private CBE school in Maua, Igembe South, Meru County, offering Kindergarten, Pre-Primary and Junior School."
         path="/admissions"
       />
       <section className="section">
         <div className="wrap split">
           <div>
-            <span className="eyebrow">The process</span>
-            <h2>Four simple steps</h2>
+            <span className="eyebrow">Admissions · Maua, Meru County</span>
+            <h2>How to apply to Hill Springs Academy</h2>
             <div className="admissions-timeline">
               {(SCHOOL.steps || []).map((step, i) => (
                 <article className="timeline-item" key={step.title}>
@@ -342,6 +342,8 @@ export function Admissions() {
             <h3>Levels</h3>
             <p>Applications are accepted for the classes listed below, subject to available places.</p>
             <div className="tags dark">{(SCHOOL.applyLevels || []).map((l) => <span key={l}>{l}</span>)}</div>
+            <p style={{ marginTop: 16 }}>Hill Springs Academy serves families in Maua and Igembe South, Meru County. Contact admissions to confirm whether a place is available for the class you need.</p>
+            <Link className="textlink" to="/contact">Contact admissions →</Link>
           </aside>
         </div>
       </section>
@@ -356,6 +358,11 @@ export function Admissions() {
             <Link to="/apply"><strong>Apply online</strong><span>Start an application →</span></Link>
             <Link to="/enquire"><strong>Make an enquiry</strong><span>Ask admissions a question →</span></Link>
             <Link to="/contact"><strong>Contact the school</strong><span>Find phone, email and location →</span></Link>
+          </div>
+          <div className="btns" style={{ marginTop: 24 }}>
+            <Link className="btn ghost" to="/academics">Explore learning stages</Link>
+            <Link className="btn ghost" to="/fees">View school fees</Link>
+            <Link className="btn ghost" to="/uniforms">See school uniforms</Link>
           </div>
         </div>
       </section>
@@ -488,12 +495,12 @@ const UNIFORM_LEVELS = [
 export function Uniforms() {
   return (
     <>
-      <PageHead title="School uniforms" text="Uniform reference for Primary School and Junior Secondary School (JSS)." path="/uniforms" />
+      <PageHead title="Primary & JSS School Uniforms in Maua" text="View Hill Springs Academy uniform references for Primary School and Junior Secondary School (JSS) in Maua, Meru County. Contact admissions to confirm current sizing, suppliers and prices." path="/uniforms" />
       <section className="section uniform-section">
         <div className="wrap">
           <div className="intro-row">
-            <div><span className="eyebrow">Uniform guide</span><h2>Primary and JSS, clearly separated.</h2></div>
-            <p className="lede">The photographs below are grouped by school level. Contact the school for supplier, sizing, pricing and any current term-specific requirements.</p>
+            <div><span className="eyebrow">Hill Springs Academy · Maua</span><h2>Primary and Junior Secondary School uniforms</h2></div>
+            <p className="lede">Use this school uniform guide to identify the Primary School and Junior Secondary School (JSS) options. The photographs are grouped by level. For current supplier details, sizes, prices and term-specific requirements, confirm directly with admissions before purchasing.</p>
           </div>
           {UNIFORM_LEVELS.map((level) => (
             <div className="uniform-level" key={level.id} id={level.id}>
@@ -509,6 +516,17 @@ export function Uniforms() {
             </div>
           ))}
           <div className="uniform-note"><span aria-hidden="true">✓</span><p><strong>Need the exact requirements?</strong> Contact admissions before buying uniforms so you can confirm the current specification.</p></div>
+          <div className="section-kicker" style={{ marginTop: 28 }}><span className="eyebrow">For parents and guardians</span></div>
+          <div className="cols">
+            <article className="card"><h3>Which uniform should I choose?</h3><p>Use the Primary School or Junior Secondary School (JSS) section that matches your child's level. If you are unsure which level applies, ask the admissions office before purchasing.</p></article>
+            <article className="card"><h3>Where can I confirm sizes and prices?</h3><p>Current supplier, sizing, pricing and purchase arrangements are not listed here. Contact Hill Springs Academy directly for the latest requirements.</p></article>
+            <article className="card"><h3>New admission?</h3><p>Families planning to join the school can review the admissions process and contact the office about the correct uniform for the learner's class.</p></article>
+          </div>
+          <div className="btns" style={{ marginTop: 24 }}>
+            <Link className="btn" to="/contact">Ask about uniforms</Link>
+            <Link className="btn ghost" to="/admissions">Admissions information</Link>
+            <Link className="btn ghost" to="/fees">School fees</Link>
+          </div>
         </div>
       </section>
     </>
@@ -557,13 +575,13 @@ export function Contact() {
   };
   return (
     <>
-      <PageHead title="Contact Hill Springs Academy" text="Find the school, call the office, or send a message." path="/contact" />
+      <PageHead title="Contact Hill Springs Academy in Maua, Meru County" text="Contact Hill Springs Academy in Maua for admissions, school fees, uniforms, transport enquiries, a school visit or directions to the school office." path="/contact" />
       <section className="section">
         <div className="wrap contact-layout">
           <div className="contact-copy">
             <span className="eyebrow">Come and see us</span>
-            <h2>Let's talk about your child's next step.</h2>
-            <p>For admissions, fees, transport, uniforms or a general question, use the details below or send a message.</p>
+            <h2>Contact our school office in Maua</h2>
+            <p>Speak with Hill Springs Academy about admissions, current school fees, Primary and JSS uniforms, transport arrangements or planning a school visit. You can call, email or send a message using the form.</p>
             <div className="contact-details">
               {SCHOOL.phone && <a href={`tel:${SCHOOL.phoneTel || SCHOOL.phone}`}><small>Phone</small><strong>{SCHOOL.phone}</strong></a>}
               <a href={`mailto:${SCHOOL.infoEmail}`}><small>Email</small><strong>{SCHOOL.infoEmail}</strong></a>
@@ -649,7 +667,7 @@ export function Fees() {
   }, []);
   return (
     <>
-      <PageHead title={`School fees ${feesYear}`} text="Official termly fees by class. Click a class to download that fee structure as a PDF." path="/fees" />
+      <PageHead title={`School fees ${feesYear}`} text={`View the official ${feesYear} Hill Springs Academy school fees in Maua, Meru County. Download the termly fee structure by class and contact admissions to confirm current charges before payment.`} path="/fees" />
       <section className="section"><div className="wrap">
         <div className="row-head"><div><span className="eyebrow">Fees Structure {FEES_META.year}</span><h2>Choose a class to download</h2><p className="lede">Each download shows the fee band for that class, what the fees cover, admission charge and bank details.</p></div><Link className="btn ghost" to="/enquire">Ask about fees</Link></div>
         <div className="fee-class-grid">{FEE_CLASSES.map((item)=><button key={item.slug} type="button" className="fee-class-card" onClick={()=>downloadFeePdf(item)}><strong>{item.name}</strong><span className="fee-band-label">{item.band.title}</span><span className="fee-amounts">{item.band.terms.map(t=><span key={t.term}><small>{t.term}</small> Ksh {t.amount}</span>)}</span><span className="fee-dl">Download PDF ↓</span></button>)}</div>
