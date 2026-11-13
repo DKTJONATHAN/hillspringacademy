@@ -34,6 +34,7 @@ const PAGE_TITLES = {
   "/academics": "Academics | Hill Springs Academy, Maua",
   "/admissions": "Admissions | Hill Springs Academy, Maua",
   "/signup": "Join Hill Springs Academy | Sign up",
+  "/parent": "Parent Portal | Hill Springs Academy, Maua",
   "/apply": "Apply to Hill Springs Academy | Maua",
   "/enquire": "Make an enquiry | Hill Springs Academy",
   "/school-life": "School Life | Hill Springs Academy, Maua",
@@ -90,7 +91,7 @@ export function render(url) {
       ? "The page you requested could not be found on the Hill Springs Academy website."
       : PAGE_DESCRIPTIONS[pathname] ||
         "Official information about Hill Springs Academy in Maua, Igembe South, Meru County, Kenya.";
-  const noIndex = notFound || ["/signup", "/apply", "/enquire", "/admin"].includes(pathname);
+  const noIndex = notFound || ["/signup", "/parent", "/apply", "/enquire", "/admin"].includes(pathname);
   return {
     appHtml,
     title,
