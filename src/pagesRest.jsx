@@ -168,7 +168,7 @@ export function About() {
               ))}
             </ul>
             <div className="btns" style={{ marginTop: 16 }}>
-              <Link className="btn small" to="/fees">Fees 2026</Link>
+              <Link className="btn small" to="/fees">Fees {getFeesYear()}</Link>
               <Link className="btn small ghost" to="/uniforms">Uniforms</Link>
             </div>
           </div>
