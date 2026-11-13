@@ -240,18 +240,18 @@ export function Academics() {
   return (
     <>
       <PageHead
-        title="Academics"
-        text="A clear learning journey from the early years into Junior School, grounded in Kenya's Competency-Based Education."
+        title="Academics at Hill Springs Academy | CBE School in Maua"
+        text="Explore Kindergarten, Pre-Primary and Junior School at Hill Springs Academy in Maua, Meru County. Learn about the school's CBE approach, subject areas and learning stages."
         path="/academics"
       />
       <section className="section">
         <div className="wrap">
           <div className="intro-row">
             <div>
-              <span className="eyebrow">Learning at Hill Springs</span>
-              <h2>Build understanding. Practise skills. Grow in confidence.</h2>
+              <span className="eyebrow">CBE learning · Maua, Meru County</span>
+              <h2>Kindergarten, Pre-Primary and Junior School learning</h2>
             </div>
-            <p className="lede">Our academic approach is designed to help learners use what they know — in class, through practical activities and in everyday situations.</p>
+            <p className="lede">Hill Springs Academy's academic pathway supports learners from the early years into Junior School. The programme emphasises literacy, numeracy, subject understanding, practical application, positive values and the ability to use learning in everyday situations.</p>
           </div>
           <div className="academic-path">
             {(SCHOOL.stages || []).map((stage, i) => (
@@ -287,7 +287,7 @@ export function Academics() {
           <div>
             <span className="eyebrow">Curriculum</span>
             <h2>Subject areas</h2>
-            <p>Our programme brings together foundational literacy and numeracy, sciences, humanities, creative work, physical development and values.</p>
+            <p>The learning programme brings together language and communication, mathematics, science and technology, social studies, creative arts, religious education and physical education. These subject areas support a broad foundation across the school's learning stages.</p>
           </div>
           <div className="subject-list">
             {(SCHOOL.subjects || []).map((subject, i) => (
@@ -297,6 +297,16 @@ export function Academics() {
         </div>
       </section>
 
+      <section className="section alt">
+        <div className="wrap split">
+          <div><span className="eyebrow">For families</span><h2>Understand the next step</h2><p>Families can review the admissions process, check the published fee information and ask the school about the appropriate class for their child.</p></div>
+          <div className="btns">
+            <Link className="btn" to="/admissions">Admissions information</Link>
+            <Link className="btn ghost" to="/fees">View school fees</Link>
+            <Link className="btn ghost" to="/contact">Ask the school</Link>
+          </div>
+        </div>
+      </section>
       <section className="cta">
         <div className="wrap">
           <span className="eyebrow">Next step</span>
@@ -537,10 +547,10 @@ export function FAQ() {
   const [open, setOpen] = useState(0);
   return (
     <>
-      <PageHead title="Frequently asked questions" text="Quick answers to common questions from families considering Hill Springs Academy." path="/faq" />
+      <PageHead title="School FAQs | Admissions, Fees & Learning in Maua" text="Answers to common questions about Hill Springs Academy in Maua, including admission forms, school visits, learning levels, transport, uniforms and fees." path="/faq" />
       <section className="section">
         <div className="wrap faq-layout">
-          <div><span className="eyebrow">Questions</span><h2>What families usually want to know.</h2><p className="lede">If your question is not answered here, the school office can give you the current information.</p><Link className="btn ghost" to="/contact">Ask the school</Link></div>
+          <div><span className="eyebrow">Parent information · Maua</span><h2>Common questions about Hill Springs Academy</h2><p className="lede">Find quick information about joining the school, learning stages and practical arrangements. Contact the school office if you need details for a particular learner.</p><Link className="btn ghost" to="/contact">Ask the school</Link></div>
           <div>
             {(SCHOOL.faqs || []).map((f, i) => (
               <div className="faq" key={f.q}>
