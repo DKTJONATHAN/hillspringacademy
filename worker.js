@@ -73,7 +73,7 @@ async function ssrResponse(request, env) {
   );
 
   return new Response(html, {
-    status: 200,
+    status: rendered.status || 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "public, max-age=60, s-maxage=300",
