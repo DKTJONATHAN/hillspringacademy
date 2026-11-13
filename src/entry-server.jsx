@@ -10,7 +10,7 @@ const SITE = "https://hillspringsacademy.sc.ke";
 const PAGE_DESCRIPTIONS = {
   "/": "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya, offering Kindergarten, Pre-Primary and Junior School.",
   "/about": "Learn about Hill Springs Academy, a private CBE school in Maua, Igembe South, Meru County, offering Kindergarten, Pre-Primary and Junior School.",
-  "/academics": "Explore the Kindergarten, Pre-Primary and Junior School learning stages at Hill Springs Academy in Maua, Meru County.",
+  "/academics": "Explore Kindergarten, Pre-Primary and Junior School at Hill Springs Academy in Maua, Meru County. Learn about the school's CBE approach, subject areas and learning stages.",
   "/admissions": "Find out how to enquire and apply to Hill Springs Academy, a private CBE school in Maua, Igembe South, Meru County, offering Kindergarten, Pre-Primary and Junior School.",
   "/parent": "Sign in or create a parent account to manage applications and school enquiries.",
   "/school-life": "Discover school life at Hill Springs Academy in Maua, including learning, activities and the wider school community.",
@@ -18,7 +18,7 @@ const PAGE_DESCRIPTIONS = {
   "/reading-materials": "Access learning and reading resources shared by Hill Springs Academy for learners and families.",
   "/fees": "View the published Hill Springs Academy school fees in Maua, Meru County, with termly fee information by class. Contact admissions to confirm current charges before payment.",
   "/uniforms": "View Hill Springs Academy uniform references for Primary School and Junior Secondary School (JSS) in Maua, Meru County. Contact admissions to confirm current sizes, suppliers and prices.",
-  "/faq": "Answers to common questions about Hill Springs Academy, admissions, learning, school fees and contacting the school.",
+  "/faq": "Answers to common questions about Hill Springs Academy in Maua, including admission forms, school visits, learning levels, transport, uniforms and fees.",
   "/contact": "Contact Hill Springs Academy in Maua for admissions, school fees, uniforms, transport enquiries, school visits or directions to the school office.",
   "/blog": "Read learning, parenting and school-community articles from Hill Springs Academy in Maua, Meru County.",
   "/directors": "Meet the leadership of Hill Springs Academy in Maua, Meru County.",
@@ -32,7 +32,7 @@ const PAGE_DESCRIPTIONS = {
 const PAGE_TITLES = {
   "/": "Hill Springs Academy | Private School in Maua, Meru County",
   "/about": "About Hill Springs Academy | Private CBE School in Maua",
-  "/academics": "Academics | Hill Springs Academy, Maua",
+  "/academics": "Academics at Hill Springs Academy | CBE School in Maua",
   "/admissions": "School Admissions in Maua | Hill Springs Academy",
   "/signup": "Join Hill Springs Academy | Sign up",
   "/parent": "Parent Portal | Hill Springs Academy, Maua",
