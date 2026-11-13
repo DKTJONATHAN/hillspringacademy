@@ -7,6 +7,9 @@ on:
       - "src/**"
       - "worker.js"
       - "vite.config.js"
+      - "wrangler.jsonc"
+      - "index.html"
+      - "public/**"
       - "package.json"
       - "scripts/**"
       - ".github/workflows/seo-ssr.yml"
@@ -71,6 +74,30 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+      - name: Verify live SSR HTML after deployment
+        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          check_page() {
+            local path="$1"
+            local expected="$2"
+            local expected_status="$3"
+            local headers_file
+            local html_file
+            headers_file="$(mktemp)"
+            html_file="$(mktemp)"
+            local status
+            status="$(curl --silent --show-error --location --dump-header "$headers_file" --output "$html_file" --write-out '%{http_code}' "https://hillspringsacademy.sc.ke${path}?__ssr_verify=${GITHUB_RUN_ID}")"
+            test "$status" = "$expected_status"
+            grep -Eiq '^x-ssr: 1' "$headers_file"
+            grep -Fq "$expected" "$html_file"
+            rm -f "$headers_file" "$html_file"
+          }
+          check_page "/fees" "<title>School Fees 2027 | Hill Springs Academy, Maua</title>" "200"
+          check_page "/blog/cbe-at-home-learning-beyond-the-classroom" "<title>How Parents Can Support Competency-Based Education (CBE) at Home in Kenya | Hill Springs Academy, Maua</title>" "200"
+          check_page "/parent" '<meta name="robots" content="noindex,follow" />' "200"
+          check_page "/blog/not-a-real-article" '<meta name="robots" content="noindex,follow" />' "404"
       - name: Report missing Cloudflare deployment secrets
         if: env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == ''
         run: echo "::warning::Worker deployment skipped. Configure CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets to enable automatic deployment."
