@@ -111,6 +111,12 @@ jobs:
           curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/workers/routes" | jq -r '.result[]? | [.id, .pattern, (.script // "<custom-domain>")] | @tsv'
           echo "=== Ruleset entrypoints ==="
           curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/rulesets" | jq -r '.result[]? | [.id, .name, .phase] | @tsv'
+          echo "=== Legacy Page Rules (especially Cache Everything / URL forwarding) ==="
+          curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/pagerules?per_page=100" | jq -r '.result[]? | {id, status, priority, targets, actions}'
+          echo "=== Cache settings ruleset ==="
+          curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/rulesets/phases/http_request_cache_settings/entrypoint" | jq -r '.result.rules[]? | {id, description, expression, action, enabled, action_parameters}'
+          echo "=== Redirect ruleset ==="
+          curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/rulesets/phases/http_request_dynamic_redirect/entrypoint" | jq -r '.result.rules[]? | {id, description, expression, action, enabled, action_parameters}'
           echo "=== Cache/HTTPS settings ==="
           for setting in cache_level development_mode always_use_https; do
             curl --silent --show-error --fail-with-body -H "$auth" "$api/zones/$zone_id/settings/$setting" | jq -c '{setting: .result.id, value: .result.value, modified_on: .result.modified_on}'
