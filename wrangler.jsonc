@@ -1,7 +1,9 @@
 {
   "name": "hillspringacademy",
   "compatibility_date": "2026-10-01",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "vars": {
     "TURNSTILE_HOSTNAMES": "hillspringsacademy.sc.ke,admin.hillspringsacademy.sc.ke"
   },
@@ -11,5 +13,19 @@
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
     "run_worker_first": true
-  }
+  },
+  "routes": [
+    {
+      "pattern": "hillspringsacademy.sc.ke/*",
+      "zone_name": "hillspringsacademy.sc.ke"
+    },
+    {
+      "pattern": "www.hillspringsacademy.sc.ke/*",
+      "zone_name": "hillspringsacademy.sc.ke"
+    },
+    {
+      "pattern": "admin.hillspringsacademy.sc.ke/*",
+      "zone_name": "hillspringsacademy.sc.ke"
+    }
+  ]
 }
