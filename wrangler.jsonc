@@ -16,16 +16,16 @@
   },
   "routes": [
     {
-      "pattern": "hillspringsacademy.sc.ke/*",
-      "zone_name": "hillspringsacademy.sc.ke"
+      "pattern": "hillspringsacademy.sc.ke",
+      "custom_domain": true
     },
     {
-      "pattern": "www.hillspringsacademy.sc.ke/*",
-      "zone_name": "hillspringsacademy.sc.ke"
+      "pattern": "www.hillspringsacademy.sc.ke",
+      "custom_domain": true
     },
     {
-      "pattern": "admin.hillspringsacademy.sc.ke/*",
-      "zone_name": "hillspringsacademy.sc.ke"
+      "pattern": "admin.hillspringsacademy.sc.ke",
+      "custom_domain": true
     }
   ]
 }
