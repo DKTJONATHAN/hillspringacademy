@@ -50,6 +50,22 @@ for (const page of renderedPages) {
   assert.ok(html.includes(page.appHtml.slice(0, 80)), "SSR content was not injected for " + page.path);
 }
 
+const parentPortal = render("/parent");
+assert.equal(parentPortal.status, 200, "Parent portal must remain available");
+assert.ok(parentPortal.robots.includes("noindex"), "Parent portal must not be indexed");
+assert.equal(parentPortal.canonical, "https://hillspringsacademy.sc.ke/parent");
+
+const parentResponse = await worker.fetch(new Request(
+  "https://hillspringsacademy.sc.ke/parent",
+  { headers: { Accept: "text/html" } },
+), {
+  ASSETS: { fetch: async () => new Response(shell, {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  }) },
+});
+assert.equal(parentResponse.status, 200);
+assert.ok((await parentResponse.text()).includes('<meta name="robots" content="noindex,follow" />'));
+
 const missing = render("/blog/not-a-real-article");
 assert.equal(missing.status, 404, "Unknown article slugs must return HTTP 404");
 assert.ok(missing.robots.includes("noindex"), "Unknown article slugs must be noindexed");
