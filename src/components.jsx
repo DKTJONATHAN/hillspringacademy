@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { SCHOOL } from "./data.js";
 
 const P = {
@@ -36,8 +36,9 @@ export function Photo({ src, alt, ratio = "4/3" }) {
 }
 
 export function PageHead({ title, text, description, path, image }) {
+  const location = useLocation();
   const metaDescription = description || text || "Hill Springs Academy is a private CBE school in Maua, Igembe South, Meru County, Kenya. Kindergarten, Pre-Primary and Junior School.";
-  const canonicalPath = path || window.location.pathname;
+  const canonicalPath = path || location.pathname;
   const cleanPath = canonicalPath === "/" ? "/" : (canonicalPath.endsWith("/") ? canonicalPath.slice(0, -1) : canonicalPath);
   const canonical = `${SCHOOL.siteUrl}${cleanPath}`;
   const fullTitle = title.toLowerCase().includes("hill springs") ? title : `${title} | Hill Springs Academy, Maua`;
