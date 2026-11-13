@@ -175,9 +175,20 @@ export default {
       try {
         return await ssrResponse(request, env);
       } catch (err) {
-        console.error("SSR failed, falling back to SPA shell", err);
-        // Soft-fail: serve static SPA so the site still works
-        return env.ASSETS.fetch(request);
+        console.error("SSR failed; returning an uncached, non-indexable fallback", err);
+        // Keep the client app usable, but never let a failed SSR response masquerade
+        // as a fully indexable page. Search engines must retry after SSR is healthy.
+        const fallback = await env.ASSETS.fetch(request);
+        const headers = new Headers(fallback.headers);
+        headers.set("X-SSR", "fallback");
+        headers.set("X-Robots-Tag", "noindex, follow");
+        headers.set("Cache-Control", "no-store");
+        headers.set("Retry-After", "60");
+        return new Response(fallback.body, {
+          status: 503,
+          statusText: "Server-side rendering temporarily unavailable",
+          headers,
+        });
       }
     }
 
