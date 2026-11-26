@@ -3,7 +3,7 @@ import { render } from "../dist/server/entry-server.js";
 import worker from "../worker.js";
 
 const routes = ["/", "/fees", "/admissions", "/about", "/academics", "/blog",
-  "/blog/cbe-at-home-learning-beyond-the-classroom"];
+  "/blog/cbe-at-home-learning-beyond-the-classroom", "/uniforms", "/grade-4-social-studies"];
 const renderedPages = routes.map((path) => ({ path, ...render(path) }));
 
 for (const page of renderedPages) {
@@ -16,6 +16,12 @@ for (const page of renderedPages) {
 
 assert.equal(new Set(renderedPages.map((page) => page.title)).size, routes.length,
   "Public routes and individual articles must have distinct server-rendered titles");
+assert.ok(renderedPages.find((page) => page.path === "/grade-4-social-studies").appHtml.includes("benefits of industries in the county"),
+  "Grade 4 Social Studies page must render the search-intent content");
+assert.ok(renderedPages.find((page) => page.path === "/uniforms").appHtml.includes("Which school uniform is this?"),
+  "Uniform page must answer the school-uniform identification query");
+assert.ok(renderedPages.find((page) => page.path === "/grade-4-social-studies").description.includes("traditional culture"),
+  "Grade 4 Social Studies page must have a topic-specific description");
 assert.ok(renderedPages.find((page) => page.path.includes("/blog/")).title.startsWith("How Parents Can Support"),
   "Individual blog article must use its own title, not the generic blog title");
 assert.notEqual(renderedPages.find((page) => page.path === "/fees").appHtml,
