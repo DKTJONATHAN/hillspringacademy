@@ -16,6 +16,7 @@ import {
   SchoolLife,
   Fees,
   Uniforms,
+  Grade4SocialStudies,
   FAQ,
 } from "./pagesRest.jsx";
 import { AdminEmailCentre } from "./AdminEmailCentre.jsx";
@@ -64,6 +65,7 @@ export default function App() {
             <Route path="/enquire" element={<AccountPortal kind="enquiry" />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/reading-materials" element={<ReadingMaterials />} />
+            <Route path="/grade-4-social-studies" element={<Grade4SocialStudies />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<AdminEmailCentre />} />
             <Route path="/school-life" element={<SchoolLife />} />
