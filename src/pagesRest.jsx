@@ -433,6 +433,7 @@ export function ReadingMaterials() {
                     <h3>{m.title}</h3>
                     <p>{m.description}</p>
                     <a className="btn small" href={m.file} target="_blank" rel="noopener noreferrer">Download PDF</a>
+                    {m.title === "Social Studies Grade 4 Notes" && <Link className="textlink" to="/grade-4-social-studies">Read the Grade 4 Social Studies revision guide →</Link>}
                   </article>
                 ))}
               </div>
@@ -441,6 +442,95 @@ export function ReadingMaterials() {
           {!materials.length && <p>Resources will appear here as they are published.</p>}
         </div>
       </section>
+    </>
+  );
+}
+
+export function Grade4SocialStudies() {
+  const notes = (SCHOOL.readingMaterials || []).find((item) => item.title === "Social Studies Grade 4 Notes");
+  return (
+    <>
+      <PageHead
+        title="Grade 4 Social Studies Notes: Traditional Culture and Industries"
+        text="Grade 4 Social Studies revision guide covering aspects of traditional culture, traditional industries and the benefits of industries in the county. Includes quick answers and the Hill Springs Academy PDF notes."
+        path="/grade-4-social-studies"
+      />
+      <article className="section article-page">
+        <div className="wrap article-wrap">
+          <p className="article-intro">
+            This Grade 4 Social Studies revision guide explains key ideas from the Kenya curriculum in simple language.
+            Use it alongside your teacher's instructions and the downloadable Hill Springs Academy notes.
+          </p>
+          <section>
+            <h2>What are the aspects of traditional culture?</h2>
+            <p>Traditional culture includes the ways of life, practices and heritage that a community shares and passes from one generation to another.</p>
+            <p>The Grade 4 Social Studies curriculum identifies these aspects of traditional culture:</p>
+            <ul className="checks">
+              <li><strong>Dressing:</strong> traditional clothes and ornaments worn by a community.</li>
+              <li><strong>Food:</strong> traditional meals, ingredients and ways of preparing food.</li>
+              <li><strong>Housing:</strong> traditional homes and the materials used to build them.</li>
+              <li><strong>Artefacts:</strong> objects and tools made or used by people in the community.</li>
+              <li><strong>Sports and games:</strong> traditional physical activities and games.</li>
+              <li><strong>Festivals and ceremonies:</strong> community celebrations and important cultural events.</li>
+            </ul>
+            <p><strong>Quick answer:</strong> Dressing, food, housing, artefacts, sports and games, festivals and ceremonies are aspects of traditional culture.</p>
+          </section>
+          <section>
+            <h2>Why is traditional culture important?</h2>
+            <ul className="checks">
+              <li>It helps people understand and appreciate their community's identity and heritage.</li>
+              <li>It passes useful knowledge, skills and practices to younger generations.</li>
+              <li>It encourages respect for the different cultures found in Kenya.</li>
+              <li>It helps communities preserve songs, stories, artefacts, food and ceremonies.</li>
+            </ul>
+          </section>
+          <section>
+            <h2>What are traditional industries?</h2>
+            <p>Traditional industries use local skills, knowledge and materials to make useful products. Many involve practical skills and hand-made work.</p>
+            <p>Examples include:</p>
+            <ul className="checks">
+              <li>Weaving and basketry</li>
+              <li>Pottery</li>
+              <li>Leatherwork</li>
+              <li>Ironworking and blacksmithing</li>
+              <li>Woodwork and carving</li>
+              <li>Beadwork and gourd making</li>
+              <li>Boat making and granary making</li>
+            </ul>
+            <p>Examples of industries differ from one county to another. Learners should also identify industries found in their own county and community.</p>
+          </section>
+          <section>
+            <h2>What are the benefits of industries in the county?</h2>
+            <p>Industries support people and the economy in several ways:</p>
+            <ol>
+              <li><strong>They provide goods:</strong> industries make products that people need and use.</li>
+              <li><strong>They create jobs:</strong> people can earn a living by working in industries.</li>
+              <li><strong>They support local development:</strong> businesses create demand for transport, supplies and other services.</li>
+              <li><strong>They generate income:</strong> workers, business owners and county and national governments can receive income from industrial activity.</li>
+              <li><strong>They add value to resources:</strong> industries can turn locally available raw materials into useful products.</li>
+            </ol>
+            <p><strong>Quick answer:</strong> Industries provide goods, create employment, generate income and support development in the county.</p>
+          </section>
+          <section>
+            <h2>Grade 4 Social Studies revision questions</h2>
+            <h3>1. Name six aspects of traditional culture.</h3>
+            <p>Dressing, food, housing, artefacts, sports and games, festivals and ceremonies.</p>
+            <h3>2. Give four examples of traditional industries.</h3>
+            <p>Basketry, pottery, leatherwork and wood carving. Other examples include weaving, ironworking and beadwork.</p>
+            <h3>3. State four benefits of industries in the county.</h3>
+            <p>They provide goods, create jobs, generate income and support development.</p>
+            <h3>4. Why should learners study traditional culture?</h3>
+            <p>To understand, appreciate and preserve the cultural practices and heritage of their communities.</p>
+          </section>
+          <section className="card">
+            <h2>Download Grade 4 Social Studies notes</h2>
+            <p>Use the school PDF for the full set of notes and classroom revision.</p>
+            {notes?.file && <p><a className="btn" href={notes.file} target="_blank" rel="noopener noreferrer">Download Hill Springs Academy Grade 4 Social Studies PDF</a></p>}
+            <p><a className="textlink" href="https://kicd.ac.ke/wp-content/uploads/2024/10/Grade-4-Social-Studies-20.6.2024-Revised-1.pdf" target="_blank" rel="noopener noreferrer">View the official KICD Grade 4 Social Studies curriculum design ↗</a></p>
+            <p><Link className="textlink" to="/reading-materials">Browse all school learning resources →</Link></p>
+          </section>
+        </div>
+      </article>
     </>
   );
 }
@@ -505,12 +595,12 @@ const UNIFORM_LEVELS = [
 export function Uniforms() {
   return (
     <>
-      <PageHead title="Primary & JSS School Uniforms in Maua" text="View Hill Springs Academy uniform references for Primary School and Junior Secondary School (JSS) in Maua, Meru County. Contact admissions to confirm current sizing, suppliers and prices." path="/uniforms" />
+      <PageHead title="School Uniforms in Meru County" text="Identify Hill Springs Academy Primary and Junior Secondary School (JSS) uniforms from labelled photographs in Maua, Meru County. Contact admissions to confirm current requirements, sizes and prices." path="/uniforms" />
       <section className="section uniform-section">
         <div className="wrap">
           <div className="intro-row">
-            <div><span className="eyebrow">Hill Springs Academy · Maua</span><h2>Primary and Junior Secondary School uniforms</h2></div>
-            <p className="lede">Use this school uniform guide to identify the Primary School and Junior Secondary School (JSS) options. The photographs are grouped by level. For current supplier details, sizes, prices and term-specific requirements, confirm directly with admissions before purchasing.</p>
+            <div><span className="eyebrow">Hill Springs Academy · Maua</span><h2>Which school uniform is this? Identify Primary and JSS uniforms</h2></div>
+            <p className="lede">To identify a Hill Springs Academy school uniform, first check the learner’s level: Primary School uniforms are shown in the Primary section, while Junior Secondary School (JSS) uniforms are shown in the JSS section below. Each photograph is labelled. Confirm the current official uniform, sizes, supplier and prices with admissions before purchasing.</p>
           </div>
           {UNIFORM_LEVELS.map((level) => (
             <div className="uniform-level" key={level.id} id={level.id}>
@@ -528,7 +618,7 @@ export function Uniforms() {
           <div className="uniform-note"><span aria-hidden="true">✓</span><p><strong>Need the exact requirements?</strong> Contact admissions before buying uniforms so you can confirm the current specification.</p></div>
           <div className="section-kicker" style={{ marginTop: 28 }}><span className="eyebrow">For parents and guardians</span></div>
           <div className="cols">
-            <article className="card"><h3>Which uniform should I choose?</h3><p>Use the Primary School or Junior Secondary School (JSS) section that matches your child's level. If you are unsure which level applies, ask the admissions office before purchasing.</p></article>
+            <article className="card"><h3>Which school uniform is this?</h3><p>Match the photograph to its label and school level. Primary School uniform photographs appear under Primary; Junior Secondary School (JSS) photographs appear under JSS. If you are unsure which level applies to your child, ask admissions before purchasing.</p></article>
             <article className="card"><h3>Where can I confirm sizes and prices?</h3><p>Current supplier, sizing, pricing and purchase arrangements are not listed here. Contact Hill Springs Academy directly for the latest requirements.</p></article>
             <article className="card"><h3>New admission?</h3><p>Families planning to join the school can review the admissions process and contact the office about the correct uniform for the learner's class.</p></article>
           </div>
